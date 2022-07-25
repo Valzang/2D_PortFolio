@@ -1,6 +1,9 @@
 ﻿// 2D_PortFolio.cpp : 애플리케이션에 대한 진입점을 정의합니다.
 //
 
+
+// 펭귄 브라더스
+
 #include "framework.h"
 #include "2D_PortFolio.h"
 
