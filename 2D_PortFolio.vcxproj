@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="2D_PortFolio.h" />
+    <ClInclude Include="KeyManager.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="CustomDefine.h" />
     <ClInclude Include="framework.h" />
@@ -149,6 +150,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2D_PortFolio.cpp" />
+    <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="TimeManager.cpp" />
   </ItemGroup>

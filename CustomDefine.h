@@ -1,6 +1,10 @@
 #pragma once
 
 #include <Windows.h>
+#include <vector>
+#include <tchar.h>
+
+using namespace std;
 
 #define SINGLETON2(type) public:\
 							static type* GetInstance()\

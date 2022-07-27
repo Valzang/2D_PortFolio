@@ -42,7 +42,10 @@ SceneManager::SceneManager()
 
 SceneManager::~SceneManager()
 {
+	// GetDC로 만든건 ReleaseDC로 지워야함.
 	ReleaseDC(m_hWnd, m_hDC);
+
+	// CreateCompatibleDC로 만든건 DeleteDC로 지워야함.
 	DeleteDC(m_memDC);
 	DeleteObject(m_hBit);
 }

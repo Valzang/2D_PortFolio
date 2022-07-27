@@ -1,5 +1,4 @@
 #include "TimeManager.h"
-#include <tchar.h>
 
 TimeManager::TimeManager() : m_prevCount(), m_curCount(),
 							m_curFrequency(), m_deltaTime(),
