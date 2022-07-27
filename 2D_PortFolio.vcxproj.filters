@@ -7,9 +7,6 @@
     <Filter Include="Engine\01. Header">
       <UniqueIdentifier>{46f7ebe7-faf5-4b44-9ec5-ceda22df5fb8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\02. Core">
-      <UniqueIdentifier>{a8f44aa2-26c6-4004-99a3-f586f90cb0c8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Default">
       <UniqueIdentifier>{18b61eab-43e3-4447-bdd9-775835e2f1d4}</UniqueIdentifier>
     </Filter>
@@ -20,6 +17,9 @@
     <Filter Include="Default\헤더 파일">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Engine\02. Manager">
+      <UniqueIdentifier>{a8f44aa2-26c6-4004-99a3-f586f90cb0c8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -35,8 +35,14 @@
     <ClInclude Include="2D_PortFolio.h">
       <Filter>Default\헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="CCore.h">
-      <Filter>Engine\02. Core</Filter>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Engine\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Engine\02. Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomDefine.h">
+      <Filter>Engine\01. Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -56,8 +62,11 @@
     <ClCompile Include="2D_PortFolio.cpp">
       <Filter>Default</Filter>
     </ClCompile>
-    <ClCompile Include="CCore.cpp">
-      <Filter>Engine\02. Core</Filter>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Engine\02. Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Engine\02. Manager</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
