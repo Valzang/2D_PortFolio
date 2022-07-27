@@ -4,19 +4,12 @@
     <Filter Include="Engine">
       <UniqueIdentifier>{d2196239-600d-4230-b221-96fd33c9d5df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\01. Header">
-      <UniqueIdentifier>{46f7ebe7-faf5-4b44-9ec5-ceda22df5fb8}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Default">
       <UniqueIdentifier>{18b61eab-43e3-4447-bdd9-775835e2f1d4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Default\리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Default\헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
     <Filter Include="Engine\02. Manager">
       <UniqueIdentifier>{a8f44aa2-26c6-4004-99a3-f586f90cb0c8}</UniqueIdentifier>
@@ -27,22 +20,31 @@
     <Filter Include="Engine\02. Manager\Source">
       <UniqueIdentifier>{fb81103b-f10b-4334-98c8-293ff520240a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\03. Object">
+      <UniqueIdentifier>{631c7843-3e64-4de1-b63f-7cabbd7bf418}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Header">
+      <UniqueIdentifier>{8d9e75ae-6ec1-443b-b0be-95e3d87a9031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Source">
+      <UniqueIdentifier>{40724a4c-e4bd-4c04-ba4f-029f29e222fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene">
+      <UniqueIdentifier>{4043ae2b-75e3-4c3b-8d38-2b6308829324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Header">
+      <UniqueIdentifier>{1adc0926-edf9-48c3-9fed-1fb7e1585fef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Source">
+      <UniqueIdentifier>{1b7df32e-994c-469e-bcad-41babe57f90c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\01. Define">
+      <UniqueIdentifier>{46f7ebe7-faf5-4b44-9ec5-ceda22df5fb8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Default\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Default\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Default\헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="2D_PortFolio.h">
-      <Filter>Default\헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="CustomDefine.h">
-      <Filter>Engine\01. Header</Filter>
+      <Filter>Engine\01. Define</Filter>
     </ClInclude>
     <ClInclude Include="KeyManager.h">
       <Filter>Engine\02. Manager\Header</Filter>
@@ -52,6 +54,27 @@
     </ClInclude>
     <ClInclude Include="TimeManager.h">
       <Filter>Engine\02. Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="2D_PortFolio.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Engine\04. Scene\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Start.h">
+      <Filter>Engine\04. Scene\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -79,6 +102,15 @@
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
       <Filter>Engine\02. Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Engine\04. Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Start.cpp">
+      <Filter>Engine\04. Scene\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

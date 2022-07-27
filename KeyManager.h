@@ -53,7 +53,7 @@ int arrVK[(int)KEY::LAST] =
 	// 2P 움직임
 	VK_DELETE, VK_END, VK_NUMPAD8, VK_NUMPAD4, VK_NUMPAD5, VK_NUMPAD6,
 
-	2, // 2P 시작
+	'2', // 2P 시작
 	'P', // Pause
 	VK_ESCAPE, // Escape
 	VK_RETURN, // Enter

@@ -1,5 +1,16 @@
 #include "KeyManager.h"
 
+KeyManager::KeyManager()
+{
+
+}
+
+KeyManager::~KeyManager()
+{
+
+}
+
+
 void KeyManager::Init(HWND hWnd)
 {
 	m_hWnd = hWnd;
