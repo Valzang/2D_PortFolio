@@ -40,7 +40,7 @@ enum class KEY
 	LAST // enum¿« ≥°
 };
 
-int arrVK[(int)KEY::LAST] =
+static int arrVK[(int)KEY::LAST] =
 {
 	VK_LEFT,
 	VK_RIGHT,

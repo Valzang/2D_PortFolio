@@ -29,17 +29,17 @@
     <Filter Include="Engine\03. Object\Source">
       <UniqueIdentifier>{40724a4c-e4bd-4c04-ba4f-029f29e222fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\04. Scene">
-      <UniqueIdentifier>{4043ae2b-75e3-4c3b-8d38-2b6308829324}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\04. Scene\Header">
-      <UniqueIdentifier>{1adc0926-edf9-48c3-9fed-1fb7e1585fef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\04. Scene\Source">
-      <UniqueIdentifier>{1b7df32e-994c-469e-bcad-41babe57f90c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\01. Define">
       <UniqueIdentifier>{46f7ebe7-faf5-4b44-9ec5-ceda22df5fb8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Source\04. Scene">
+      <UniqueIdentifier>{4043ae2b-75e3-4c3b-8d38-2b6308829324}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Source\04. Scene\Header">
+      <UniqueIdentifier>{1adc0926-edf9-48c3-9fed-1fb7e1585fef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Source\04. Scene\Source">
+      <UniqueIdentifier>{1b7df32e-994c-469e-bcad-41babe57f90c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,10 +71,10 @@
       <Filter>Engine\03. Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Engine\04. Scene\Header</Filter>
+      <Filter>Engine\03. Object\Source\04. Scene\Header</Filter>
     </ClInclude>
     <ClInclude Include="Scene_Start.h">
-      <Filter>Engine\04. Scene\Header</Filter>
+      <Filter>Engine\03. Object\Source\04. Scene\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,10 +107,10 @@
       <Filter>Engine\03. Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Engine\04. Scene\Source</Filter>
+      <Filter>Engine\03. Object\Source\04. Scene\Source</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Start.cpp">
-      <Filter>Engine\04. Scene\Source</Filter>
+      <Filter>Engine\03. Object\Source\04. Scene\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

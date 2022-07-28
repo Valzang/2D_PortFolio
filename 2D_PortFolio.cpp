@@ -134,8 +134,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
             TimeManager::GetInstance();
             TimeManager::GetInstance()->Init(hWnd);
+            SceneManager::GetInstance()->Init();
             int temp = 0;
 		}
+        break;
 		case WM_COMMAND:
 		{
 			int wmId = LOWORD(wParam);
