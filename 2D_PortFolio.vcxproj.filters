@@ -29,22 +29,25 @@
     <Filter Include="Engine\03. Object\Source">
       <UniqueIdentifier>{40724a4c-e4bd-4c04-ba4f-029f29e222fa}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\01. Define">
-      <UniqueIdentifier>{46f7ebe7-faf5-4b44-9ec5-ceda22df5fb8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\03. Object\Source\04. Scene">
+    <Filter Include="Engine\04. Scene">
       <UniqueIdentifier>{4043ae2b-75e3-4c3b-8d38-2b6308829324}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\03. Object\Source\04. Scene\Header">
+    <Filter Include="Engine\04. Scene\Header">
       <UniqueIdentifier>{1adc0926-edf9-48c3-9fed-1fb7e1585fef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\03. Object\Source\04. Scene\Source">
+    <Filter Include="Engine\04. Scene\Source">
       <UniqueIdentifier>{1b7df32e-994c-469e-bcad-41babe57f90c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\헤더 파일">
+      <UniqueIdentifier>{6d1d88c0-629e-46cc-8261-7fe4a2d490e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\01. Define &amp; Core">
+      <UniqueIdentifier>{46f7ebe7-faf5-4b44-9ec5-ceda22df5fb8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CustomDefine.h">
-      <Filter>Engine\01. Define</Filter>
+      <Filter>Engine\01. Define &amp; Core</Filter>
     </ClInclude>
     <ClInclude Include="KeyManager.h">
       <Filter>Engine\02. Manager\Header</Filter>
@@ -55,26 +58,38 @@
     <ClInclude Include="TimeManager.h">
       <Filter>Engine\02. Manager\Header</Filter>
     </ClInclude>
-    <ClInclude Include="2D_PortFolio.h">
-      <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Default</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>Engine\03. Object\Header</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
-      <Filter>Engine\03. Object\Source\04. Scene\Header</Filter>
+      <Filter>Engine\04. Scene\Header</Filter>
     </ClInclude>
     <ClInclude Include="Scene_Start.h">
-      <Filter>Engine\03. Object\Source\04. Scene\Header</Filter>
+      <Filter>Engine\04. Scene\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="2D_PortFolio.h">
+      <Filter>Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default\헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Engine\01. Define &amp; Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Engine\03. Object\Header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -107,10 +122,22 @@
       <Filter>Engine\03. Object\Source</Filter>
     </ClCompile>
     <ClCompile Include="Scene.cpp">
-      <Filter>Engine\03. Object\Source\04. Scene\Source</Filter>
+      <Filter>Engine\04. Scene\Source</Filter>
     </ClCompile>
     <ClCompile Include="Scene_Start.cpp">
-      <Filter>Engine\03. Object\Source\04. Scene\Source</Filter>
+      <Filter>Engine\04. Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Engine\01. Define &amp; Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -5,12 +5,14 @@
 #include "2D_PortFolio.h"
 #include "TimeManager.h"
 #include "SceneManager.h"
+#include "Core.h"
 
 
 
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
+HWND hWnd;                                      // 현재 윈도우 핸들
 HINSTANCE hInst;                                // 현재 인스턴스입니다.
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
@@ -42,6 +44,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
+    if (FAILED(CCore::GetInstance()->Init(hWnd, POINT {1280, 768})))
+    {
+        MessageBox(nullptr, L"Core 객체 초기화 실패", L"ERROR", MB_OK);
+        return FALSE;
+    }
+
+
     HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY2DPORTFOLIO));
 
     MSG msg;
@@ -60,7 +69,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
         else
-            TimeManager::GetInstance()->Update();
+            CCore::GetInstance()->Progress();
+            //cTimeManager::GetInstance()->Update();
     }
 
 
@@ -102,13 +112,15 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
       return FALSE;
    }
+   CCore::GetInstance()->Init(hWnd, POINT { 1280, 768 });
+   //cTimeManager::GetInstance()->Init();
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -132,9 +144,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		case WM_CREATE:
 		{
-            TimeManager::GetInstance();
-            TimeManager::GetInstance()->Init(hWnd);
-            SceneManager::GetInstance()->Init();
+            //cTimeManager::GetInstance();
             int temp = 0;
 		}
         break;

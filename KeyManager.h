@@ -66,16 +66,16 @@ struct KeyInfo
 };
 
 
-class KeyManager
+class cKeyManager
 {
-	SINGLETON2(KeyManager)
+	SINGLETON2(cKeyManager)
 
 private:
 	vector<KeyInfo> m_vecKey;
-	HWND m_hWnd = NULL;
+	//HWND m_hWnd = NULL;
 
 public:
-	void Init(HWND hWnd);
+	void Init();
 	void Update();
 	KEY_STATE GetKeyState(KEY _key);
 };

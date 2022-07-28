@@ -140,8 +140,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="2D_PortFolio.h" />
+    <ClInclude Include="Bomb.h" />
+    <ClInclude Include="Core.h" />
     <ClInclude Include="KeyManager.h" />
+    <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="CustomDefine.h" />
@@ -153,8 +157,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="2D_PortFolio.cpp" />
+    <ClCompile Include="Bomb.cpp" />
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="KeyManager.cpp" />
+    <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Scene_Start.cpp" />

@@ -1,6 +1,6 @@
 #include "Scene.h"
 
-Scene::~Scene()
+cScene::~cScene()
 {
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
@@ -14,7 +14,7 @@ Scene::~Scene()
 	// ¼Ò¸êÀÚ ÀÚÃ¼¿¡¼­ º¤ÅÍ ÀÚÃ¼°¡ Áö¿öÁü
 }
 
-void Scene::Update()
+void cScene::Update()
 {
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
@@ -25,7 +25,7 @@ void Scene::Update()
 	}
 }
 
-void Scene::Render(HDC _hdc)
+void cScene::Render(HDC _hdc)
 {
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{

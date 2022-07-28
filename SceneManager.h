@@ -1,18 +1,20 @@
 #pragma once
 #include "CustomDefine.h"
 
-class Scene;
+class cScene;
 
-class SceneManager
+class cSceneManager
 {
-	SINGLETON2(SceneManager);
+	SINGLETON2(cSceneManager);
 
 private:
-	Scene* m_arrScene[(UINT)SCENE_TYPE::END]; // 가지고 있는 씬 목록
-	Scene* m_curScene; // 현재 씬
+	cScene* m_arrScene[(UINT)SCENE_TYPE::END]; // 가지고 있는 씬 목록
+	cScene* m_curScene; // 현재 씬
 	
 public:
 	void Init();
 	void Update();
 	void Render(HDC _hdc);
+
+	cScene* GetCurScene() { return m_curScene; }
 };

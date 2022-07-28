@@ -1,26 +1,25 @@
 #include "KeyManager.h"
 
-KeyManager::KeyManager()
+cKeyManager::cKeyManager()
 {
 
 }
 
-KeyManager::~KeyManager()
+cKeyManager::~cKeyManager()
 {
 
 }
 
 
-void KeyManager::Init(HWND hWnd)
+void cKeyManager::Init()
 {
-	m_hWnd = hWnd;
 	for (int i = 0; i < (int)KEY::LAST; ++i)
 	{
 		m_vecKey.push_back(KeyInfo { KEY_STATE::NONE, false });
 	}
 }
 
-void KeyManager::Update()
+void cKeyManager::Update()
 {
 	//포커싱 된 윈도우가 누구인지
 	HWND hWnd = GetFocus();
@@ -67,7 +66,7 @@ void KeyManager::Update()
 	}
 }
 
-KEY_STATE KeyManager::GetKeyState(KEY _key)
+KEY_STATE cKeyManager::GetKeyState(KEY _key)
 {
 	return m_vecKey[(int)_key].mKeyState;
 }

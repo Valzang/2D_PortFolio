@@ -1,16 +1,16 @@
 #pragma once
 #include "Scene.h"
 
-class Scene_Start : public Scene
+class cScene_Start : public cScene
 {
 private:
 
 public:
-	Scene_Start() {};
-	virtual ~Scene_Start() {};
+	cScene_Start() {};
+	virtual ~cScene_Start() {};
 
-	virtual void Enter() override;
-	virtual void Exit() override;
+	virtual void Enter();
+	virtual void Exit();
 
 };
 

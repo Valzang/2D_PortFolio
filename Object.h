@@ -2,20 +2,17 @@
 
 #include "KeyManager.h"
 #include "TimeManager.h"
-//#include "CustomDefine.h"
 
 
-class Object
+class cObject
 {
-protected:
-
 private:
 	Vec2 m_Pos;
 	Vec2 m_Scale;
 
 public:
-	Object() : m_Pos(), m_Scale(){};
-	virtual ~Object() {};
+	cObject() : m_Pos(), m_Scale(){};
+	virtual ~cObject() {};
 
 	void SetPos(Vec2 _Pos) { m_Pos = _Pos; }
 	void SetScale(Vec2 _Scale) { m_Scale = _Scale; }
@@ -23,7 +20,7 @@ public:
 	Vec2 GetPos() { return m_Pos; }
 	Vec2 GetScale() { return m_Scale; }
 
-	void Update();
-	void Render(HDC _hdc);
+	virtual void Update() = 0;
+	virtual void Render(HDC _hdc);
 };
 

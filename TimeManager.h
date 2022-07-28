@@ -1,17 +1,16 @@
 #pragma once
 
 #include "CustomDefine.h"
+#include "Core.h"
 
-class TimeManager
+class cTimeManager
 {
-	SINGLETON2(TimeManager);
+	SINGLETON2(cTimeManager);
 
 private:
 	LARGE_INTEGER m_curCount;
 	LARGE_INTEGER m_prevCount;
 	LARGE_INTEGER m_curFrequency;
-
-	HWND m_hWnd = NULL;
 
 	double m_deltaTime; // 프레임 사이의 시간 값
 	double m_accumlate; // 1초 체크를 위한 누적 시간 값
@@ -19,7 +18,7 @@ private:
 	UINT m_FPS; // FPS ( 초당 프레임 수 )
 
 public:
-	void Init(HWND handle);
+	void Init();
 	void Update();
 
 	float GetDT() { return (float)m_deltaTime; }

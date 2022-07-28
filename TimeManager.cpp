@@ -1,21 +1,20 @@
 #include "TimeManager.h"
 
-TimeManager::TimeManager() : m_prevCount(), m_curCount(),
+cTimeManager::cTimeManager() : m_prevCount(), m_curCount(),
 							m_curFrequency(), m_deltaTime(),
 							m_callCount(), m_accumlate(),
-							m_FPS(), m_hWnd()
+							m_FPS()
 {
 
 }
 
-TimeManager::~TimeManager()
+cTimeManager::~cTimeManager()
 {
 
 }
 
-void TimeManager::Init(HWND handle)
+void cTimeManager::Init()
 {
-	m_hWnd = handle;
 	// 현재 센 카운트
 	QueryPerformanceCounter(&m_prevCount);
 
@@ -23,7 +22,7 @@ void TimeManager::Init(HWND handle)
 	QueryPerformanceFrequency(&m_curFrequency);
 }
 
-void TimeManager::Update()
+void cTimeManager::Update()
 {
 	QueryPerformanceCounter(&m_curCount);
 
@@ -48,6 +47,6 @@ void TimeManager::Update()
 
 		wchar_t Buffer[255] = {};
 		swprintf_s(Buffer, L"FPS : %d, DT : %.8f", m_FPS, m_deltaTime);
-		SetWindowText(m_hWnd, Buffer);
+		SetWindowText(CCore::GetInstance()->GetMainHwnd(), Buffer);
 	}
 }
