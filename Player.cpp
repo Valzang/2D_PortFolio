@@ -10,7 +10,7 @@
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false)
 {
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
-	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/2.f));
+	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/4.f));
 
 	m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); // 왼쪽 컬러에서부터 오른쪽 컬러 사이 값들을 투명하게 만들어줌
 	SetDirection(1);
@@ -41,13 +41,12 @@ void cPlayer::Update()
 	if (KEY_CHECK(KEY::J, KEY_STATE::DOWN))
 	{		
 		m_isMoved = true;
-		if(GetDirection() == 1)
-			m_PlayerImg->RotateFlip(RotateNoneFlipX);
 		SetDirection(-1);
 	}
 	if (KEY_CHECK(KEY::J, KEY_STATE::HOLD))
 	{
 		Pos.x -= 200.f * DELTA_TIME;
+		SetDirection(-1);
 	}
 	if (KEY_CHECK(KEY::J, KEY_STATE::UP))
 	{
@@ -58,8 +57,6 @@ void cPlayer::Update()
 	if (KEY_CHECK(KEY::L, KEY_STATE::DOWN))
 	{
 		m_isMoved = true;
-		if (GetDirection() == -1)
-			m_PlayerImg->RotateFlip(RotateNoneFlipX);
 		SetDirection(1);
 	}
 	if (KEY_CHECK(KEY::L, KEY_STATE::HOLD))
@@ -95,6 +92,9 @@ void cPlayer::Render(HDC _hdc)
 		curFrame = 0;
 
 	xStart = curFrame * w;
+	
+	if (GetDirection() == -1)
+		yStart = m_PlayerImg->GetHeight() / 2.f;
 
 	Vec2 Temp_Pos = GetPos();
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
