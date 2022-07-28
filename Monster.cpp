@@ -7,13 +7,13 @@ cMonster::cMonster() :
 	m_CenterPos(Vec2 { 0.f, 0.f })
 	, m_Speed(100.f)
 	, m_MaxDistance(50.f)
-	, m_Direction(1)
 	, m_MonsterImg(nullptr)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/FlyingMonster.png");		
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
 	
 	m_imgAttr.SetColorKey(Color(0, 160, 80), Color(0, 170, 80)); // 왼쪽 컬러에서부터 오른쪽 컬러 사이 값들을 투명하게 만들어줌
+	SetDirection(1);
 }
 
 cMonster::~cMonster()
@@ -45,14 +45,14 @@ void cMonster::Update()
 	Vec2 CurPos = GetPos();
 
 	// 진행 방향으로 시간당 m_Speed 만큼 이동
-	CurPos.x += DELTA_TIME * m_Speed * m_Direction;
+	CurPos.x += DELTA_TIME * m_Speed * GetDirection();
 
 	float Dist = abs(m_CenterPos.x - CurPos.x) - m_MaxDistance;
 
 	if (Dist > 0.f)
 	{
-		m_Direction *= -1;
-		CurPos.x += Dist * m_Direction;
+		SetDirection(GetDirection() * -1);
+		CurPos.x += Dist * GetDirection();
 		m_MonsterImg->RotateFlip(RotateNoneFlipX);
 	}
 

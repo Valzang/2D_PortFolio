@@ -8,7 +8,6 @@ private:
     Vec2 m_CenterPos;
     float m_Speed;
     float m_MaxDistance;
-    int m_Direction;
     Image* m_MonsterImg;  // 이미지 파일
     ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 

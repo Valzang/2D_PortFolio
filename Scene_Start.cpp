@@ -7,11 +7,10 @@
 void cScene_Start::Enter()
 {
 	// Object 추가
-	cObject* PlayerObj = new cPlayer;
+	cPlayer* PlayerObj = new cPlayer;
 
 	// Object 위치, 크기 설정
 	PlayerObj->SetPos(Vec2 { 640.f, 384.f });
-	PlayerObj->SetScale(Vec2 {100.f, 100.f});
 	AddObject(PlayerObj, GROUP_TYPE::DEFAULT);
 
 
