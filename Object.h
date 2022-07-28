@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CustomDefine.h"
 #include "KeyManager.h"
 #include "TimeManager.h"
 

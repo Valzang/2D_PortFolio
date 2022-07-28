@@ -10,6 +10,7 @@ CCore::CCore() : m_hBit(NULL), m_hDC(NULL)
 
 CCore::~CCore()
 {
+	Gdi_End();
 	// GetDC로 만든건 ReleaseDC로 지워야함.
 	ReleaseDC(m_hWnd, m_hDC);
 
@@ -23,6 +24,7 @@ CCore::~CCore()
 
 int CCore::Init(HWND _hWnd, POINT _ptResolution)
 {
+	Gdi_Init();
 	m_hWnd = _hWnd;
 	m_ptResolution = _ptResolution;
 

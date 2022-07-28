@@ -2,12 +2,11 @@
 // 펭귄 브라더스
 
 #include "framework.h"
-#include "2D_PortFolio.h"
+#include "Penguin_Bros.h"
 #include "TimeManager.h"
 #include "SceneManager.h"
 #include "Core.h"
-
-
+#include <crtdbg.h>
 
 #define MAX_LOADSTRING 100
 
@@ -35,7 +34,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     // 전역 문자열을 초기화합니다.
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-    LoadStringW(hInstance, IDC_MY2DPORTFOLIO, szWindowClass, MAX_LOADSTRING);
+    LoadStringW(hInstance, IDC_PENGUINBROS, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
 
     // 애플리케이션 초기화를 수행합니다:
@@ -51,7 +50,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     }
 
 
-    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY2DPORTFOLIO));
+    HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PENGUINBROS));
 
     MSG msg;
 
@@ -70,18 +69,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
         else
             CCore::GetInstance()->Progress();
-            //cTimeManager::GetInstance()->Update();
     }
-
-
-    //while (GetMessage(&msg, nullptr, 0, 0))
-    //{
-    //    if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-    //    {
-    //        TranslateMessage(&msg);
-    //        DispatchMessage(&msg);
-    //    }
-    //}
 
     return (int) msg.wParam;
 }
@@ -98,10 +86,10 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.cbClsExtra     = 0;
     wcex.cbWndExtra     = 0;
     wcex.hInstance      = hInstance;
-    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MY2DPORTFOLIO));
+    wcex.hIcon          = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_PENGUINBROS));
     wcex.hCursor        = LoadCursor(nullptr, IDC_ARROW);
     wcex.hbrBackground  = (HBRUSH)(COLOR_WINDOW+1);
-    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_MY2DPORTFOLIO);
+    wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_PENGUINBROS);
     wcex.lpszClassName  = szWindowClass;
     wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 
@@ -128,24 +116,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-//
-//  함수: WndProc(HWND, UINT, WPARAM, LPARAM)
-//
-//  용도: 주 창의 메시지를 처리합니다.
-//
-//  WM_COMMAND  - 애플리케이션 메뉴를 처리합니다.
-//  WM_PAINT    - 주 창을 그립니다.
-//  WM_DESTROY  - 종료 메시지를 게시하고 반환합니다.
-//
-//
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 		case WM_CREATE:
 		{
-            //cTimeManager::GetInstance();
-            int temp = 0;
+            //_CrtSetBreakAlloc(244); // 어느 블럭에서 메모리 누수가 있었는지
 		}
         break;
 		case WM_COMMAND:
@@ -175,6 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 		case WM_DESTROY:
 			PostQuitMessage(0);
+            _CrtDumpMemoryLeaks();
 			break;
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);

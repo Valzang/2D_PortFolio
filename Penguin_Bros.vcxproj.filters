@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{f737261f-1474-491d-bf1a-9bb471fa44bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\01. Define &amp; Core">
+      <UniqueIdentifier>{d148b5fe-5d88-4dbd-ad5c-1dc316e91bc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Manager">
+      <UniqueIdentifier>{5334fef5-eb1c-4578-9e41-8306140217ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object">
+      <UniqueIdentifier>{4105dd16-532f-4b40-bbaa-7f2238a3c4b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene">
+      <UniqueIdentifier>{a77c2234-da93-44a6-9fff-44647314f56c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default">
+      <UniqueIdentifier>{70407466-cb26-4170-99be-aa42457eb89a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Engine\03. Object\Header">
+      <UniqueIdentifier>{67dd3048-5c1d-469b-842e-4731c9501628}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Source">
+      <UniqueIdentifier>{78c4f9d7-ed1b-4a0d-8056-9b47ab7d5906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Source">
+      <UniqueIdentifier>{013eb19c-1099-4a66-8933-00231ff657af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Header">
+      <UniqueIdentifier>{e8a42ac2-3817-4853-aaf5-bddb0af60632}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Manager\Header">
+      <UniqueIdentifier>{c0e483d2-9b26-448d-9357-968f91dde237}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Manager\Source">
+      <UniqueIdentifier>{39d24566-30a2-4646-a7c0-a58a3eeb4829}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\Header">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Default\Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Default\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Penguin_Bros.h">
+      <Filter>Default\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Core.h">
+      <Filter>Engine\01. Define &amp; Core</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomDefine.h">
+      <Filter>Engine\01. Define &amp; Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Engine\04. Scene\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Start.h">
+      <Filter>Engine\04. Scene\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Engine\03. Object\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>Engine\02. Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Engine\02. Manager\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Engine\02. Manager\Header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Penguin_Bros.cpp">
+      <Filter>Default\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Engine\01. Define &amp; Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Engine\04. Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Start.cpp">
+      <Filter>Engine\04. Scene\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Engine\03. Object\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>Engine\02. Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Engine\02. Manager\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Engine\02. Manager\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Penguin_Bros.rc">
+      <Filter>Default\리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="Penguin_Bros.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

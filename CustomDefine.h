@@ -5,6 +5,34 @@
 #include <tchar.h>
 #include <string>
 
+// GDI================================
+#include <objidl.h>
+#include <gdiplus.h>
+#pragma comment(lib,"Gdiplus.lib")
+using namespace Gdiplus;
+
+static ULONG_PTR g_GdiToken;
+
+static bool GDI_INIT = false;
+
+static void Gdi_Init()
+{
+	if (!GDI_INIT)
+	{
+		GdiplusStartupInput gpsi;
+		GdiplusStartup(&g_GdiToken, &gpsi, NULL);
+		GDI_INIT = true;
+	}
+};
+
+static void Gdi_End()
+{
+	GdiplusShutdown(g_GdiToken);
+	GDI_INIT = false;
+}
+
+// GDI================================
+
 using namespace std;
 
 #define SINGLETON2(type) public:\

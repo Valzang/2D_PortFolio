@@ -16,12 +16,13 @@ void cScene_Start::Enter()
 
 
 	// 몬스터 배치
-	int MonCount = 16;
-	float MoveDist = 25.f;
-	float ObjectScale = 50.f;
+	int MonCount = 10;
+
+	float MoveDist = 40.f;
+	float ObjectScale = 81.f;
 
 	Vec2 Resolution = CCore::GetInstance()->GetResolution();
-	float temp = (Resolution.x - ((MoveDist+ ObjectScale/2.f) * 2)) / (float)(MonCount-1);
+	float temp = (Resolution.x - ((MoveDist+ ObjectScale /2.f) * 2)) / (float)(MonCount-1);
 
 	//Monster Object 추가
 	cMonster* MonsterObj = nullptr;
@@ -31,8 +32,8 @@ void cScene_Start::Enter()
 		MonsterObj->SetPos(Vec2 { (MoveDist + ObjectScale / 2.f) + temp*(float)i, 50.f });
 		MonsterObj->SetCenterPos(MonsterObj->GetPos());
 		MonsterObj->SetMaxDist(MoveDist);
-		MonsterObj->SetScale(Vec2 { ObjectScale, ObjectScale });
-		AddObject(MonsterObj, GROUP_TYPE::DEFAULT);
+		//MonsterObj->SetScale(Vec2 { ObjectScale, ObjectScale });
+		AddObject(MonsterObj, GROUP_TYPE::DEFAULT);		
 	}
 	
 

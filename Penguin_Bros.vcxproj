@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{b9c675b6-8792-4a65-9b33-5cc7f189c0e0}</ProjectGuid>
-    <RootNamespace>My2DPortFolio</RootNamespace>
+    <ProjectGuid>{cff7caaf-1b53-46a3-96af-27dab4fa05f4}</ProjectGuid>
+    <RootNamespace>PenguinBros</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -139,29 +139,29 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="2D_PortFolio.h" />
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="CustomDefine.h" />
+    <ClInclude Include="framework.h" />
     <ClInclude Include="KeyManager.h" />
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Penguin_Bros.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
-    <ClInclude Include="CustomDefine.h" />
-    <ClInclude Include="framework.h" />
-    <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene_Start.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeManager.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="2D_PortFolio.cpp" />
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Penguin_Bros.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
@@ -169,10 +169,10 @@
     <ClCompile Include="TimeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="2D_PortFolio.rc" />
+    <ResourceCompile Include="Penguin_Bros.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="2D_PortFolio.ico" />
+    <Image Include="Penguin_Bros.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
