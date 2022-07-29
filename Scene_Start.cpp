@@ -23,17 +23,17 @@ void cScene_Start::Enter()
 
 
 	// 몬스터 배치
-	int MonCount = 10;			// 몬스터 수
+	SetMonsterSize(10);			// 몬스터 수
 	float MoveDist = 40.f;		// 몬스터의 행동 반경
 	float ObjectScale = 81.f;	// 몬스터 사진의 크기
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = CCore::GetInstance()->GetResolution();
-	float temp = (Resolution.x - ((MoveDist+ ObjectScale /2.f) * 2)) / (float)(MonCount-1);
+	float temp = (Resolution.x - ((MoveDist+ ObjectScale /2.f) * 2)) / (float)(GetMonsterSize()-1);
 
 	//Monster Object 추가
 	cMonster* MonsterObj = nullptr;
-	for (int i = 0; i < MonCount; ++i)
+	for (int i = 0; i < GetMonsterSize(); ++i)
 	{
 		MonsterObj = new cMonster;
 		MonsterObj->SetPos(Vec2 { (MoveDist + ObjectScale / 2.f) + temp*(float)i, 50.f });
@@ -43,6 +43,6 @@ void cScene_Start::Enter()
 	}
 }
 
-void cScene_Start::Exit()
+void cScene_Start::Exit() // 나가면서 현재 플레이어에 대한 정보를 씬 매니저에 넘겨줘야할 듯..?
 {
 }

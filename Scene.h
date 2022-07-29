@@ -16,6 +16,7 @@ private:
 	wstring m_sceneName;
 	Image* m_SceneImg;  // 이미지 파일
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
+	int m_MonsterCount;
 
 public:
 	cScene() : m_SceneImg(nullptr) {}
@@ -38,7 +39,8 @@ public:
 		m_arr_obj[UINT(_Type)].clear();
 	}
 
-	
+	int GetMonsterSize() { return m_MonsterCount; }
+	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
 
 	void SetSceneImg(const wchar_t* FileName);
 	void DeleteSceneImg();

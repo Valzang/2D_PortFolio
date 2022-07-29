@@ -20,8 +20,6 @@ CCore::~CCore()
 }
 
 
-
-
 int CCore::Init(HWND _hWnd, POINT _ptResolution)
 {
 	Gdi_Init();

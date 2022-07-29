@@ -33,6 +33,12 @@ void cSceneManager::Update()
 
 void cSceneManager::Render(HDC _hdc)
 {
-	m_curScene->Render(_hdc);
+	int t_MonsterCount = m_curScene->GetMonsterSize();
+	if(t_MonsterCount > 0)
+		m_curScene->Render(_hdc);
+	else
+	{
+		delete m_curScene;
+	}
 }
 
