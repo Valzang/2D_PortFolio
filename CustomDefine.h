@@ -71,6 +71,7 @@ enum class GROUP_TYPE
 	DEFAULT,
 	PLAYER,
 	MONSTER,
+	BOMB,
 	THING,
 
 	END = 10,

@@ -4,7 +4,7 @@ class cBomb :
     public cObject
 {
 private:
-    float m_Direction; // 위 아래 방향
+    Image* m_BombImg;  // 이미지 파일
 
 public:
     cBomb();
@@ -12,12 +12,5 @@ public:
 
     virtual void Update();
     virtual void Render(HDC _hdc);
-    void SetDirection(bool _Up)
-    {
-        if (_Up)
-            m_Direction = -1.f;
-        else
-            m_Direction = 1.f;
-    }
 };
 

@@ -5,9 +5,9 @@ class cPlayer :
     public cObject
 {
 private:
-    Image* m_PlayerImg;  // 이미지 파일
-    Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
+    Image* m_PlayerImg;  // 이미지 파일    
     bool m_isMoved;
+    double m_AtkCoolTime;
 
 public:
     cPlayer();

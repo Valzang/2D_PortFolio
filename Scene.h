@@ -14,18 +14,35 @@ private:
 	// 오브젝트들을 담을 벡터를 그룹 개수만큼 선언
 	vector<cObject*> m_arr_obj[(UINT)GROUP_TYPE::END];
 	wstring m_sceneName;
+	Image* m_SceneImg;  // 이미지 파일
+	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
 public:
+	cScene() : m_SceneImg(nullptr) {}
+	virtual ~cScene();
+
+
 	// 함수 정의를 헤더파일에 할 시에 inline 처리 되서 함수 호출 비용이 줆
 	void AddObject(cObject* _Obj, GROUP_TYPE _Type)
 	{
 		m_arr_obj[(UINT)_Type].push_back(_Obj);
 	}
 
-	cScene() {}
-	virtual ~cScene();
+	void DeleteObject(cObject* _Obj, GROUP_TYPE _Type)
+	{
+		for (UINT j = 0; j < m_arr_obj[UINT(_Type)].size(); ++j)
+		{
+			// m_arr_obj[i] 그룹 벡터의 j 물체 삭제
+			delete m_arr_obj[UINT(_Type)][j];
+		}
+		m_arr_obj[UINT(_Type)].clear();
+	}
 
-	void SetName(const wstring& _strName) { m_sceneName = _strName; }
+	
+
+	void SetSceneImg(const wchar_t* FileName);
+	void DeleteSceneImg();
+	void SetName(const wstring& _strName);
 	const wstring& GetName() { return m_sceneName; }
 
 	virtual void Enter() = 0; // 해당 씬으로 진입 시 호출

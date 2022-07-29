@@ -9,12 +9,11 @@ private:
     float m_Speed;
     float m_MaxDistance;
     Image* m_MonsterImg;  // 이미지 파일
-    ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
 public:
     virtual void Update() override;
     cMonster();
-    ~cMonster();
+    virtual ~cMonster();
 
     float GetSpeed() { return m_Speed; }
     void SetSpeed(float _speed) { m_Speed = _speed; }

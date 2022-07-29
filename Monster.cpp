@@ -12,7 +12,7 @@ cMonster::cMonster() :
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/FlyingMonster.png");		
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
 	
-	m_imgAttr.SetColorKey(Color(0, 160, 80), Color(0, 170, 80)); // 왼쪽 컬러에서부터 오른쪽 컬러 사이 값들을 투명하게 만들어줌
+	SetImgAttr();
 	SetDirection(1);
 }
 
@@ -36,8 +36,9 @@ void cMonster::Render(HDC _hdc)
 	int yStart = 0;
 
 	Vec2 Temp_Pos = GetPos();
+	Vec2 Scale = GetScale();
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
-	graphics.DrawImage(m_MonsterImg, Rect((int)Temp_Pos.x-GetScale().x/2, (int)Temp_Pos.y - GetScale().y / 2, w, h), xStart, yStart, w, h, UnitPixel, &m_imgAttr);
+	graphics.DrawImage(m_MonsterImg, Rect((int)Temp_Pos.x- (int)Scale.x/2, (int)Temp_Pos.y - (int)Scale.y / 2, w, h), xStart, yStart, w, h, UnitPixel, GetImgAttr());
 }
 
 void cMonster::Update()
