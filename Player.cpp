@@ -45,6 +45,7 @@ void cPlayer::Update()
 	}
 	if (KEY_CHECK(KEY::J, KEY_STATE::HOLD))
 	{
+		m_isMoved = true;
 		Pos.x -= 200.f * DELTA_TIME;
 		SetDirection(-1);
 	}
@@ -61,6 +62,7 @@ void cPlayer::Update()
 	}
 	if (KEY_CHECK(KEY::L, KEY_STATE::HOLD))
 	{
+		m_isMoved = true;
 		Pos.x += 200.f * DELTA_TIME;
 		SetDirection(1);
 	}
@@ -87,7 +89,16 @@ void cPlayer::Render(HDC _hdc)
 
 	int xStart = 0, yStart = 0;
 	if (m_isMoved)
-		curFrame = curFrame >= 2 ? 0 : curFrame + 1;
+	{
+		static int temp = 1;
+		temp = temp >= 8 ? 1 : temp + 1;
+
+		curFrame = temp/3;
+		
+		//curFrame = curFrame >= 5 ? 0 : curFrame + 1;
+		//if (curFrame == 4)
+//			int temp = 0;
+	}
 	else
 		curFrame = 0;
 
