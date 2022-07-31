@@ -11,7 +11,6 @@ cScene_Start::cScene_Start()
 
 cScene_Start::~cScene_Start()
 {
-	DeleteSceneImg();
 }
 
 void cScene_Start::Enter()
@@ -22,7 +21,7 @@ void cScene_Start::Enter()
 	AddObject(PlayerObj, GROUP_TYPE::PLAYER);
 
 
-	// 몬스터 배치
+	// 몬스터 배치	
 	SetMonsterSize(10);			// 몬스터 수
 	float MoveDist = 40.f;		// 몬스터의 행동 반경
 	float ObjectScale = 81.f;	// 몬스터 사진의 크기

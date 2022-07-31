@@ -10,7 +10,7 @@ public:
     cBomb();
     virtual ~cBomb();
 
-    virtual void Update();
+    virtual bool Update();
     virtual void Render(HDC _hdc);
 };
 

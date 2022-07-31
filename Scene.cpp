@@ -35,9 +35,14 @@ void cScene::Update()
 {
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
-		for (UINT j = 0; j < m_arr_obj[i].size(); ++j)
+		for (INT j = (INT)(m_arr_obj[i].size())-1; j >= 0; --j)
 		{
-			m_arr_obj[i][j]->Update();
+			if (m_arr_obj[i][j]->Update() == false)
+			{
+				delete m_arr_obj[i][j];
+				m_arr_obj[i][j] = nullptr;
+				m_arr_obj[i].erase(m_arr_obj[i].begin() + j);
+			}
 		}
 	}
 }

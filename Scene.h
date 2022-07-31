@@ -19,7 +19,7 @@ private:
 	int m_MonsterCount;
 
 public:
-	cScene() : m_SceneImg(nullptr) {}
+	cScene() : m_SceneImg(nullptr), m_MonsterCount(0) {}
 	virtual ~cScene();
 
 
@@ -31,19 +31,22 @@ public:
 
 	void DeleteObject(cObject* _Obj, GROUP_TYPE _Type)
 	{
-		for (UINT j = 0; j < m_arr_obj[UINT(_Type)].size(); ++j)
+		for (int j = (int)m_arr_obj[UINT(_Type)].size()-1 ; j >= 0; --j)
 		{
-			// m_arr_obj[i] 그룹 벡터의 j 물체 삭제
-			delete m_arr_obj[UINT(_Type)][j];
+			// m_arr_obj[i] 그룹 벡터의 j가 죽어있으면 해당 객체 삭제
+			if (m_arr_obj[UINT(_Type)][j]->isDead())
+			{
+				delete m_arr_obj[UINT(_Type)][j];
+				m_arr_obj[UINT(_Type)].erase(m_arr_obj[UINT(_Type)].begin() + j);
+			}
 		}
-		m_arr_obj[UINT(_Type)].clear();
 	}
 
 	int GetMonsterSize() { return m_MonsterCount; }
 	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
 
-	void SetSceneImg(const wchar_t* FileName);
-	void DeleteSceneImg();
+	virtual void SetSceneImg(const wchar_t* FileName);
+	virtual void DeleteSceneImg();
 	void SetName(const wstring& _strName);
 	const wstring& GetName() { return m_sceneName; }
 
@@ -55,4 +58,3 @@ public:
 
 
 };
-

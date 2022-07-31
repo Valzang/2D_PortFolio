@@ -6,12 +6,13 @@ class cMonster :
 {
 private:
     Vec2 m_CenterPos;
+    int m_HP;
     float m_Speed;
     float m_MaxDistance;
     Image* m_MonsterImg;  // 이미지 파일
 
 public:
-    virtual void Update() override;
+    virtual bool Update() override;
     cMonster();
     virtual ~cMonster();
 

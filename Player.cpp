@@ -7,7 +7,8 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
-cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_AtkCoolTime(3.f)
+cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false)
+					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_LifeCount(3)
 {
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/4.f));
@@ -22,19 +23,32 @@ cPlayer::~cPlayer()
 		delete m_PlayerImg;
 }
 
-void cPlayer::Update()
+bool cPlayer::Update()
 {
+	if (m_LifeCount < 0)
+		return false;
+
 	Vec2 Pos = GetPos();
+	if (OnPlatform() == false)
+		Pos.y += 500.f * DELTA_TIME; // 중력
 
 	// DELTA_TIME으로 시간동기화 해서 이동
 
-	if (KEY_CHECK(KEY::I, KEY_STATE::HOLD))
+	if (KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 	{
 		Pos.y -= 200.f * DELTA_TIME;
 	}
-	if (KEY_CHECK(KEY::K, KEY_STATE::HOLD))
+	if (KEY_CHECK(KEY::K, KEY_STATE::HOLD)) // 밑을 보는 이미지로 변경해야함.
 	{
-		Pos.y += 200.f * DELTA_TIME;
+		m_isSitted = true;
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_isDashing == false) // 여기서 대쉬하면서 이동을 빠르게 해야함.
+		{
+			m_isDashing = true;
+		}
+	}
+	if (KEY_CHECK(KEY::K, KEY_STATE::UP))
+	{
+		m_isSitted = false;
 	}
 
 	// ============================================= 좌측 이동
@@ -85,6 +99,9 @@ void cPlayer::Update()
 		m_AtkCoolTime += DELTA_TIME;
 	}
 	SetPos(Pos);
+	SetPosOtherside();
+
+	return true;
 }
 
 void cPlayer::Render(HDC _hdc)
@@ -105,12 +122,16 @@ void cPlayer::Render(HDC _hdc)
 
 	}
 	else
+	{
+		if(m_isSitted)
+			yStart = (int)(m_PlayerImg->GetHeight() / 4.f);
 		curFrame = 0;
+	}
 
 	xStart = curFrame * w;
 	
 	if (GetDirection() == -1)
-		yStart = (int)(m_PlayerImg->GetHeight() / 2.f);
+		yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
 
 	Vec2 Temp_Pos = GetPos();
 	Vec2 Scale = GetScale();

@@ -12,7 +12,11 @@ cSceneManager::~cSceneManager()
 	for (UINT i = 0; i < (UINT)SCENE_TYPE::END; ++i)
 	{
 		if (m_arrScene[i] != nullptr)
+		{
+			//m_arrScene[i]->DeleteSceneImg();
 			delete m_arrScene[i];
+			m_arrScene[i] = nullptr;
+		}
 	}
 }
 

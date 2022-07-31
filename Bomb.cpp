@@ -15,15 +15,13 @@ cBomb::~cBomb()
 {
 }
 
-void cBomb::Update()
+bool cBomb::Update()
 {
-
 	Vec2 Pos = GetPos();
 	Pos.y += 500.f * DELTA_TIME * GetDirection();
-	if (Pos.y <= 0)
-		Pos.y = CCore::GetInstance()->GetResolution().y;
 	SetPos(Pos);
-
+	SetPosOtherside();
+	return true;
 }
 
 void cBomb::Render(HDC _hdc)
