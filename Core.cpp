@@ -74,6 +74,7 @@ void CCore::Progress()
 
 	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
 		   , m_memDC, 0, 0, SRCCOPY);
+	// m_memDC : 그려주는 도화지, m_hDC : 메인 도화지
 
 }
 

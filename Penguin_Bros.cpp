@@ -13,7 +13,7 @@
 // 전역 변수:
 
 HINSTANCE hInst;                                // 현재 인스턴스입니다. HINSTANCE는 하나 밖에 없음. HINSTANCE > HWND > H
-HWND hWnd;                                      // 현재 윈도우 핸들
+HWND hWnd;                                     // 현재 윈도우 핸들
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
 WCHAR szWindowClass[MAX_LOADSTRING];            // 기본 창 클래스 이름입니다.
 
