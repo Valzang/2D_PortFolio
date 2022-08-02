@@ -10,7 +10,7 @@
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_JumpingTime(0.f), m_DashTime(0.f), m_LifeCount(3)
 					, m_Falling(500.f)
-{
+{	
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/4.f));
 
@@ -33,15 +33,12 @@ bool cPlayer::Update()
 		return false;
 
 	Vec2 Pos = GetPos();
+
 	if (!isOnPlatform()) // 플랫폼 위에 없다면 중력
 	{
-		if (m_isJumping)
-		{
-			Pos.y -= m_Falling * DELTA_TIME;
-			m_Falling -= 15.45f;
-		}
-		else
-			Pos.y += 500.f * DELTA_TIME;		
+		Pos.y += m_Dir.y * DELTA_TIME;
+		if (m_Dir.y < 800.f)
+			m_Dir.y += 1200.f * DELTA_TIME;
 	}
 
 	// DELTA_TIME으로 시간동기화 해서 이동
@@ -90,18 +87,21 @@ bool cPlayer::Update()
 		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isDashing && isOnPlatform())
 		{
 			m_isJumping = true;
+			m_Dir.y *= -0.9;
 			SetOnPlatform(false);
 		}
 
 		// ============================================= 좌측 이동
 		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN))
 		{
-			m_isMoved = true;
+			if (!m_isDashing)
+				m_isMoved = true;
 			SetDirection(-1);
 		}
 		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD))
 		{
-			m_isMoved = true;
+			if (!m_isDashing)
+				m_isMoved = true;
 			Pos.x -= 250.f * DELTA_TIME;
 			SetDirection(-1);
 		}
@@ -113,12 +113,14 @@ bool cPlayer::Update()
 		// ============================================= 우측 이동
 		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN))
 		{
-			m_isMoved = true;
+			if(!m_isDashing)
+				m_isMoved = true;
 			SetDirection(1);
 		}
 		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD))
 		{
-			m_isMoved = true;
+			if (!m_isDashing)
+				m_isMoved = true;
 			Pos.x += 250.f * DELTA_TIME;
 			SetDirection(1);
 		}
@@ -140,11 +142,15 @@ bool cPlayer::Update()
 		m_DashCoolTime += DELTA_TIME;
 	}
 
-	CollsionWithPlatform(*this);
+	//if (Pos.y + GetScale().y / 2.f <= 384.f + 500.f * DELTA_TIME
+	//	&& Pos.y + GetScale().y / 2.f >= 384.f - 500.f * DELTA_TIME)
+	//	SetOnPlatform(true);
+	if(m_Dir.y >= 0.f)
+		CollsionWithPlatform(*this, 1.f);
 	if (isOnPlatform())
 	{
+		m_Dir.y = 600.f;
 		m_isJumping = false;
-		m_Falling = 500.f;
 	}
 
 	SetPos(Pos);

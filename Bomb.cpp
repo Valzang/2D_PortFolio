@@ -5,8 +5,9 @@
 // PI/2 => 아래직선			-PI/2 => 위 직선
 // PI/4 => 우측아래대각선		-PI/4 => 우측위 대각선
 
-cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_Dir(Vec2(-2.f, -3.f))
+cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0)
 {
+	m_Dir = Vec2(-2.f, -3.f);
 	m_Dir.Normalize();
 	m_BombImg = Image::FromFile((WCHAR*)L"Image/Bomb.png");
 	SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight()));
@@ -25,16 +26,23 @@ bool cBomb::Update()
 		return false;
 	Vec2 Pos = GetPos();
 
-	Pos.x += -600.f * m_Dir.x * DELTA_TIME * GetDirection(); // 바라보는 방향에 맞게끔
-	Pos.y += 600.f * m_Dir.y * DELTA_TIME;
+	if (!isOnPlatform())
+	{
+		Pos.x += -600.f * m_Dir.x * DELTA_TIME * GetDirection(); // 바라보는 방향에 맞게끔
 
-	if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
-		m_Dir.y += 8.f * DELTA_TIME;
-	if (m_Dir.x > 0) // 폭탄 방향도 마찬가지
-		m_Dir.x -= 0.3f * DELTA_TIME;
-	else if (m_Dir.x < 0)
-		m_Dir.x += 0.3f * DELTA_TIME;
+		Pos.y += 600.f * m_Dir.y * DELTA_TIME;
 
+		if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+			m_Dir.y += 8.f * DELTA_TIME;
+		if (m_Dir.x > 0) // 폭탄 방향도 마찬가지
+			m_Dir.x -= 0.3f * DELTA_TIME;
+		else if (m_Dir.x < 0)
+			m_Dir.x += 0.3f * DELTA_TIME;
+
+		CollsionWithPlatform(*this, 120.f);
+	}	
+	if (isOnPlatform())
+		m_Dir.y = 0;
 
 	//Pos.y += 500.f * DELTA_TIME * GetDirection();
 	SetPos(Pos);

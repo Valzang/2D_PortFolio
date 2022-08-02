@@ -20,7 +20,7 @@ void cObject::SetPosOtherside()
 	SetPos(curPos);
 }
 
-void cObject::CollsionWithPlatform(cObject& curObj)
+void cObject::CollsionWithPlatform(cObject& curObj, float multiplier)
 {
 	Vec2 og_pos = curObj.GetPos();
 	Vec2 curObj_Left = curObj.GetPos();
@@ -42,7 +42,9 @@ void cObject::CollsionWithPlatform(cObject& curObj)
 		float Top_End = Platform_Pos.y - Platform_Scale.y / 2.f;
 		//float Bottom_End = Platform_Pos.y + Platform_Scale.y / 2.f;
 
-		if (Top_End >= curObj_y && Top_End - curObj_y <= 1.f	// ÇöÀç ÇÃ·§Æû°ú 1 ÀÌÇÏÀÇ Â÷ÀÌ·Î ÇÃ·§Æû À§¿¡ ÀÖ°í
+		double cur_DT = double(multiplier * m_Dir.y * DELTA_TIME);
+
+		if ((curObj_y >= Top_End - cur_DT) && (curObj_y <= Top_End + cur_DT) 	// ÇöÀç ÇÃ·§Æû°ú 1 ÀÌÇÏÀÇ Â÷ÀÌ·Î ÇÃ·§Æû À§¿¡ ÀÖ°í
 			&& curObj_Right.x > Left_End && curObj_Left.x < Right_End )	// ÇöÀç ÇÃ·§ÆûÀÇ ÁÂÃø ³¡°ú ¿ìÃø ³¡ »çÀÌ¿¡ ÀÖÀ» ¶§,
 		{
 			curObj.SetOnPlatform(true);

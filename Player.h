@@ -6,6 +6,7 @@ class cPlayer :
 {
 private:
     Image* m_PlayerImg;  // 이미지 파일    
+
     bool m_isMoved;     // 현재 움직이고 있는지
     bool m_isSitted;    // 현재 앉아있는 지
     bool m_isDashing;   // 현재 대쉬중인지

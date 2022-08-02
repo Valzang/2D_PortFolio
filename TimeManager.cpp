@@ -1,9 +1,9 @@
 #include "TimeManager.h"
 
 cTimeManager::cTimeManager() : m_prevCount(), m_curCount(),
-							m_curFrequency(), m_deltaTime(),
-							m_callCount(), m_accumlate(),
-							m_FPS()
+m_curFrequency(), m_deltaTime(),
+m_callCount(), m_accumlate(),
+m_FPS()
 {
 
 }
@@ -24,6 +24,7 @@ void cTimeManager::Init()
 
 void cTimeManager::Update()
 {
+	HWND hWnd = GetFocus();
 	QueryPerformanceCounter(&m_curCount);
 
 	// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
@@ -31,7 +32,6 @@ void cTimeManager::Update()
 
 	// 이전 카운트 값을 전체값을 갱신(다음번 계산을 위해)
 	m_prevCount = m_curCount;
-
 	// 함수 호출 횟수 증가
 	++m_callCount;
 
@@ -49,4 +49,5 @@ void cTimeManager::Update()
 		swprintf_s(Buffer, L"FPS : %d, DT : %.8f", m_FPS, m_deltaTime);
 		SetWindowText(CCore::GetInstance()->GetMainHwnd(), Buffer);
 	}
+
 }
