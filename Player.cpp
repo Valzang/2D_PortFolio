@@ -9,6 +9,7 @@
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_JumpingTime(0.f), m_DashTime(0.f), m_LifeCount(3)
+					, m_Falling(500.f)
 {
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/4.f));
@@ -20,7 +21,10 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 cPlayer::~cPlayer()
 {
 	if (m_PlayerImg != NULL)
+	{
 		delete m_PlayerImg;
+		m_PlayerImg = nullptr;
+	}
 }
 
 bool cPlayer::Update()
@@ -29,8 +33,16 @@ bool cPlayer::Update()
 		return false;
 
 	Vec2 Pos = GetPos();
-	//if (OnPlatform() == false) // 플랫폼 위에 없다면 중력
-		//Pos.y += 500.f * DELTA_TIME; 
+	if (!isOnPlatform()) // 플랫폼 위에 없다면 중력
+	{
+		if (m_isJumping)
+		{
+			Pos.y -= m_Falling * DELTA_TIME;
+			m_Falling -= 15.45f;
+		}
+		else
+			Pos.y += 500.f * DELTA_TIME;		
+	}
 
 	// DELTA_TIME으로 시간동기화 해서 이동
 
@@ -72,27 +84,13 @@ bool cPlayer::Update()
 		}
 		if (KEY_CHECK(KEY::K, KEY_STATE::UP) || KEY_CHECK(KEY::K, KEY_STATE::NONE))
 		{
-			if (!m_isDashing)
-				m_isSitted = false;
+			m_isSitted = false;
 		}
 
-		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping)
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isDashing && isOnPlatform())
 		{
 			m_isJumping = true;
-		}
-
-		if (m_isJumping) // 점프 중이면 => 현재는 godown이라는 변수로 공중에서의 y값 변화를 줄여주었지만, 플랫폼을 구현한 이후에는 JumpingTime이 필요 없어지게 된다.
-		{
-			static float godown = 500.f;
-			Pos.y -= godown * DELTA_TIME;
-			m_JumpingTime += DELTA_TIME;
-			godown -= 15.45f;
-			if (m_JumpingTime >= 1)
-			{
-				m_isJumping = false;
-				m_JumpingTime = 0;
-				godown = 500.f;
-			}
+			SetOnPlatform(false);
 		}
 
 		// ============================================= 좌측 이동
@@ -142,7 +140,13 @@ bool cPlayer::Update()
 		m_DashCoolTime += DELTA_TIME;
 	}
 
-	
+	CollsionWithPlatform(*this);
+	if (isOnPlatform())
+	{
+		m_isJumping = false;
+		m_Falling = 500.f;
+	}
+
 	SetPos(Pos);
 	SetPosOtherside();
 
@@ -200,7 +204,7 @@ void cPlayer::CreateBomb()
 	if (m_isMoved) // 움직이면서 폭탄을 날렸을 시
 	{
 		Vec2 temp = bomb->GetDir();
-		temp.x *= 1.8;
+		temp.x *= 1.8f;
 		bomb->SetDir(temp);
 	}
 	bomb->SetPos(bomb_Pos);

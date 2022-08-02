@@ -23,12 +23,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Engine\03. Object\Header">
-      <UniqueIdentifier>{67dd3048-5c1d-469b-842e-4731c9501628}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\03. Object\Source">
-      <UniqueIdentifier>{78c4f9d7-ed1b-4a0d-8056-9b47ab7d5906}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\04. Scene\Source">
       <UniqueIdentifier>{013eb19c-1099-4a66-8933-00231ff657af}</UniqueIdentifier>
     </Filter>
@@ -48,6 +42,18 @@
     <Filter Include="Default\Source">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Engine\03. Object\Bomb">
+      <UniqueIdentifier>{b30fce9d-3d0f-421a-9b00-2368304a399f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Monster">
+      <UniqueIdentifier>{0dff8edf-9404-4f76-8ec1-d4f314ac336e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Platform">
+      <UniqueIdentifier>{6db318e6-c958-4299-8a79-465ccaa842c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\03. Object\Player">
+      <UniqueIdentifier>{a2ee3d5b-fa11-4044-b62f-bb9bb05d5510}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -75,18 +81,6 @@
     <ClInclude Include="Scene_Start.h">
       <Filter>Engine\04. Scene\Header</Filter>
     </ClInclude>
-    <ClInclude Include="Bomb.h">
-      <Filter>Engine\03. Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Monster.h">
-      <Filter>Engine\03. Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>Engine\03. Object\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Engine\03. Object\Header</Filter>
-    </ClInclude>
     <ClInclude Include="KeyManager.h">
       <Filter>Engine\02. Manager\Header</Filter>
     </ClInclude>
@@ -96,8 +90,26 @@
     <ClInclude Include="TimeManager.h">
       <Filter>Engine\02. Manager\Header</Filter>
     </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Engine\03. Object\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform_Under.h">
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Platform_SideWall.h">
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClInclude>
     <ClInclude Include="Platform.h">
-      <Filter>Engine\03. Object\Header</Filter>
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomb.h">
+      <Filter>Engine\03. Object\Bomb</Filter>
+    </ClInclude>
+    <ClInclude Include="Monster.h">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>Engine\03. Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -113,18 +125,6 @@
     <ClCompile Include="Scene_Start.cpp">
       <Filter>Engine\04. Scene\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Bomb.cpp">
-      <Filter>Engine\03. Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Monster.cpp">
-      <Filter>Engine\03. Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>Engine\03. Object\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Engine\03. Object\Source</Filter>
-    </ClCompile>
     <ClCompile Include="KeyManager.cpp">
       <Filter>Engine\02. Manager\Source</Filter>
     </ClCompile>
@@ -134,8 +134,26 @@
     <ClCompile Include="TimeManager.cpp">
       <Filter>Engine\02. Manager\Source</Filter>
     </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Engine\03. Object\Player</Filter>
+    </ClCompile>
     <ClCompile Include="Platform.cpp">
-      <Filter>Engine\03. Object\Source</Filter>
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform_SideWall.cpp">
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform_Under.cpp">
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomb.cpp">
+      <Filter>Engine\03. Object\Bomb</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster.cpp">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>Engine\03. Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

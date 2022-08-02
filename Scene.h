@@ -17,9 +17,10 @@ private:
 	Image* m_SceneImg;  // 이미지 파일
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 	int m_MonsterCount;
+	int m_PlatformCount;
 
 public:
-	cScene() : m_SceneImg(nullptr), m_MonsterCount(0) {}
+	cScene() : m_SceneImg(nullptr), m_MonsterCount(0), m_PlatformCount(0) {}
 	virtual ~cScene();
 
 
@@ -44,6 +45,11 @@ public:
 
 	int GetMonsterSize() { return m_MonsterCount; }
 	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
+
+	int GetPlatformSize() { return m_PlatformCount; }
+	void SetPlatformSize(int _s) { m_PlatformCount = _s; }
+
+	vector<cObject*>* GetCurObjectVec() { return m_arr_obj; }
 
 	virtual void SetSceneImg(const wchar_t* FileName);
 	virtual void DeleteSceneImg();

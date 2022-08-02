@@ -110,9 +110,10 @@ enum class GROUP_TYPE
 	PLAYER,
 	MONSTER,
 	BOMB,
+	PLATFORM,
 	THING,
 
-	END = 10,
+	END = 8,
 };
 
 enum class SCENE_TYPE

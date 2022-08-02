@@ -1,6 +1,8 @@
 #include "Scene_Start.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Platform_SideWall.h"
+#include "Platform_Under.h"
 
 #include "Core.h"
 
@@ -17,7 +19,7 @@ void cScene_Start::Enter()
 {
 	// 플레이어 추가 및 위치 설정
 	cPlayer* PlayerObj = new cPlayer;
-	PlayerObj->SetPos(Vec2 { 640.f, 384.f });
+	PlayerObj->SetPos(Vec2 { 640.f, 380.f });
 	AddObject(PlayerObj, GROUP_TYPE::PLAYER);
 
 
@@ -40,6 +42,34 @@ void cScene_Start::Enter()
 		MonsterObj->SetMaxDist(MoveDist);
 		AddObject(MonsterObj, GROUP_TYPE::MONSTER);		
 	}
+
+	SetPlatformSize(6);
+
+	//Platform Object 추가
+	cPlatform* PlatformObj = nullptr;
+	PlatformObj = new cPlatform_SideWall;
+	PlatformObj->SetPos(Vec2 { (PlatformObj->GetScale().x / 2.f), Resolution.y/2.f });
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform_SideWall;
+	PlatformObj->SetPos(Vec2 { Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform_Under;
+	PlatformObj->SetPos(Vec2 { Resolution.x/2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	//for (; i < GetPlatformSize(); ++i)
+	//{
+	//	PlatformObj = new cPlatform;
+	//	PlatformObj->SetPos(Vec2 { (MoveDist + ObjectScale / 2.f) + temp * (float)i, 50.f });
+	//	PlatformObj->SetCenterPos(PlatformObj->GetPos());
+	//	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+	//}
 }
 
 void cScene_Start::Exit() // 나가면서 현재 플레이어에 대한 정보를 씬 매니저에 넘겨줘야할 듯..?

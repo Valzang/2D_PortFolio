@@ -12,6 +12,7 @@ private:
     bool m_isJumping;   // 현재 점프 중인지
 
     int m_LifeCount;     // 현재 목숨
+    double m_Falling;
 
     double m_AtkCoolTime; // 폭탄 간 쿨타임
     double m_DashTime;    // 몇 초 간 대쉬를 하는지

@@ -148,6 +148,8 @@
     <ClInclude Include="Monster.h" />
     <ClInclude Include="Object.h" />
     <ClInclude Include="Penguin_Bros.h" />
+    <ClInclude Include="Platform_SideWall.h" />
+    <ClInclude Include="Platform_Under.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
@@ -164,6 +166,8 @@
     <ClCompile Include="Monster.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Penguin_Bros.cpp" />
+    <ClCompile Include="Platform_SideWall.cpp" />
+    <ClCompile Include="Platform_Under.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />

@@ -29,11 +29,11 @@ bool cBomb::Update()
 	Pos.y += 600.f * m_Dir.y * DELTA_TIME;
 
 	if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
-		m_Dir.y += 0.08f;
+		m_Dir.y += 8.f * DELTA_TIME;
 	if (m_Dir.x > 0) // 폭탄 방향도 마찬가지
-		m_Dir.x -= 0.005f;
+		m_Dir.x -= 0.3f * DELTA_TIME;
 	else if (m_Dir.x < 0)
-		m_Dir.x += 0.005f;
+		m_Dir.x += 0.3f * DELTA_TIME;
 
 
 	//Pos.y += 500.f * DELTA_TIME * GetDirection();
