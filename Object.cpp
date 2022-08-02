@@ -40,11 +40,11 @@ void cObject::CollsionWithPlatform(cObject& curObj, float multiplier)
 		float Left_End = Platform_Pos.x - Platform_Scale.x/2.f;
 		float Right_End = Platform_Pos.x + Platform_Scale.x/2.f;
 		float Top_End = Platform_Pos.y - Platform_Scale.y / 2.f;
-		//float Bottom_End = Platform_Pos.y + Platform_Scale.y / 2.f;
+		float Bottom_End = Platform_Pos.y + Platform_Scale.y / 2.f;
 
 		double cur_DT = double(multiplier * m_Dir.y * DELTA_TIME);
 
-		if ((curObj_y >= Top_End - cur_DT) && (curObj_y <= Top_End + cur_DT) 	// ÇöÀç ÇÃ·§Æû°ú 1 ÀÌÇÏÀÇ Â÷ÀÌ·Î ÇÃ·§Æû À§¿¡ ÀÖ°í
+		if ((curObj_y >= Top_End - cur_DT) && (curObj_y <= Bottom_End) 	// ÇöÀç ÇÃ·§Æû°ú 1 ÀÌÇÏÀÇ Â÷ÀÌ·Î ÇÃ·§Æû À§¿¡ ÀÖ°í
 			&& curObj_Right.x > Left_End && curObj_Left.x < Right_End )	// ÇöÀç ÇÃ·§ÆûÀÇ ÁÂÃø ³¡°ú ¿ìÃø ³¡ »çÀÌ¿¡ ÀÖÀ» ¶§,
 		{
 			curObj.SetOnPlatform(true);
