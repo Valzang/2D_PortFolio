@@ -39,7 +39,7 @@ bool cBomb::Update()
 		else if (m_Dir.x < 0)
 			m_Dir.x += 0.3f * DELTA_TIME;
 
-		CollsionWithPlatform(*this, 120.f);
+		CollsionWithPlatform(*this, Pos, GetScale()/2, 600.f);
 	}	
 	if (isOnPlatform())
 		m_Dir.y = 0;
@@ -55,7 +55,7 @@ void cBomb::Render(HDC _hdc)
 	Graphics graphics(_hdc);
 
 	Vec2 Pos = GetPos();
-	Vec2 Scale = GetScale();
+	Vec2 Scale = GetScale()/2;
 
 	static int xStart = 0;
 	int yStart = 0;

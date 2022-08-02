@@ -65,6 +65,7 @@ struct Vec2
 	{
 		x = (float)_pt.x;
 		y = (float)_pt.y;
+		return *this;
 	}
 
 	template <typename T>
@@ -72,6 +73,7 @@ struct Vec2
 	{
 		x *= (float)_value;
 		y *= (float)_value;
+		return *this;
 	}
 
 	template <typename T>
@@ -79,6 +81,7 @@ struct Vec2
 	{
 		x /= (float)_value;
 		y /= (float)_value;
+		return *this;
 	}
 
 	Vec2() : x(0.f), y(0.f) {}

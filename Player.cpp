@@ -8,11 +8,12 @@
 #include "Scene.h"
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
-					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_JumpingTime(0.f), m_DashTime(0.f), m_LifeCount(3)
-					, m_Falling(500.f)
+					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3)
 {	
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/4.f));
+
+	SetDir(Vec2(-2.f, 450.f));
 
 	SetImgAttr();
 	SetDirection(1);
@@ -38,7 +39,13 @@ bool cPlayer::Update()
 	{
 		Pos.y += m_Dir.y * DELTA_TIME;
 		if (m_Dir.y < 800.f)
-			m_Dir.y += 1200.f * DELTA_TIME;
+		{
+			if(m_isJumping)
+				m_Dir.y += 1200.f * DELTA_TIME;
+			else
+				m_Dir.y += 250.f * DELTA_TIME;
+		}
+			
 	}
 
 	// DELTA_TIME으로 시간동기화 해서 이동
@@ -87,7 +94,7 @@ bool cPlayer::Update()
 		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isDashing && isOnPlatform())
 		{
 			m_isJumping = true;
-			m_Dir.y *= -0.9;
+			m_Dir.y *= -1;
 			SetOnPlatform(false);
 		}
 
@@ -146,10 +153,13 @@ bool cPlayer::Update()
 	//	&& Pos.y + GetScale().y / 2.f >= 384.f - 500.f * DELTA_TIME)
 	//	SetOnPlatform(true);
 	if(m_Dir.y >= 0.f)
-		CollsionWithPlatform(*this, 1.f);
+	{
+		Vec2 Scale = GetScale();
+		CollsionWithPlatform(*this, Pos, Scale, 1.f);
+	}
 	if (isOnPlatform())
 	{
-		m_Dir.y = 600.f;
+		m_Dir.y = 450.f;
 		m_isJumping = false;
 	}
 

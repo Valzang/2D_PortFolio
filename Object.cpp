@@ -20,16 +20,16 @@ void cObject::SetPosOtherside()
 	SetPos(curPos);
 }
 
-void cObject::CollsionWithPlatform(cObject& curObj, float multiplier)
+void cObject::CollsionWithPlatform(cObject& curObj, Vec2& curObj_Pos, Vec2& curObj_Scl, float multiplier)
 {
-	Vec2 og_pos = curObj.GetPos();
-	Vec2 curObj_Left = curObj.GetPos();
-	curObj_Left.x -= (curObj.GetScale().x / 2);
+	Vec2 og_pos = curObj_Pos;
+	Vec2 curObj_Left = curObj_Pos;
+	curObj_Left.x -= (curObj_Scl.x / 2);
 
-	float curObj_y = curObj_Left.y + (curObj.GetScale().y / 2);
+	float curObj_y = curObj_Left.y + (curObj_Scl.y / 2);
 
-	Vec2 curObj_Right = curObj.GetPos();
-	curObj_Right.x += (curObj.GetScale().x / 2);
+	Vec2 curObj_Right = curObj_Pos;
+	curObj_Right.x += (curObj_Pos.x / 2);
 
 	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
 	for (int i = 0; i < curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLATFORM].size(); ++i)
@@ -46,7 +46,7 @@ void cObject::CollsionWithPlatform(cObject& curObj, float multiplier)
 
 		if ((curObj_y >= Top_End - cur_DT) && (curObj_y <= Bottom_End) 	// 현재 플랫폼과 1 이하의 차이로 플랫폼 위에 있고
 			&& curObj_Right.x > Left_End && curObj_Left.x < Right_End )	// 현재 플랫폼의 좌측 끝과 우측 끝 사이에 있을 때,
-		{
+		{			
 			curObj.SetOnPlatform(true);
 			return;
 		}
