@@ -8,7 +8,11 @@ cScene::~cScene()
 		for (UINT j = 0; j < m_arr_obj[i].size(); ++j)
 		{
 			// m_arr_obj[i] 그룹 벡터의 j 물체 삭제
-			delete m_arr_obj[i][j];
+			if (m_arr_obj[i][j] != NULL)
+			{
+				delete m_arr_obj[i][j];
+				m_arr_obj[i][j] = nullptr;
+			}			
 		}
 	}
 	// 위에서 벡터의 원소가 지워졌다면
@@ -23,7 +27,10 @@ void cScene::SetSceneImg(const wchar_t* FileName)
 void cScene::DeleteSceneImg()
 {
 	if (m_SceneImg != NULL)
+	{
 		delete m_SceneImg;
+		m_SceneImg = nullptr;
+	}
 }
 
 void cScene::SetName(const wstring& _strName)

@@ -197,7 +197,7 @@ void cPlayer::Render(HDC _hdc)
 	static int temp_Move = 1;
 
 	if (GetDirection() == -1)
-		yStart += (m_PlayerImg->GetHeight() / 2.f);
+		yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
 
 	if (m_isJumping)
 	{

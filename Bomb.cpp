@@ -17,6 +17,11 @@ cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0)
 
 cBomb::~cBomb()
 {
+	if (m_BombImg != NULL)
+	{
+		delete m_BombImg;
+		m_BombImg = nullptr;
+	}
 }
 
 bool cBomb::Update()
