@@ -20,36 +20,38 @@ void cObject::SetPosOtherside()
 	SetPos(curPos);
 }
 
-void cObject::CollsionWithPlatform(cObject& curObj, Vec2& curObj_Pos, Vec2& curObj_Scl, float multiplier)
+void cObject::Collsion(cObject& curObj, UINT GROUP_TYPE, float multiplier)
 {
-	Vec2 curObj_Left = curObj_Pos;
-	curObj_Left.x -= (curObj_Scl.x / 2);
+	Vec2 curObj_Left = curObj.GetPos();
+	curObj_Left.x -= (curObj.GetScale().x / 2);
 
-	float curObj_y = curObj_Left.y + (curObj_Scl.y / 2);
+	float curObj_y = curObj_Left.y + (curObj.GetScale().y / 2);
 
-	Vec2 curObj_Right = curObj_Pos;
-	curObj_Right.x += (curObj_Scl.x / 2);
+	Vec2 curObj_Right = curObj.GetPos();
+	curObj_Right.x += (curObj.GetScale().x / 2);
 
 	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
-	for (int i = 0; i < curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLATFORM].size(); ++i)
+	for (int i = 0; i < curScene->GetCurObjectVec()[GROUP_TYPE].size(); ++i)
 	{
-		Vec2 Platform_Pos = curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLATFORM][i]->GetPos();
-		Vec2 Platform_Scale = curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLATFORM][i]->GetScale();
+		Vec2 Platform_Pos = curScene->GetCurObjectVec()[GROUP_TYPE][i]->GetPos();
+		Vec2 Platform_Scale = curScene->GetCurObjectVec()[GROUP_TYPE][i]->GetScale();
 
 		float Left_End = Platform_Pos.x - Platform_Scale.x/2.f;
 		float Right_End = Platform_Pos.x + Platform_Scale.x/2.f;
 		float Top_End = Platform_Pos.y - Platform_Scale.y / 2.f;
 		float Bottom_End = Platform_Pos.y + Platform_Scale.y / 2.f;
 
-		double cur_DT = double(multiplier * m_Dir.y * DELTA_TIME);
+		double cur_DT = (double)multiplier * (double)(m_Dir.y) * DELTA_TIME;
 
-		if ((curObj_y >= Top_End - cur_DT) && (curObj_y <= Bottom_End) 	// ÇöÀç ÇÃ·§Æû°ú 1 ÀÌÇÏÀÇ Â÷ÀÌ·Î ÇÃ·§Æû À§¿¡ ÀÖ°í
+		if (GROUP_TYPE == (UINT)GROUP_TYPE::PLATFORM 
+			&& curObj_y + cur_DT >= Top_End && curObj_Left.y <= Top_End 	// ÇöÀç ÇÃ·§Æû°ú 1 ÀÌÇÏÀÇ Â÷ÀÌ·Î ÇÃ·§Æû À§¿¡ ÀÖ°í
 			&& curObj_Right.x > Left_End && curObj_Left.x < Right_End )	// ÇöÀç ÇÃ·§ÆûÀÇ ÁÂÃø ³¡°ú ¿ìÃø ³¡ »çÀÌ¿¡ ÀÖÀ» ¶§,
 		{			
 			curObj.SetOnPlatform(true);
 			return;
 		}
 	}
-	curObj.SetOnPlatform(false);
+	if (GROUP_TYPE == (UINT)GROUP_TYPE::PLATFORM)
+		curObj.SetOnPlatform(false);
 	return;
 }

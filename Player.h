@@ -17,6 +17,7 @@ private:
     double m_AtkCoolTime; // 폭탄 간 쿨타임
     double m_DashTime;    // 몇 초 간 대쉬를 하는지
     double m_DashCoolTime; // 대쉬 간 쿨타임    
+    double m_AfterAttackTime;
 
 public:
     cPlayer();

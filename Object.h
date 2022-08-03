@@ -46,7 +46,7 @@ public:
 	Gdiplus::ImageAttributes* GetImgAttr() { return &m_imgAttr; }
 	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); } // A 컬러에서부터 B 컬러 사이 값들을 투명하게 만들어줌
 
-	void CollsionWithPlatform(cObject& curObj, Vec2& curObj_Pos, Vec2& curObj_Scl,float multiplier); // 플랫폼 위에 있으면 안떨어지게끔 하려고함, 추후 구현 필요
+	void Collsion(cObject& curObj,UINT GROUP_TYPE, float multiplier); // 플랫폼 위에 있으면 안떨어지게끔 하려고함, 추후 구현 필요
 
 	virtual bool Update() = 0;
 	virtual void Render(HDC _hdc) = 0;

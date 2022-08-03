@@ -8,12 +8,12 @@
 #include "Scene.h"
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
-					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3)
+					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
 {	
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 3.f, (float)m_PlayerImg->GetHeight()/4.f));
 
-	SetDir(Vec2(-2.f, 450.f));
+	SetDir(Vec2(-2.f, 3.f));
 
 	SetImgAttr();
 	SetDirection(1);
@@ -30,10 +30,22 @@ cPlayer::~cPlayer()
 
 bool cPlayer::Update()
 {
+	Vec2 Pos = GetPos();
+	if (m_AfterAttackTime > 0.f) // 뒤로 밀려나게끔
+	{
+		float Back = 100.f;
+		if (m_isJumping)
+			Back = 200.f;
+		if (GetDirection() != -1) // 방향에 따른 이동
+			Pos.x -= Back * DELTA_TIME;
+		else
+			Pos.x += Back * DELTA_TIME;
+
+		m_AfterAttackTime -= DELTA_TIME;
+	}
 	if (m_LifeCount < 0)
 		return false;
 
-	Vec2 Pos = GetPos();
 
 	if (!isOnPlatform()) // 플랫폼 위에 없다면 중력
 	{
@@ -105,7 +117,7 @@ bool cPlayer::Update()
 				m_isMoved = true;
 			SetDirection(-1);
 		}
-		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD))
+		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) && m_AfterAttackTime <= 0.f)
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
@@ -124,7 +136,7 @@ bool cPlayer::Update()
 				m_isMoved = true;
 			SetDirection(1);
 		}
-		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD))
+		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD) && m_AfterAttackTime <= 0.f)
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
@@ -142,6 +154,10 @@ bool cPlayer::Update()
 			if (m_AtkCoolTime >= 1.5f)
 			{
 				m_AtkCoolTime = 0.f;
+				if (m_isJumping)
+					m_AfterAttackTime = 0.3f;
+				else
+					m_AfterAttackTime = 0.1f;
 				CreateBomb();
 			}
 		}
@@ -149,13 +165,10 @@ bool cPlayer::Update()
 		m_DashCoolTime += DELTA_TIME;
 	}
 
-	//if (Pos.y + GetScale().y / 2.f <= 384.f + 500.f * DELTA_TIME
-	//	&& Pos.y + GetScale().y / 2.f >= 384.f - 500.f * DELTA_TIME)
-	//	SetOnPlatform(true);
 	if(m_Dir.y >= 0.f)
 	{
 		Vec2 Scale = GetScale();
-		CollsionWithPlatform(*this, Pos, Scale, 1.f);
+		Collsion(*this,(UINT)GROUP_TYPE::PLATFORM, 1.f);
 	}
 	if (isOnPlatform())
 	{
@@ -164,7 +177,7 @@ bool cPlayer::Update()
 	}
 
 	SetPos(Pos);
-	SetPosOtherside();
+	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
 
 	return true;
 }
@@ -213,8 +226,9 @@ void cPlayer::CreateBomb()
 {
 	Vec2 bomb_Pos = GetPos();
 	if (GetDirection() == 1)
-		bomb_Pos.x += GetScale().x / 2.f;
-
+		bomb_Pos.x += GetScale().x / 2.5f;
+	else
+		bomb_Pos.x -= GetScale().x / 1.5f;
 	// 폭탄 오브젝트
 	cBomb* bomb = new cBomb;
 	if (m_isMoved) // 움직이면서 폭탄을 날렸을 시

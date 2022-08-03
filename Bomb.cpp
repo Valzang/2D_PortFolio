@@ -10,7 +10,7 @@ cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0)
 	m_Dir = Vec2(-2.f, -3.f);
 	m_Dir.Normalize();
 	m_BombImg = Image::FromFile((WCHAR*)L"Image/Bomb.png");
-	SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight()));
+	SetScale(Vec2((float)m_BombImg->GetWidth()/2, (float)m_BombImg->GetHeight()/2));
 
 	SetImgAttr();
 }
@@ -39,7 +39,7 @@ bool cBomb::Update()
 		else if (m_Dir.x < 0)
 			m_Dir.x += 0.3f * DELTA_TIME;
 
-		CollsionWithPlatform(*this, Pos, GetScale()/2, 300.f);
+		Collsion(*this, (UINT)GROUP_TYPE::PLATFORM, 1200.f);
 	}	
 	if (isOnPlatform())
 		m_Dir.y = 0;
