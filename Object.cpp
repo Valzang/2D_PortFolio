@@ -22,14 +22,13 @@ void cObject::SetPosOtherside()
 
 void cObject::CollsionWithPlatform(cObject& curObj, Vec2& curObj_Pos, Vec2& curObj_Scl, float multiplier)
 {
-	Vec2 og_pos = curObj_Pos;
 	Vec2 curObj_Left = curObj_Pos;
 	curObj_Left.x -= (curObj_Scl.x / 2);
 
 	float curObj_y = curObj_Left.y + (curObj_Scl.y / 2);
 
 	Vec2 curObj_Right = curObj_Pos;
-	curObj_Right.x += (curObj_Pos.x / 2);
+	curObj_Right.x += (curObj_Scl.x / 2);
 
 	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
 	for (int i = 0; i < curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLATFORM].size(); ++i)

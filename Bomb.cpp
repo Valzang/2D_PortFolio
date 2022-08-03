@@ -39,7 +39,7 @@ bool cBomb::Update()
 		else if (m_Dir.x < 0)
 			m_Dir.x += 0.3f * DELTA_TIME;
 
-		CollsionWithPlatform(*this, Pos, GetScale()/2, 600.f);
+		CollsionWithPlatform(*this, Pos, GetScale()/2, 300.f);
 	}	
 	if (isOnPlatform())
 		m_Dir.y = 0;
