@@ -31,6 +31,10 @@ void cObject::Collsion(cObject& curObj, UINT GROUP_TYPE, float multiplier)
 	curObj_Right.x += (curObj.GetScale().x / 2);
 
 	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
+
+	if (GROUP_TYPE == (UINT)GROUP_TYPE::PLATFORM)
+		curObj.SetOnPlatform(false);
+
 	for (int i = 0; i < curScene->GetCurObjectVec()[GROUP_TYPE].size(); ++i)
 	{
 		Vec2 Platform_Pos = curScene->GetCurObjectVec()[GROUP_TYPE][i]->GetPos();
@@ -43,15 +47,26 @@ void cObject::Collsion(cObject& curObj, UINT GROUP_TYPE, float multiplier)
 
 		double cur_DT = (double)multiplier * (double)(m_Dir.y) * DELTA_TIME;
 
-		if (GROUP_TYPE == (UINT)GROUP_TYPE::PLATFORM 
-			&& curObj_y + cur_DT >= Top_End && curObj_Left.y <= Top_End 	// 현재 플랫폼과 1 이하의 차이로 플랫폼 위에 있고
-			&& curObj_Right.x > Left_End && curObj_Left.x < Right_End )	// 현재 플랫폼의 좌측 끝과 우측 끝 사이에 있을 때,
-		{			
-			curObj.SetOnPlatform(true);
-			return;
+		if (GROUP_TYPE == (UINT)GROUP_TYPE::PLATFORM)
+		{
+			if (!(curObj.isOnPlatform()) && curObj_y + cur_DT >= Top_End && curObj_Left.y <= Top_End 	// 현재 플랫폼과 1 이하의 차이로 플랫폼 위에 있고
+				&& curObj_Right.x > Left_End && curObj_Left.x < Right_End)	// 현재 플랫폼의 좌측 끝과 우측 끝 사이에 있을 때,
+			{
+				curObj.SetOnPlatform(true);
+			}
+			if (curObj_Right.x + cur_DT >= Left_End && curObj.GetPos().x < Left_End
+				&& curObj_Left.y >= Top_End && curObj_Left.y <= Bottom_End)
+			{
+				curObj.m_Blocked[(UINT)KEY::RIGHT] = true;
+			}
+			else if (curObj_Left.x - cur_DT <= Right_End && curObj.GetPos().x > Right_End
+					 && curObj_Left.y >= Top_End && curObj_Left.y <= Bottom_End)
+			{
+				curObj.m_Blocked[(UINT)KEY::LEFT] = true;
+			}
 		}
+			
 	}
-	if (GROUP_TYPE == (UINT)GROUP_TYPE::PLATFORM)
-		curObj.SetOnPlatform(false);
+	
 	return;
 }

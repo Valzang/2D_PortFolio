@@ -36,9 +36,9 @@ bool cPlayer::Update()
 		float Back = 100.f;
 		if (m_isJumping)
 			Back = 200.f;
-		if (GetDirection() != -1) // 방향에 따른 이동
+		if (GetDirection() == 1 && !m_Blocked[(UINT)KEY::LEFT]) // 방향에 따른 이동
 			Pos.x -= Back * DELTA_TIME;
-		else
+		else if (GetDirection() == -1 && !m_Blocked[(UINT)KEY::RIGHT])
 			Pos.x += Back * DELTA_TIME;
 
 		m_AfterAttackTime -= DELTA_TIME;
@@ -64,9 +64,9 @@ bool cPlayer::Update()
 
 	if (m_isDashing) // 대쉬 중이라면
 	{
-		if (GetDirection() == -1) // 방향에 따른 이동
+		if (GetDirection() == -1 && !m_Blocked[(UINT)KEY::LEFT]) // 방향에 따른 이동
 			Pos.x -= 400.f * DELTA_TIME;
-		else
+		else if (GetDirection() == 1 && !m_Blocked[(UINT)KEY::RIGHT])
 			Pos.x += 400.f * DELTA_TIME;
 
 		if (m_DashTime >= 0.5) // 0.5초 이상 대시중일 시 초기화
@@ -111,18 +111,20 @@ bool cPlayer::Update()
 		}
 
 		// ============================================= 좌측 이동
-		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && m_AfterAttackTime <= 0.f)
+		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && (KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::LEFT])
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
 			SetDirection(-1);
+			m_Blocked[(UINT)KEY::RIGHT] = false;
 		}
-		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) && m_AfterAttackTime <= 0.f)
+		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) &&(KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::LEFT])
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
 			Pos.x -= 250.f * DELTA_TIME;
 			SetDirection(-1);
+			m_Blocked[(UINT)KEY::RIGHT] = false;
 		}
 		if (KEY_CHECK(KEY::J, KEY_STATE::UP))
 		{
@@ -130,18 +132,20 @@ bool cPlayer::Update()
 		}
 
 		// ============================================= 우측 이동
-		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN) && m_AfterAttackTime <= 0.f)
+		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::RIGHT])
 		{
 			if(!m_isDashing)
 				m_isMoved = true;
 			SetDirection(1);
+			m_Blocked[(UINT)KEY::LEFT] = false;
 		}
-		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD) && m_AfterAttackTime <= 0.f)
+		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::RIGHT])
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
 			Pos.x += 250.f * DELTA_TIME;
 			SetDirection(1);
+			m_Blocked[(UINT)KEY::LEFT] = false;
 		}
 		if (KEY_CHECK(KEY::L, KEY_STATE::UP))
 		{

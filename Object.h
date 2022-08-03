@@ -19,9 +19,10 @@ private:
 
 protected:
 	Vec2 m_Dir;
+	bool m_Blocked[(UINT)KEY::RIGHT+1];
 
 public:
-	cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), m_Dir(Vec2(-2.f, 600.f)) { m_Dir.Normalize(); };
+	cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), m_Dir(Vec2(-2.f, 600.f)), m_Blocked{} { m_Dir.Normalize(); };
 	virtual ~cObject() {};
 
 	Vec2 GetPos() { return m_Pos; }
