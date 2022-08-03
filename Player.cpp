@@ -91,7 +91,7 @@ bool cPlayer::Update()
 			m_isSitted = false;
 		}
 
-		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isDashing && isOnPlatform())
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && isOnPlatform())
 		{
 			m_isJumping = true;
 			m_Dir.y *= -1;

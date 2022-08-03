@@ -101,6 +101,11 @@ struct Vec2
 		return*this;
 	}
 
+	double Distance(Vec2& _Other)
+	{
+		return pow(_Other.x - x, 2) + pow(_Other.y - y, 2);
+	}
+
 	float Length()
 	{
 		return sqrt(x * x + y * y);
