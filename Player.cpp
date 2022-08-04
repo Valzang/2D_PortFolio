@@ -39,8 +39,8 @@ bool cPlayer::Update()
 	float curPos_x_r = Pos.x + Scl.x / 2;
 	float curPos_y = Pos.y + Scl.y / 2;
 
-	float Map_Max_x = cCore::GetInstance()->GetResolution().x;
-	float Map_Max_y = cCore::GetInstance()->GetResolution().y;
+	float Map_Max_x = (float)(cCore::GetInstance()->GetResolution().x);
+	float Map_Max_y = (float)(cCore::GetInstance()->GetResolution().y);
 
 	if (m_LifeCount < 0)
 		return false;
@@ -60,42 +60,49 @@ bool cPlayer::Update()
 	}
 	
 
-	// 플랫폼 위에 없다면 중력
+	// 캐릭터의 일부가 맵을 벗어났을 때
 	if (curPos_x_l < 0 || curPos_x_r >= (int)(Map_Max_x)
 		|| curPos_y + m_Dir.y * DELTA_TIME >= Map_Max_y)
 	{
-		// 현재 점프상태로 넘어가면 공중에서 멈추는 현상 발생
-		/*if (curPos_x_l < 0 && curPos_x_r < 0)
-			Pos.y += m_Dir.y * DELTA_TIME;
-		if (curPos_x_r >= (int)(Map_Max_x)
-			&& curPos_x_l >= (int)(Map_Max_x))
-			Pos.y += m_Dir.y * DELTA_TIME;*/
-		
-
-		if (curPos_x_l < 0)
-		{
-			if(curPos_x_r < 0)
+		if (curPos_x_l < 0) // 캐릭터의 좌측 좌표가 맵을 벗어났을 때
+		{			
+			if(curPos_x_r < 0) // 캐릭터의 우측 좌표도 맵을 벗어났으면 그냥 떨어짐
 				Pos.y += m_Dir.y * DELTA_TIME;
-			else if((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)
-				   && g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
-				Pos.y += m_Dir.y * DELTA_TIME;
+			else if ((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
+			{
+				if (g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)]) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+					Pos.y += m_Dir.y * DELTA_TIME;
+				else // 플랫폼이면 착지 멈추고 감소 속도 복구
+				{
+					m_isJumping = false;
+					m_Dir.y = 450.f;
+				}
+			}
 		}
-		if (curPos_x_r >= (int)(Map_Max_x))
+		if (curPos_x_r >= (int)(Map_Max_x)) // 캐릭터의 우측 좌표가 맵을 벗어났을 때
 		{
-			if (curPos_x_l >= (int)(Map_Max_x))
+			if (curPos_x_l >= (int)(Map_Max_x)) // 캐릭터의 좌측 좌표도 맵을 벗어났으면 그냥 떨어짐
 				Pos.y += m_Dir.y * DELTA_TIME;
-			else if ((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)
-					 && g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
-				Pos.y += m_Dir.y * DELTA_TIME;
+			else if ((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
+			{
+				if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)])  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+					Pos.y += m_Dir.y * DELTA_TIME;
+				else // 플랫폼이면 착지 멈추고 감소 속도 복구
+				{ 
+					m_isJumping = false;
+					m_Dir.y = 450.f;
+				}
+			}
 		}
-		if (m_Dir.y < 800.f)
+		if (m_Dir.y < 800.f) // 감소속도가 일정 수준 되기 전 까지는 꾸준히 증가
 		{
-			if (m_isJumping)
+			if (m_isJumping) // 점프 중에서는 빠르게 감소
 				m_Dir.y += 1200.f * DELTA_TIME;
-			else
+			else // 그냥 낙하 중인 경우는 천천히 감소
 				m_Dir.y += 250.f * DELTA_TIME;
 		}
 	}
+	// 캐릭터 전체가 맵 안에 있을 때
 	else
 	{
 		if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)]
@@ -115,10 +122,7 @@ bool cPlayer::Update()
 			m_isJumping = false;
 			m_Dir.y = 450.f;
 		}
-	}
-
-	
-		
+	}		
 
 	// 대쉬 중이라면
 	if (m_isDashing) 
