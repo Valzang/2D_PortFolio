@@ -64,12 +64,37 @@ bool cPlayer::Update()
 	if (curPos_x_l < 0 || curPos_x_r >= (int)(Map_Max_x)
 		|| curPos_y + m_Dir.y * DELTA_TIME >= Map_Max_y)
 	{
-		//Pos.y += m_Dir.y * DELTA_TIME;
-		if(curPos_x_l < 0 && curPos_x_r < 0)
+		// 현재 점프상태로 넘어가면 공중에서 멈추는 현상 발생
+		/*if (curPos_x_l < 0 && curPos_x_r < 0)
 			Pos.y += m_Dir.y * DELTA_TIME;
 		if (curPos_x_r >= (int)(Map_Max_x)
 			&& curPos_x_l >= (int)(Map_Max_x))
-			Pos.y += m_Dir.y * DELTA_TIME;
+			Pos.y += m_Dir.y * DELTA_TIME;*/
+		
+
+		if (curPos_x_l < 0)
+		{
+			if(curPos_x_r < 0)
+				Pos.y += m_Dir.y * DELTA_TIME;
+			else if((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)
+				   && g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
+				Pos.y += m_Dir.y * DELTA_TIME;
+		}
+		if (curPos_x_r >= (int)(Map_Max_x))
+		{
+			if (curPos_x_l >= (int)(Map_Max_x))
+				Pos.y += m_Dir.y * DELTA_TIME;
+			else if ((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)
+					 && g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
+				Pos.y += m_Dir.y * DELTA_TIME;
+		}
+		if (m_Dir.y < 800.f)
+		{
+			if (m_isJumping)
+				m_Dir.y += 1200.f * DELTA_TIME;
+			else
+				m_Dir.y += 250.f * DELTA_TIME;
+		}
 	}
 	else
 	{
