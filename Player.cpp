@@ -39,6 +39,9 @@ bool cPlayer::Update()
 	float curPos_x_r = Pos.x + Scl.x / 2;
 	float curPos_y = Pos.y + Scl.y / 2;
 
+	float Map_Max_x = cCore::GetInstance()->GetResolution().x;
+	float Map_Max_y = cCore::GetInstance()->GetResolution().y;
+
 	if (m_LifeCount < 0)
 		return false;
 
@@ -58,13 +61,14 @@ bool cPlayer::Update()
 	
 
 	// 플랫폼 위에 없다면 중력
-	if (curPos_x_l < 0 || curPos_x_r >= (int)(cCore::GetInstance()->GetResolution().x)
-		|| curPos_y + m_Dir.y * DELTA_TIME >= cCore::GetInstance()->GetResolution().y)
+	if (curPos_x_l < 0 || curPos_x_r >= (int)(Map_Max_x)
+		|| curPos_y + m_Dir.y * DELTA_TIME >= Map_Max_y)
 	{
+		//Pos.y += m_Dir.y * DELTA_TIME;
 		if(curPos_x_l < 0 && curPos_x_r < 0)
 			Pos.y += m_Dir.y * DELTA_TIME;
-		if (curPos_x_r >= (int)(cCore::GetInstance()->GetResolution().x)
-			&& curPos_x_l >= (int)(cCore::GetInstance()->GetResolution().x))
+		if (curPos_x_r >= (int)(Map_Max_x)
+			&& curPos_x_l >= (int)(Map_Max_x))
 			Pos.y += m_Dir.y * DELTA_TIME;
 	}
 	else
@@ -94,10 +98,21 @@ bool cPlayer::Update()
 	// 대쉬 중이라면
 	if (m_isDashing) 
 	{
-		if (GetDirection() == -1 && g_PossibleArea[(int)(curPos_x_l - 400.f * DELTA_TIME)][(int)curPos_y]) // 방향에 따른 이동
-			Pos.x -= 400.f * DELTA_TIME;
-		else if (GetDirection() == 1 && g_PossibleArea[(int)(curPos_x_r + 400.f * DELTA_TIME)][(int)curPos_y])
-			Pos.x += 400.f * DELTA_TIME;
+		
+		if (GetDirection() == -1) // 방향에 따른 이동
+		{
+			if ((int)(curPos_x_l - 400.f * DELTA_TIME) < 0)
+				Pos.x -= 400.f * DELTA_TIME;
+			else if(g_PossibleArea[(int)(curPos_x_l - 400.f * DELTA_TIME)][(int)curPos_y])
+				Pos.x -= 400.f * DELTA_TIME;
+		}
+		else
+		{
+			if ((int)(curPos_x_r + 400.f * DELTA_TIME) >= Map_Max_x)
+				Pos.x += 400.f * DELTA_TIME;
+			else if (g_PossibleArea[(int)(curPos_x_r + 400.f * DELTA_TIME)][(int)curPos_y])
+				Pos.x += 400.f * DELTA_TIME;
+		}
 
 		if (m_DashTime >= 0.5) // 0.5초 이상 대시중일 시 초기화
 		{
@@ -188,7 +203,7 @@ bool cPlayer::Update()
 			&& m_AfterAttackTime <= 0.f)
 		{
 			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
-			if (Right_Check >= (int)(cCore::GetInstance()->GetResolution().x))
+			if (Right_Check >= (int)Map_Max_x)
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
@@ -205,7 +220,7 @@ bool cPlayer::Update()
 			&& m_AfterAttackTime <= 0.f)
 		{
 			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
-			if (Right_Check >= (int)(cCore::GetInstance()->GetResolution().x))
+			if (Right_Check >= (int)Map_Max_x)
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
