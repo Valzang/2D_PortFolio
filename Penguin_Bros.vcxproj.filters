@@ -35,14 +35,6 @@
     <Filter Include="Engine\02. Manager\Source">
       <UniqueIdentifier>{39d24566-30a2-4646-a7c0-a58a3eeb4829}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Default\Header">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Default\Source">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Engine\03. Object\Bomb">
       <UniqueIdentifier>{b30fce9d-3d0f-421a-9b00-2368304a399f}</UniqueIdentifier>
     </Filter>
@@ -57,18 +49,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
-      <Filter>Default\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Default\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Default\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Penguin_Bros.h">
-      <Filter>Default\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Core.h">
       <Filter>Engine\01. Define &amp; Core</Filter>
     </ClInclude>
@@ -111,11 +91,20 @@
     <ClInclude Include="Object.h">
       <Filter>Engine\03. Object</Filter>
     </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Penguin_Bros.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Penguin_Bros.cpp">
-      <Filter>Default\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Core.cpp">
       <Filter>Engine\01. Define &amp; Core</Filter>
     </ClCompile>
@@ -154,6 +143,9 @@
     </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>Engine\03. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Penguin_Bros.cpp">
+      <Filter>Default</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

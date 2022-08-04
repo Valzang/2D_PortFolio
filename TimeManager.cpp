@@ -47,7 +47,7 @@ void cTimeManager::Update()
 
 		wchar_t Buffer[255] = {};
 		swprintf_s(Buffer, L"FPS : %d, DT : %.8f", m_FPS, m_deltaTime);
-		SetWindowText(CCore::GetInstance()->GetMainHwnd(), Buffer);
+		SetWindowText(cCore::GetInstance()->GetMainHwnd(), Buffer);
 	}
 
 }

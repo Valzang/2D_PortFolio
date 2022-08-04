@@ -11,7 +11,7 @@
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
-
+bool** g_PossibleArea = nullptr;
 HINSTANCE hInst;                                // 현재 인스턴스입니다. HINSTANCE는 하나 밖에 없음. HINSTANCE > HWND > H
 HWND hWnd;                                     // 현재 윈도우 핸들
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.
@@ -47,7 +47,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         return FALSE;
     }
 
-    if (FAILED(CCore::GetInstance()->Init(hWnd, POINT {1280, 768})))
+    if (FAILED(cCore::GetInstance()->Init(hWnd, POINT {1280, 768})))
     {
         MessageBox(nullptr, L"Core 객체 초기화 실패", L"ERROR", MB_OK);
         return FALSE;
@@ -72,7 +72,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
             }
         }
         else
-            CCore::GetInstance()->Progress();
+            cCore::GetInstance()->Progress();
     }
 
     return (int) msg.wParam;

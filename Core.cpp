@@ -1,14 +1,15 @@
 #include "Core.h"
 #include "Object.h"
 
+extern bool** g_PossibleArea;
 
-CCore::CCore() : m_hBit(NULL), m_hDC(NULL)
+cCore::cCore() : m_hBit(NULL), m_hDC(NULL)
 , m_hWnd(NULL), m_memDC(NULL), m_ptResolution({ 0, 0 })
 {
 
 }
 
-CCore::~CCore()
+cCore::~cCore()
 {
 	Gdi_End();
 	// GetDC로 만든건 ReleaseDC로 지워야함.
@@ -17,16 +18,30 @@ CCore::~CCore()
 	// CreateCompatibleDC로 만든건 DeleteDC로 지워야함.
 	DeleteDC(m_memDC);
 	DeleteObject(m_hBit);
+
+	for (int i = 0; i < m_ptResolution.x; ++i)
+	{
+		delete[] g_PossibleArea[i];
+	}
+	delete[] g_PossibleArea;
 }
 
 
-int CCore::Init(HWND _hWnd, POINT _ptResolution)
+int cCore::Init(HWND _hWnd, POINT _ptResolution)
 {
 	Gdi_Init();
 
 	// 메인의 핸들을 Core의 핸들에 넣어주기
 	m_hWnd = _hWnd;
 	m_ptResolution = _ptResolution;
+
+	// 맵 범위에 해당하는 동적 배열 만듦.
+	g_PossibleArea = new bool* [m_ptResolution.x];
+	for (int i = 0; i < m_ptResolution.x; ++i)
+	{
+		g_PossibleArea[i] = new bool[m_ptResolution.y];
+		memset(g_PossibleArea[i], true, sizeof(bool) * m_ptResolution.y);
+	}
 
 	RECT rt = { 0, 0, m_ptResolution.x, m_ptResolution.y };
 
@@ -58,7 +73,7 @@ int CCore::Init(HWND _hWnd, POINT _ptResolution)
 }
 
 
-void CCore::Progress()
+void cCore::Progress()
 {
 
 	cTimeManager::GetInstance()->Update();
@@ -78,10 +93,10 @@ void CCore::Progress()
 
 }
 
-void CCore::Update()
+void cCore::Update()
 {
 }
 
-void CCore::Render()
+void cCore::Render()
 {
 }

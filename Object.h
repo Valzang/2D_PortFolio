@@ -4,6 +4,7 @@
 #include "KeyManager.h"
 #include "TimeManager.h"
 
+extern bool** g_PossibleArea;
 
 class cObject
 {
@@ -15,18 +16,20 @@ private:
 	bool m_OnPlatform;
 
 
+
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
 protected:
 	Vec2 m_Dir;
 	bool m_Blocked[(UINT)KEY::RIGHT+1];
+	int m_curGroupType;
 
 public:
-	cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), m_Dir(Vec2(-2.f, 600.f)), m_Blocked{} { m_Dir.Normalize(); };
+	cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), m_Dir(Vec2(-2.f, 600.f)), m_Blocked {} { m_Dir.Normalize(); m_curGroupType = (INT)GROUP_TYPE::DEFAULT; };
 	virtual ~cObject() {};
 
 	Vec2 GetPos() { return m_Pos; }
-	void SetPos(Vec2 _Pos) { m_Pos = _Pos; }
+	void SetPos(Vec2 _Pos);
 	void SetPosOtherside(); // 맵 안에서만 맴돌게끔 해주는 함수
 
 	bool isDead() { return m_IsDead; }

@@ -3,9 +3,9 @@
 #include "TimeManager.h"
 #include "SceneManager.h"
 
-class CCore
+class cCore
 {
-	SINGLETON2(CCore)
+	SINGLETON2(cCore)
 private:
 	HWND	m_hWnd;	// 메인 윈도우 핸들
 	POINT	m_ptResolution; // 메인 윈도우 해상도

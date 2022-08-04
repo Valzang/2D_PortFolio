@@ -7,9 +7,12 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+
+
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
 {	
+	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight()/6.f));
 
@@ -30,43 +33,57 @@ cPlayer::~cPlayer()
 
 bool cPlayer::Update()
 {
-	Vec2 Pos = GetPos();
-	if (m_AfterAttackTime > 0.f) // 뒤로 밀려나게끔
+	Vec2 Pos = GetPos(); 
+	Vec2 Scl = GetScale();
+	float curPos_x_l = Pos.x - Scl.x / 2;
+	float curPos_x_r = Pos.x + Scl.x / 2;
+	float curPos_y = Pos.y + Scl.y / 2;
+
+	if (m_LifeCount < 0)
+		return false;
+
+	// 공격 시 뒤로 밀려나게끔
+	if (m_AfterAttackTime > 0.f)
 	{
 		float Back = 100.f;
 		if (m_isJumping)
 			Back = 200.f;
-		if (GetDirection() == 1 && !m_Blocked[(UINT)KEY::LEFT]) // 방향에 따른 이동
+		if (GetDirection() == 1 && g_PossibleArea[(int)(curPos_x_l - Back * DELTA_TIME)][(int)curPos_y]) // 방향에 따른 이동
 			Pos.x -= Back * DELTA_TIME;
-		else if (GetDirection() == -1 && !m_Blocked[(UINT)KEY::RIGHT])
+		else if (GetDirection() == -1 && g_PossibleArea[(int)(curPos_x_r + Back * DELTA_TIME)][(int)curPos_y])
 			Pos.x += Back * DELTA_TIME;
 
 		m_AfterAttackTime -= DELTA_TIME;
 	}
-	if (m_LifeCount < 0)
-		return false;
+	
 
+	// 플랫폼 위에 없다면 중력
 
-	if (!isOnPlatform()) // 플랫폼 위에 없다면 중력
+	if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)] 
+		&& g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
 	{
 		Pos.y += m_Dir.y * DELTA_TIME;
 		if (m_Dir.y < 800.f)
 		{
-			if(m_isJumping)
-				m_Dir.y += 1200.f * DELTA_TIME;
+			if (m_isJumping)
+				m_Dir.y += 1200.f * DELTA_TIME; 
 			else
 				m_Dir.y += 250.f * DELTA_TIME;
 		}
-			
 	}
-
-	// DELTA_TIME으로 시간동기화 해서 이동
-
-	if (m_isDashing) // 대쉬 중이라면
+	else
 	{
-		if (GetDirection() == -1 && !m_Blocked[(UINT)KEY::LEFT]) // 방향에 따른 이동
+		m_isJumping = false;
+		m_Dir.y = 450.f;
+	}
+		
+
+	// 대쉬 중이라면
+	if (m_isDashing) 
+	{
+		if (GetDirection() == -1 && g_PossibleArea[(int)(curPos_x_l - 400.f * DELTA_TIME)][(int)curPos_y]) // 방향에 따른 이동
 			Pos.x -= 400.f * DELTA_TIME;
-		else if (GetDirection() == 1 && !m_Blocked[(UINT)KEY::RIGHT])
+		else if (GetDirection() == 1 && g_PossibleArea[(int)(curPos_x_r + 400.f * DELTA_TIME)][(int)curPos_y])
 			Pos.x += 400.f * DELTA_TIME;
 
 		if (m_DashTime >= 0.5) // 0.5초 이상 대시중일 시 초기화
@@ -83,10 +100,9 @@ bool cPlayer::Update()
 	}
 	else
 	{
-		if (KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
-		{
-			Pos.y -= 200.f * DELTA_TIME;
-		}
+		//if (KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
+		//{
+		//}
 		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD)) // 아래를 짚음.
 		{
 			m_isSitted = true;
@@ -103,28 +119,27 @@ bool cPlayer::Update()
 			m_isSitted = false;
 		}
 
-		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && isOnPlatform())
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing )//&& isOnPlatform())
 		{
 			m_isJumping = true;
 			m_Dir.y *= -1;
-			SetOnPlatform(false);
 		}
 
 		// ============================================= 좌측 이동
-		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && (KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::LEFT])
+		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && (KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
+			&& m_AfterAttackTime <= 0.f && g_PossibleArea[(int)(curPos_x_l - 250.f * DELTA_TIME)][(int)curPos_y])
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
 			SetDirection(-1);
-			m_Blocked[(UINT)KEY::RIGHT] = false;
 		}
-		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) &&(KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::LEFT])
+		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) &&(KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
+			&& m_AfterAttackTime <= 0.f && g_PossibleArea[(int)(curPos_x_l - 250.f * DELTA_TIME)][(int)curPos_y])
 		{
 			if (!m_isDashing)
 				m_isMoved = true;
 			Pos.x -= 250.f * DELTA_TIME;
 			SetDirection(-1);
-			m_Blocked[(UINT)KEY::RIGHT] = false;
 		}
 		if (KEY_CHECK(KEY::J, KEY_STATE::UP))
 		{
@@ -132,20 +147,41 @@ bool cPlayer::Update()
 		}
 
 		// ============================================= 우측 이동
-		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::RIGHT])
+		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) 
+			&& m_AfterAttackTime <= 0.f)
 		{
-			if(!m_isDashing)
-				m_isMoved = true;
-			SetDirection(1);
-			m_Blocked[(UINT)KEY::LEFT] = false;
+			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
+			if (Right_Check >= (int)(cCore::GetInstance()->GetResolution().x))
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				Pos.x += 250.f * DELTA_TIME;
+			}
+			else if (g_PossibleArea[Right_Check][(int)curPos_y])
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				SetDirection(1);
+			}			
 		}
-		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) && m_AfterAttackTime <= 0.f && !m_Blocked[(UINT)KEY::RIGHT])
+		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) 
+			&& m_AfterAttackTime <= 0.f)
 		{
-			if (!m_isDashing)
-				m_isMoved = true;
-			Pos.x += 250.f * DELTA_TIME;
-			SetDirection(1);
-			m_Blocked[(UINT)KEY::LEFT] = false;
+			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
+			if (Right_Check >= (int)(cCore::GetInstance()->GetResolution().x))
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				Pos.x += 250.f * DELTA_TIME;
+			}
+			else if (g_PossibleArea[Right_Check][(int)curPos_y])
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				Pos.x += 250.f * DELTA_TIME;
+				SetDirection(1);
+			}
+			
 		}
 		if (KEY_CHECK(KEY::L, KEY_STATE::UP))
 		{
@@ -167,17 +203,6 @@ bool cPlayer::Update()
 		}
 		m_AtkCoolTime += DELTA_TIME;
 		m_DashCoolTime += DELTA_TIME;
-	}
-
-	if(m_Dir.y >= 0.f)
-	{
-		Vec2 Scale = GetScale();
-		Collsion(*this,(UINT)GROUP_TYPE::PLATFORM, 1.f);
-	}
-	if (isOnPlatform())
-	{
-		m_Dir.y = 450.f;
-		m_isJumping = false;
 	}
 
 	SetPos(Pos);
