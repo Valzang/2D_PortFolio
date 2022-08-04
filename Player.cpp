@@ -182,7 +182,7 @@ bool cPlayer::Update()
 			m_Dir.y *= -1;
 		}
 
-		// ============================================= 좌측 이동
+		// ================================================================================================================== 좌측 이동
 		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && (KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
 			&& m_AfterAttackTime <= 0.f)
 		{
@@ -218,16 +218,14 @@ bool cPlayer::Update()
 					m_isMoved = true;
 				Pos.x -= 250.f * DELTA_TIME;
 				SetDirection(-1);
-			}
-
-			
+			}						
 		}
 		if (KEY_CHECK(KEY::J, KEY_STATE::UP))
 		{
 			m_isMoved = false;
 		}
 
-		// ============================================= 우측 이동
+		// ======================================================================================================================= 우측 이동
 		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) 
 			&& m_AfterAttackTime <= 0.f)
 		{

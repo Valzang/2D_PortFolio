@@ -40,6 +40,10 @@ bool cBomb::Update()
 	float curPos_x_r = Pos.x + Scl.x / 2;	// 폭탄의 우측 좌표
 	float curPos_y = Pos.y + Scl.y / 2;		// 폭탄의 최하단 좌표
 
+	float Map_Max_x = (float)(cCore::GetInstance()->GetResolution().x);
+	float Map_Max_y = (float)(cCore::GetInstance()->GetResolution().y);
+
+	// 공중에 있을 때
 	if (!isOnPlatform())
 	{
 		Pos.y += 600.f * m_Dir.y * DELTA_TIME;
@@ -50,29 +54,78 @@ bool cBomb::Update()
 
 		if (temp_dir == 1) // 우측 방향일때
 		{
-			if (g_PossibleArea[(int)(curPos_x_r - 600.f * m_Dir.x * DELTA_TIME)][(int)curPos_y])
+			int Next_Left = (int)(curPos_x_l - 600.f * m_Dir.x * DELTA_TIME);
+			int Next_Right = (int)(curPos_x_r - 600.f * m_Dir.x * DELTA_TIME);
+			int Next_Down = (int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME);
+
+			if (Next_Right >= Map_Max_x)
 			{
 				Pos.x += -600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
 				curPos_x_r += -600.f * m_Dir.x * DELTA_TIME;
+				if (Next_Left < Map_Max_x && curPos_y < Map_Max_y
+					&& !(g_PossibleArea[Next_Left][(int)curPos_y]))
+					SetOnPlatform(true);
 			}
-			else // 속도 바꿔주기
+			else if (curPos_y < Map_Max_y)
 			{
-				SetDirection(-1);
-				m_Dir.x /= 2.f;
+				if (g_PossibleArea[Next_Right][(int)curPos_y] || Next_Left < 0)
+				{
+					Pos.x += -600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
+					curPos_x_r += -600.f * m_Dir.x * DELTA_TIME;
+				}
+				else if (Next_Left < 0 && Next_Right >= 0
+						 && !(g_PossibleArea[Next_Right][(int)curPos_y]))
+				{
+					SetOnPlatform(true);
+				}
+				else if (Next_Left < Map_Max_x && g_PossibleArea[Next_Left][(int)curPos_y])// 속도 바꿔주기
+				{
+					SetDirection(-1);
+					m_Dir.x /= 2.f;
+				}
+				else
+					SetOnPlatform(true);
 			}
+			
 		}
 		else // 좌측 방향일 때
 		{
-			if (g_PossibleArea[(int)(curPos_x_l + 600.f * m_Dir.x * DELTA_TIME)][(int)curPos_y])
+			int Next_Left = (int)(curPos_x_l + 600.f * m_Dir.x * DELTA_TIME);
+			int Next_Right = (int)(curPos_x_r + 600.f * m_Dir.x * DELTA_TIME);
+			int Next_Down = (int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME);
+
+			if (Next_Left < 0)
 			{
 				Pos.x += 600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
-				curPos_x_l += 600.f * m_Dir.x * DELTA_TIME;
+				curPos_x_l += 600.f * m_Dir.x * DELTA_TIME;				
+				if (Next_Right >= 0 && curPos_y < Map_Max_y
+					&& !(g_PossibleArea[Next_Right][(int)curPos_y]))
+					SetOnPlatform(true);
+					
 			}
-			else // 속도 바꿔주기
+			// 다음 좌측 위치가 맵 안에 있고, 다음 아래 위치도 맵 안에 있을 때
+			else if (curPos_y < Map_Max_y)
 			{
-				SetDirection(1);
-				m_Dir.x /= 2.f;
-			}
+				// 다음 좌측위치가 플랫폼이 아니거나, 다음 우측 위치가 맵 밖일 때
+				if (g_PossibleArea[Next_Left][(int)curPos_y] || Next_Right>=Map_Max_x)
+				{
+					Pos.x += 600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
+					curPos_x_l += 600.f * m_Dir.x * DELTA_TIME;
+				}
+				else if (Next_Right >= Map_Max_x && Next_Left < Map_Max_x
+						 && !(g_PossibleArea[Next_Left][(int)curPos_y]))
+				{
+					SetOnPlatform(true);
+				}
+				// 왼쪽은 플랫폼인데 우측은 플랫폼이 아닐 때
+				else if (Next_Right >= 0 && g_PossibleArea[Next_Right][(int)curPos_y])// 속도 바꿔주기
+				{
+					SetDirection(1);
+					m_Dir.x /= 2.f;
+				}
+				else
+					SetOnPlatform(true);
+			}			
 		}
 	}
 
@@ -82,8 +135,10 @@ bool cBomb::Update()
 		m_Dir.x += 0.3f * DELTA_TIME;
 
 	// 바닥에 닿았을 때
-	if (!(g_PossibleArea[(int)(curPos_x_l)][(int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME)])
-		&& !(g_PossibleArea[(int)(curPos_x_r)][(int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME)]))
+	int Next_Down = (int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME);
+	if ( curPos_x_l >= 0 && curPos_x_r < Map_Max_x && Next_Down < Map_Max_y
+		&& !(g_PossibleArea[(int)(curPos_x_l)][Next_Down])
+		&& !(g_PossibleArea[(int)(curPos_x_r)][Next_Down]))
 	{
 		SetOnPlatform(true);
 		m_Dir.y = 0;
