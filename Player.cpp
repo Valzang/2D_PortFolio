@@ -58,24 +58,37 @@ bool cPlayer::Update()
 	
 
 	// 플랫폼 위에 없다면 중력
-
-	if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)] 
-		&& g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
+	if (curPos_x_l < 0 || curPos_x_r >= (int)(cCore::GetInstance()->GetResolution().x)
+		|| curPos_y + m_Dir.y * DELTA_TIME >= cCore::GetInstance()->GetResolution().y)
 	{
-		Pos.y += m_Dir.y * DELTA_TIME;
-		if (m_Dir.y < 800.f)
-		{
-			if (m_isJumping)
-				m_Dir.y += 1200.f * DELTA_TIME; 
-			else
-				m_Dir.y += 250.f * DELTA_TIME;
-		}
+		if(curPos_x_l < 0 && curPos_x_r < 0)
+			Pos.y += m_Dir.y * DELTA_TIME;
+		if (curPos_x_r >= (int)(cCore::GetInstance()->GetResolution().x)
+			&& curPos_x_l >= (int)(cCore::GetInstance()->GetResolution().x))
+			Pos.y += m_Dir.y * DELTA_TIME;
 	}
 	else
 	{
-		m_isJumping = false;
-		m_Dir.y = 450.f;
+		if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)]
+			&& g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
+		{
+			Pos.y += m_Dir.y * DELTA_TIME;
+			if (m_Dir.y < 800.f)
+			{
+				if (m_isJumping)
+					m_Dir.y += 1200.f * DELTA_TIME;
+				else
+					m_Dir.y += 250.f * DELTA_TIME;
+			}
+		}
+		else
+		{
+			m_isJumping = false;
+			m_Dir.y = 450.f;
+		}
 	}
+
+	
 		
 
 	// 대쉬 중이라면
@@ -127,19 +140,43 @@ bool cPlayer::Update()
 
 		// ============================================= 좌측 이동
 		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && (KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
-			&& m_AfterAttackTime <= 0.f && g_PossibleArea[(int)(curPos_x_l - 250.f * DELTA_TIME)][(int)curPos_y])
+			&& m_AfterAttackTime <= 0.f)
 		{
-			if (!m_isDashing)
-				m_isMoved = true;
-			SetDirection(-1);
+			int Left_Check = (int)(curPos_x_l - 250.f * DELTA_TIME);
+			if (Left_Check < 0)
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				SetDirection(-1);
+			}
+			else
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				SetDirection(-1);
+			}
+			
 		}
 		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) &&(KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
-			&& m_AfterAttackTime <= 0.f && g_PossibleArea[(int)(curPos_x_l - 250.f * DELTA_TIME)][(int)curPos_y])
+			&& m_AfterAttackTime <= 0.f)
 		{
-			if (!m_isDashing)
-				m_isMoved = true;
-			Pos.x -= 250.f * DELTA_TIME;
-			SetDirection(-1);
+			int Left_Check = (int)(curPos_x_l - 250.f * DELTA_TIME);
+			if (Left_Check < 0)
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				Pos.x -= 250.f * DELTA_TIME;
+				SetDirection(-1);
+			}
+			else
+			{
+				if (!m_isDashing)
+					m_isMoved = true;
+				Pos.x -= 250.f * DELTA_TIME;
+				SetDirection(-1);
+			}
+
+			
 		}
 		if (KEY_CHECK(KEY::J, KEY_STATE::UP))
 		{
@@ -155,7 +192,7 @@ bool cPlayer::Update()
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
-				Pos.x += 250.f * DELTA_TIME;
+				SetDirection(1);
 			}
 			else if (g_PossibleArea[Right_Check][(int)curPos_y])
 			{
@@ -173,6 +210,7 @@ bool cPlayer::Update()
 				if (!m_isDashing)
 					m_isMoved = true;
 				Pos.x += 250.f * DELTA_TIME;
+				SetDirection(1);
 			}
 			else if (g_PossibleArea[Right_Check][(int)curPos_y])
 			{
