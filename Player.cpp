@@ -51,26 +51,37 @@ bool cPlayer::Update()
 		float Back = 100.f;
 		if (m_isJumping)
 			Back = 200.f;
-		if (GetDirection() == 1 && g_PossibleArea[(int)(curPos_x_l - Back * DELTA_TIME)][(int)curPos_y]) // 방향에 따른 이동
-			Pos.x -= Back * DELTA_TIME;
-		else if (GetDirection() == -1 && g_PossibleArea[(int)(curPos_x_r + Back * DELTA_TIME)][(int)curPos_y])
-			Pos.x += Back * DELTA_TIME;
+		if (GetDirection() == 1)
+		{
+			int Back_Left = (int)(curPos_x_l - Back * DELTA_TIME);
+			if (Back_Left < 0 || Back_Left >= Map_Max_x || curPos_y >= Map_Max_y
+				|| g_PossibleArea[Back_Left][(int)curPos_y])
+				Pos.x -= Back * DELTA_TIME;
+		}
+		else
+		{
+			int Back_Right = (int)(curPos_x_r + Back * DELTA_TIME);
+			if (Back_Right < 0 || Back_Right >= Map_Max_x || curPos_y >= Map_Max_y
+				|| g_PossibleArea[Back_Right][(int)curPos_y])
+				Pos.x += Back * DELTA_TIME;
+		}
 
 		m_AfterAttackTime -= DELTA_TIME;
 	}
 	
+	int Next_Down = (int)(curPos_y + m_Dir.y * DELTA_TIME);
 
 	// 캐릭터의 일부가 맵을 벗어났을 때
 	if (curPos_x_l < 0 || curPos_x_r >= (int)(Map_Max_x)
-		|| curPos_y + m_Dir.y * DELTA_TIME >= Map_Max_y)
+		|| Next_Down >= Map_Max_y)
 	{
 		if (curPos_x_l < 0) // 캐릭터의 좌측 좌표가 맵을 벗어났을 때
 		{			
 			if(curPos_x_r < 0) // 캐릭터의 우측 좌표도 맵을 벗어났으면 그냥 떨어짐
 				Pos.y += m_Dir.y * DELTA_TIME;
-			else if ((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
+			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
 			{
-				if (g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)]) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+				if (g_PossibleArea[(int)curPos_x_r][Next_Down]) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
 					Pos.y += m_Dir.y * DELTA_TIME;
 				else // 플랫폼이면 착지 멈추고 감소 속도 복구
 				{
@@ -83,9 +94,9 @@ bool cPlayer::Update()
 		{
 			if (curPos_x_l >= (int)(Map_Max_x)) // 캐릭터의 좌측 좌표도 맵을 벗어났으면 그냥 떨어짐
 				Pos.y += m_Dir.y * DELTA_TIME;
-			else if ((curPos_y + m_Dir.y * DELTA_TIME < Map_Max_y)) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
+			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
 			{
-				if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)])  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+				if (g_PossibleArea[(int)curPos_x_l][Next_Down])  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
 					Pos.y += m_Dir.y * DELTA_TIME;
 				else // 플랫폼이면 착지 멈추고 감소 속도 복구
 				{ 
@@ -105,8 +116,8 @@ bool cPlayer::Update()
 	// 캐릭터 전체가 맵 안에 있을 때
 	else
 	{
-		if (g_PossibleArea[(int)curPos_x_l][(int)(curPos_y + m_Dir.y * DELTA_TIME)]
-			&& g_PossibleArea[(int)curPos_x_r][(int)(curPos_y + m_Dir.y * DELTA_TIME)])
+		if (g_PossibleArea[(int)curPos_x_l][Next_Down]
+			&& g_PossibleArea[(int)curPos_x_r][Next_Down])
 		{
 			Pos.y += m_Dir.y * DELTA_TIME;
 			if (m_Dir.y < 800.f)
@@ -126,8 +137,7 @@ bool cPlayer::Update()
 
 	// 대쉬 중이라면
 	if (m_isDashing) 
-	{
-		
+	{		
 		if (GetDirection() == -1) // 방향에 따른 이동
 		{
 			if ((int)(curPos_x_l - 400.f * DELTA_TIME) < 0)
@@ -193,7 +203,7 @@ bool cPlayer::Update()
 					m_isMoved = true;
 				SetDirection(-1);
 			}
-			else
+			else if (g_PossibleArea[Left_Check][(int)curPos_y])
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
@@ -212,7 +222,7 @@ bool cPlayer::Update()
 				Pos.x -= 250.f * DELTA_TIME;
 				SetDirection(-1);
 			}
-			else
+			else if (g_PossibleArea[Left_Check][(int)curPos_y])
 			{
 				if (!m_isDashing)
 					m_isMoved = true;

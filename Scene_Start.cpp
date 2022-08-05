@@ -47,13 +47,13 @@ void cScene_Start::Enter()
 
 	//Platform Object 추가
 	cPlatform* PlatformObj = nullptr;
-	//PlatformObj = new cPlatform_SideWall;
-	//PlatformObj->SetPos(Vec2 { (PlatformObj->GetScale().x / 2.f), Resolution.y/2.f });
-	//AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+	PlatformObj = new cPlatform_SideWall;
+	PlatformObj->SetPos(Vec2 { (PlatformObj->GetScale().x / 2.f), Resolution.y/2.f });
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
-	//PlatformObj = new cPlatform_SideWall;
-	//PlatformObj->SetPos(Vec2 { Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // 중심좌표..?
-	//AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+	PlatformObj = new cPlatform_SideWall;
+	PlatformObj->SetPos(Vec2 { Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_Under;
 	PlatformObj->SetPos(Vec2 { Resolution.x/2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?

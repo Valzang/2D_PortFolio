@@ -7,6 +7,7 @@ private:
     Image* m_BombImg;  // 이미지 파일
     double m_TimeLimit;
     double m_ExplosionRange;
+    bool m_DirChanged;
     //float m_Theta; // 각도로 방향을 정함.
 
 public:
