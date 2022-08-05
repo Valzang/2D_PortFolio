@@ -15,7 +15,8 @@ private:
 	bool m_IsDead;
 	bool m_OnPlatform;
 
-
+	bool m_isRotating;
+	Vec2 m_RotatorPos;
 
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
@@ -23,9 +24,10 @@ protected:
 	Vec2 m_Dir;
 	bool m_Blocked[(UINT)KEY::RIGHT+1];
 	int m_curGroupType;
+	
 
 public:
-	cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), m_Dir(Vec2(-2.f, 600.f)), m_Blocked {} { m_Dir.Normalize(); m_curGroupType = (INT)GROUP_TYPE::DEFAULT; };
+	cObject();
 	virtual ~cObject() {};
 
 	Vec2 GetPos() { return m_Pos; }
@@ -44,9 +46,16 @@ public:
 	Vec2 GetDir() { return m_Dir; }
 	void SetDir(Vec2 _Dir) { m_Dir = _Dir; m_Dir.Normalize(); }
 
-
 	int GetDirection() { return m_Direction; }
 	void SetDirection(int _dir) { m_Direction = _dir; }
+
+	bool GetRotating() { return m_isRotating; }
+	void SetRotating(bool _val) { m_isRotating = _val; }
+
+	Vec2 GetRotator() { return m_RotatorPos; }
+	void SetRotator(Vec2 _val) { m_RotatorPos = _val; }
+
+
 	Gdiplus::ImageAttributes* GetImgAttr() { return &m_imgAttr; }
 	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); } // A 컬러에서부터 B 컬러 사이 값들을 투명하게 만들어줌
 

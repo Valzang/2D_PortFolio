@@ -3,6 +3,7 @@
 #include "Monster.h"
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
+#include "Platform_Rotate.h"
 
 #include "Core.h"
 
@@ -43,7 +44,7 @@ void cScene_Start::Enter()
 		AddObject(MonsterObj, GROUP_TYPE::MONSTER);		
 	}
 
-	SetPlatformSize(6);
+	//SetPlatformSize(6);
 
 	//Platform Object 추가
 	cPlatform* PlatformObj = nullptr;
@@ -59,9 +60,13 @@ void cScene_Start::Enter()
 	PlatformObj->SetPos(Vec2 { Resolution.x/2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
-	PlatformObj = new cPlatform;
+	PlatformObj = new cPlatform_Rotate;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f }); // 중심좌표..?
-	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM_ROTATE);
+
+	//PlatformObj = new cPlatform;
+	//PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f }); // 중심좌표..?
+	//AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	//for (; i < GetPlatformSize(); ++i)
 	//{

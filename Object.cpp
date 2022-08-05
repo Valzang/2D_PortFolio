@@ -1,10 +1,17 @@
 #include "Object.h"
 #include "Scene.h"
 
+cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1),
+					m_IsDead(false), m_OnPlatform(false), m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating()
+{ 
+	m_Dir.Normalize(); 
+	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 
+}
+
 void cObject::SetPos(Vec2 _Pos)
 {
 	m_Pos = _Pos;
-	if (m_curGroupType == (INT)GROUP_TYPE::PLATFORM)
+	if (m_curGroupType == (INT)GROUP_TYPE::PLATFORM || m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
 	{
 		for (int i = (int)(_Pos.x - m_Scale.x / 2); i < (int)(_Pos.x + m_Scale.x / 2); ++i)
 		{
@@ -79,9 +86,7 @@ void cObject::Collsion(cObject& curObj, UINT GROUP_TYPE, float multiplier)
 			{
 				curObj.m_Blocked[(UINT)KEY::LEFT] = true;
 			}
-		}
-			
-	}
-	
+		}			
+	}	
 	return;
 }

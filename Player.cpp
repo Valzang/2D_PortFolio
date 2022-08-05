@@ -170,9 +170,18 @@ bool cPlayer::Update()
 		//if (KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 		//{
 		//}
+
+		if (KEY_CHECK(KEY::K, KEY_STATE::DOWN)) // 아래를 짚음.
+		{
+			if (!m_isJumping
+				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
+				&& (KEY_CHECK(KEY::L, KEY_STATE::NONE) || KEY_CHECK(KEY::L, KEY_STATE::UP)))
+				Rotate_Platform();
+		}
 		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD)) // 아래를 짚음.
 		{
 			m_isSitted = true;
+			
 			if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_DashCoolTime > 0.55 && !m_isJumping) // 여기서 대쉬하면서 이동을 빠르게 해야함.
 			{
 				m_isMoved = false;
@@ -306,8 +315,11 @@ void cPlayer::Render(HDC _hdc)
 	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
-	int w = (int)GetScale().x;
-	int h = (int)GetScale().y;
+	Vec2 Temp_Pos = GetPos();
+	Vec2 Scale = GetScale();
+
+	int w = (int)Scale.x;
+	int h = (int)Scale.y;
 
 	int xStart = 0, yStart = 0;
 
@@ -350,8 +362,31 @@ void cPlayer::Render(HDC _hdc)
 
 	xStart = curFrame * w;
 
-	Vec2 Temp_Pos = GetPos();
-	Vec2 Scale = GetScale();
+	if (GetRotating())
+	{
+		Vec2 Rotator_Pos = GetRotator();
+		Vec2 Player_Pos = GetPos();
+		int decrease = 0;
+		if (Rotator_Pos.x < Temp_Pos.x)
+			decrease = 10;
+		else
+			decrease = -10;
+
+		// Rotator의 위치값에 따라 회전 방향 다르게끔 구현해야함
+		Gdiplus::Matrix mat;
+		static int rot = 0;
+
+		mat.RotateAt(Gdiplus::REAL(rot % 360), Gdiplus::PointF(Rotator_Pos.x, Rotator_Pos.y)); // 중점을 기준으로 회전
+
+		graphics.SetTransform(&mat);
+
+		rot += decrease;
+		if (rot == 180 || rot == -180)
+		{
+			SetRotating(false);
+			rot = 0;
+		}
+	}
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 	graphics.DrawImage(m_PlayerImg, Rect((int)Temp_Pos.x - (int)Scale.x / 2, (int)Temp_Pos.y - (int)Scale.y / 2, w, h), xStart, yStart, w, h, UnitPixel, GetImgAttr());
 }
@@ -376,4 +411,36 @@ void cPlayer::CreateBomb()
 
 	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
 	curScene->AddObject(bomb, GROUP_TYPE::BOMB);
+}
+
+bool cPlayer::Rotate_Platform()
+{
+	Vec2 curPos = GetPos();
+	float Player_Y_Down = curPos.y + GetScale().y / 2.f;
+	float Player_Y_Up = curPos.y - GetScale().y / 2.f;
+
+	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
+	int PLATFORM_ROTATE = (INT)GROUP_TYPE::PLATFORM_ROTATE;
+
+	for (int i = 0; i < curScene->GetCurObjectVec()[PLATFORM_ROTATE].size(); ++i)
+	{
+		Vec2 Platform_Pos = curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->GetPos();
+		Vec2 Platform_Scale = curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->GetScale();		
+
+		float Left_End = Platform_Pos.x - Platform_Scale.x / 2.f;
+		float Right_End = Platform_Pos.x + Platform_Scale.x / 2.f;
+		float Top_End = Platform_Pos.y - Platform_Scale.y / 2.f;
+		float Bottom_End = Platform_Pos.y + Platform_Scale.y / 2.f;
+
+		// 플레이어의 현 위치 중심 값이 플랫폼의 좌우끝 안에 있을 때
+		if (curPos.x >= Left_End && curPos.x <= Right_End
+			&& ((!m_isJumping && Top_End <= Player_Y_Down + m_Dir.y * DELTA_TIME)
+			|| (m_isJumping && Bottom_End >= Player_Y_Up + m_Dir.y * DELTA_TIME)))
+		{
+			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotating(true);
+			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotator(curPos);
+			return true;
+		}
+	}
+	return false;
 }

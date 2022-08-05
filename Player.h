@@ -19,11 +19,14 @@ private:
     double m_DashCoolTime; // 대쉬 간 쿨타임    
     double m_AfterAttackTime;
 
+
 public:
     cPlayer();
     virtual ~cPlayer();
     virtual bool Update() override;
     virtual void Render(HDC _hdc) override;
     void CreateBomb();
+
+    bool Rotate_Platform();
 };
 

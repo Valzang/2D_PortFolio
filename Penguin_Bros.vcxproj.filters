@@ -103,6 +103,9 @@
     <ClInclude Include="targetver.h">
       <Filter>Default</Filter>
     </ClInclude>
+    <ClInclude Include="Platform_Rotate.h">
+      <Filter>Engine\03. Object\Platform</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -146,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="Penguin_Bros.cpp">
       <Filter>Default</Filter>
+    </ClCompile>
+    <ClCompile Include="Platform_Rotate.cpp">
+      <Filter>Engine\03. Object\Platform</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
