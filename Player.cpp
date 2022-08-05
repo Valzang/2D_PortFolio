@@ -379,6 +379,27 @@ void cPlayer::Render(HDC _hdc)
 		mat.RotateAt(Gdiplus::REAL(rot % 360), Gdiplus::PointF(Rotator_Pos.x, Rotator_Pos.y)); // 중점을 기준으로 회전
 
 		graphics.SetTransform(&mat);
+		float temp_x = Player_Pos.x + mat.OffsetX();
+		float temp_y = Player_Pos.y + mat.OffsetY();
+		/*
+		
+		void ObjectRectangle::Rotate()
+		{
+			//double RotationDirection = abs(x_speed) / x_speed;
+			RotationDirection = abs(x_speed) / x_speed;
+			Rotation_Angle += 5 * RotationDirection;
+			double angle_radian = Rotation_Angle / 180 * M_PI;
+		
+			for (int i = 0; i < 4; ++i)
+			{
+				double new_x = cos(angle_radian) * ((Rect_Point[i].x - Center.x)) - sin(angle_radian) * ((Rect_Point[i].y - Center.y));
+				double new_y = sin(angle_radian) * ((Rect_Point[i].x - Center.x)) + cos(angle_radian) * ((Rect_Point[i].y - Center.y));
+				Rect_Point[i].x = new_x + Center.x;
+				Rect_Point[i].y = new_y + Center.y;
+			}
+		}		
+		
+		*/
 
 		rot += decrease;
 		if (rot == 180 || rot == -180)
