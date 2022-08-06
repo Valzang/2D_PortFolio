@@ -404,8 +404,11 @@ void cPlayer::Render(HDC _hdc)
 		rot += decrease;
 		if (rot == 180 || rot == -180)
 		{
+			float temp_x = mat.OffsetX();
+			float temp_y = mat.OffsetY();
 			SetRotating(false);
 			rot = 0;
+			SetPos(Vec2(temp_x / 2, temp_y / 2));
 		}
 	}
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
