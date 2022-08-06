@@ -22,8 +22,9 @@ private:
 
 protected:
 	Vec2 m_Dir;
-	bool m_Blocked[(UINT)KEY::RIGHT+1];
-	int m_curGroupType;
+	bool m_Blocked[(UINT)KEY::RIGHT+1]; // 좌측/우측 벽이 막혔는지
+	int m_curGroupType;					// 현재 무슨 타입인지
+	bool RotFromDown;
 	
 
 public:
@@ -55,11 +56,13 @@ public:
 	Vec2 GetRotator() { return m_RotatorPos; }
 	void SetRotator(Vec2 _val) { m_RotatorPos = _val; }
 
+	bool GetRotFromDown() { return RotFromDown; }
+	void SetRotFromDown(bool _val) { RotFromDown = _val; }
+
+
 
 	Gdiplus::ImageAttributes* GetImgAttr() { return &m_imgAttr; }
 	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); } // A 컬러에서부터 B 컬러 사이 값들을 투명하게 만들어줌
-
-	void Collsion(cObject& curObj,UINT GROUP_TYPE, float multiplier); // 플랫폼 위에 있으면 안떨어지게끔 하려고함, 추후 구현 필요
 
 	virtual bool Update() = 0;
 	virtual void Render(HDC _hdc) = 0;

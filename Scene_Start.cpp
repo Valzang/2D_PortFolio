@@ -61,7 +61,7 @@ void cScene_Start::Enter()
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_Rotate;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f }); // Áß½ÉÁÂÇ¥..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f+150 }); // Áß½ÉÁÂÇ¥..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM_ROTATE);
 
 	//PlatformObj = new cPlatform;

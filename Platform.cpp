@@ -30,18 +30,30 @@ void cPlatform::Render(HDC _hdc)
 	Vec2 Platform_Pos = GetPos();
 	Vec2 Scale = GetScale();
 
+	// Rotating 하라는 신호일때
 	if (GetRotating())
 	{
 		Vec2 Rotator_Pos = GetRotator();
 		cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
 		curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->SetRotator(Platform_Pos);
 		curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->SetRotating(true);
-
+		
 		int decrease = 0;
-		if (Rotator_Pos.x > Platform_Pos.x)
-			decrease = 10;
+
+		if (GetRotFromDown())
+		{
+			if (Rotator_Pos.x <= Platform_Pos.x)
+				decrease = 10;
+			else
+				decrease = -10;
+		}
 		else
-			decrease = -10;
+		{
+			if (Rotator_Pos.x > Platform_Pos.x)
+				decrease = 10;
+			else
+				decrease = -10;
+		}
 
 		// Rotator의 위치값에 따라 회전 방향 다르게끔 구현해야함
 		Gdiplus::Matrix mat;
@@ -54,6 +66,7 @@ void cPlatform::Render(HDC _hdc)
 		rot += decrease;
 		if (rot == 180 || rot == -180)
 		{
+			//curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->
 			SetRotating(false);
 			rot = 0;
 		}

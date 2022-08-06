@@ -11,6 +11,7 @@
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
+					, m_AttachingTime(0.f), m_isAttached(false)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
@@ -77,11 +78,11 @@ bool cPlayer::Update()
 	{
 		if (curPos_x_l < 0) // 캐릭터의 좌측 좌표가 맵을 벗어났을 때
 		{			
-			if(curPos_x_r < 0) // 캐릭터의 우측 좌표도 맵을 벗어났으면 그냥 떨어짐
+			if(curPos_x_r < 0 && !m_isAttached) // 캐릭터의 우측 좌표도 맵을 벗어났으면 그냥 떨어짐
 				Pos.y += m_Dir.y * DELTA_TIME;
 			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
 			{
-				if (g_PossibleArea[(int)curPos_x_r][Next_Down]) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+				if (g_PossibleArea[(int)curPos_x_r][Next_Down] && !m_isAttached) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
 					Pos.y += m_Dir.y * DELTA_TIME;
 				else // 플랫폼이면 착지 멈추고 감소 속도 복구
 				{
@@ -92,11 +93,11 @@ bool cPlayer::Update()
 		}
 		if (curPos_x_r >= (int)(Map_Max_x)) // 캐릭터의 우측 좌표가 맵을 벗어났을 때
 		{
-			if (curPos_x_l >= (int)(Map_Max_x)) // 캐릭터의 좌측 좌표도 맵을 벗어났으면 그냥 떨어짐
+			if (curPos_x_l >= (int)(Map_Max_x) && !m_isAttached) // 캐릭터의 좌측 좌표도 맵을 벗어났으면 그냥 떨어짐
 				Pos.y += m_Dir.y * DELTA_TIME;
 			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
 			{
-				if (g_PossibleArea[(int)curPos_x_l][Next_Down])  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+				if (g_PossibleArea[(int)curPos_x_l][Next_Down] && !m_isAttached)  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
 					Pos.y += m_Dir.y * DELTA_TIME;
 				else // 플랫폼이면 착지 멈추고 감소 속도 복구
 				{ 
@@ -117,9 +118,25 @@ bool cPlayer::Update()
 	else
 	{
 		if (g_PossibleArea[(int)curPos_x_l][Next_Down]
-			&& g_PossibleArea[(int)curPos_x_r][Next_Down])
+			&& g_PossibleArea[(int)curPos_x_r][Next_Down] && !m_isAttached)
 		{
 			Pos.y += m_Dir.y * DELTA_TIME;
+			// 점프
+			if (m_isJumping)
+			{
+				float Check_Up = Pos.y - Scl.y / 2 + m_Dir.y * DELTA_TIME;
+				if (Check_Up >= 0 && !g_PossibleArea[(int)Pos.x][(int)Check_Up])
+				{
+					//SetPos(Pos);
+					m_isAttached = true;
+					SetRotFromDown(true);
+					Rotate_Platform();
+					m_isJumping = false;
+					m_Dir.y = 450.f;
+				}
+			}
+			
+			
 			if (m_Dir.y < 800.f)
 			{
 				if (m_isJumping)
@@ -167,22 +184,38 @@ bool cPlayer::Update()
 	}
 	else
 	{
-		//if (KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
-		//{
-		//}
-
-		if (KEY_CHECK(KEY::K, KEY_STATE::DOWN)) // 아래를 짚음.
+		if (KEY_CHECK(KEY::I, KEY_STATE::DOWN)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 		{
-			if (!m_isJumping
+			if (m_isAttached && !GetRotating()
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
 				&& (KEY_CHECK(KEY::L, KEY_STATE::NONE) || KEY_CHECK(KEY::L, KEY_STATE::UP)))
+			{
+				SetRotFromDown(true);
 				Rotate_Platform();
+				m_AttachingTime = 0.f;
+			}
 		}
-		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD)) // 아래를 짚음.
+
+		if (KEY_CHECK(KEY::K, KEY_STATE::DOWN) && !GetRotating()) // 아래를 짚음.
+		{
+			if (!m_isJumping && !m_isAttached
+				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
+				&& (KEY_CHECK(KEY::L, KEY_STATE::NONE) || KEY_CHECK(KEY::L, KEY_STATE::UP)))
+			{
+				SetRotFromDown(false);
+				Rotate_Platform();
+			}
+			if(m_isAttached)
+			{
+				m_isAttached = false;
+				m_AttachingTime = 0.f;
+			}
+		}
+		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD) && !GetRotating()) // 아래를 짚음.
 		{
 			m_isSitted = true;
 			
-			if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_DashCoolTime > 0.55 && !m_isJumping) // 여기서 대쉬하면서 이동을 빠르게 해야함.
+			if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_DashCoolTime > 0.55 && !m_isJumping && !m_isAttached) // 여기서 대쉬하면서 이동을 빠르게 해야함.
 			{
 				m_isMoved = false;
 				m_isDashing = true;
@@ -195,33 +228,23 @@ bool cPlayer::Update()
 			m_isSitted = false;
 		}
 
-		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing )//&& isOnPlatform())
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && !GetRotating())//&& isOnPlatform())
 		{
-			m_isJumping = true;
-			m_Dir.y *= -1;
+			if (m_isAttached)
+			{
+				m_isAttached = false;
+				m_AttachingTime = 0.f;
+			}
+			else
+			{
+				m_isJumping = true;
+				m_Dir.y *= -1;
+			}
 		}
 
 		// ================================================================================================================== 좌측 이동
-		if (KEY_CHECK(KEY::J, KEY_STATE::DOWN) && (KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
-			&& m_AfterAttackTime <= 0.f)
-		{
-			int Left_Check = (int)(curPos_x_l - 250.f * DELTA_TIME);
-			if (Left_Check < 0)
-			{
-				if (!m_isDashing)
-					m_isMoved = true;
-				SetDirection(-1);
-			}
-			else if (g_PossibleArea[Left_Check][(int)curPos_y])
-			{
-				if (!m_isDashing)
-					m_isMoved = true;
-				SetDirection(-1);
-			}
-			
-		}
-		if (KEY_CHECK(KEY::J, KEY_STATE::HOLD) &&(KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE)) 
-			&& m_AfterAttackTime <= 0.f)
+		if ((KEY_CHECK(KEY::J, KEY_STATE::DOWN) || KEY_CHECK(KEY::J, KEY_STATE::HOLD)) &&(KEY_CHECK(KEY::L, KEY_STATE::UP) || KEY_CHECK(KEY::L, KEY_STATE::NONE))
+			&& m_AfterAttackTime <= 0.f && !GetRotating())
 		{
 			int Left_Check = (int)(curPos_x_l - 250.f * DELTA_TIME);
 			if (Left_Check < 0)
@@ -245,25 +268,8 @@ bool cPlayer::Update()
 		}
 
 		// ======================================================================================================================= 우측 이동
-		if (KEY_CHECK(KEY::L, KEY_STATE::DOWN) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) 
-			&& m_AfterAttackTime <= 0.f)
-		{
-			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
-			if (Right_Check >= (int)Map_Max_x)
-			{
-				if (!m_isDashing)
-					m_isMoved = true;
-				SetDirection(1);
-			}
-			else if (g_PossibleArea[Right_Check][(int)curPos_y])
-			{
-				if (!m_isDashing)
-					m_isMoved = true;
-				SetDirection(1);
-			}			
-		}
-		if (KEY_CHECK(KEY::L, KEY_STATE::HOLD) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE)) 
-			&& m_AfterAttackTime <= 0.f)
+		if ((KEY_CHECK(KEY::L, KEY_STATE::DOWN) || KEY_CHECK(KEY::L, KEY_STATE::HOLD)) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE))
+			&& m_AfterAttackTime <= 0.f && !GetRotating())
 		{
 			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
 			if (Right_Check >= (int)Map_Max_x)
@@ -301,7 +307,29 @@ bool cPlayer::Update()
 			}
 		}
 		m_AtkCoolTime += DELTA_TIME;
-		m_DashCoolTime += DELTA_TIME;
+		m_DashCoolTime += DELTA_TIME;		
+	}
+
+	if (m_isAttached)
+	{
+		if (m_AttachingTime >= 1) // 0.5초 이상 대시중일 시 초기화
+		{
+			m_isAttached = false;
+			m_AttachingTime = 0.f;
+		}
+		else
+			m_AttachingTime += DELTA_TIME;
+	}
+
+	if (m_Rotation_Degree == 180 || m_Rotation_Degree == -180)
+	{
+		// 플레이어의 위치를 회전 플랫폼 중점을 기준으로 점 대칭 이동
+		Pos.x -= ((Pos.x - GetRotator().x) * 2);
+		Pos.y -= ((Pos.y - GetRotator().y) * 2);
+		SetRotating(false);
+		m_Rotation_Degree = 0;
+		//SetPos(Player_Pos);
+		m_isAttached = Pos.y > GetRotator().y ? true : false;
 	}
 
 	SetPos(Pos);
@@ -315,17 +343,17 @@ void cPlayer::Render(HDC _hdc)
 	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
-	Vec2 Temp_Pos = GetPos();
-	Vec2 Scale = GetScale();
+	Vec2 Player_Pos = GetPos();
+	Vec2 Player_Scale = GetScale();
 
-	int w = (int)Scale.x;
-	int h = (int)Scale.y;
+	int Width = (int)Player_Scale.x;
+	int Height = (int)Player_Scale.y;
 
 	int xStart = 0, yStart = 0;
 
-	static int temp_Jump = 1;
+	static int Img_Jump_Cursor = 1;
 
-	static int temp_Move = 1;
+	static int Img_Move_Cursor = 1;
 
 	if (GetDirection() == -1)
 		yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
@@ -334,85 +362,77 @@ void cPlayer::Render(HDC _hdc)
 	{
 		// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
 		yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
-		curFrame = temp_Jump / 10;
-		temp_Jump = temp_Jump >= 59 ? 1 : temp_Jump + 1;
+		curFrame = Img_Jump_Cursor / 10;
+		Img_Jump_Cursor = Img_Jump_Cursor >= 59 ? 1 : Img_Jump_Cursor + 1;
 	}
 	else if (m_isMoved) // 움직이고 있다면
 	{
 		// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
-		curFrame = temp_Move / 4;
-		temp_Move = temp_Move >= 11 ? 1 : temp_Move + 1;
+		curFrame = Img_Move_Cursor / 4;
+		Img_Move_Cursor = Img_Move_Cursor >= 11 ? 1 : Img_Move_Cursor + 1;
 
 	}
 	else if (m_isSitted)
 	{
 		// 앉아있다면
 		yStart += (int)(m_PlayerImg->GetHeight() / 6.f);
-		if (m_isDashing)
-			curFrame = 1;
-		else
-			curFrame = 0;
+		curFrame = m_isDashing ? 1 : 0;
 	}
 	else
 	{
 		curFrame = 0;
-		temp_Jump = 1;
-		temp_Move = 1;
+		Img_Jump_Cursor = 1;
+		Img_Move_Cursor = 1;
 	}
 
-	xStart = curFrame * w;
+	xStart = curFrame * Width;
+	Gdiplus::Matrix mat;
+	//static int Rotation_Degree = 0;
 
 	if (GetRotating())
 	{
 		Vec2 Rotator_Pos = GetRotator();
-		Vec2 Player_Pos = GetPos();
+
 		int decrease = 0;
-		if (Rotator_Pos.x < Temp_Pos.x)
-			decrease = 10;
+
+		if (GetRotFromDown())
+		{
+			if (Rotator_Pos.x >= Player_Pos.x)
+				decrease = 10;
+			else
+				decrease = -10;
+		}
 		else
-			decrease = -10;
+		{
+			if (Rotator_Pos.x < Player_Pos.x)
+				decrease = 10;
+			else
+				decrease = -10;
+		}
 
 		// Rotator의 위치값에 따라 회전 방향 다르게끔 구현해야함
-		Gdiplus::Matrix mat;
-		static int rot = 0;
 
-		mat.RotateAt(Gdiplus::REAL(rot % 360), Gdiplus::PointF(Rotator_Pos.x, Rotator_Pos.y)); // 중점을 기준으로 회전
+		mat.RotateAt(Gdiplus::REAL(m_Rotation_Degree % 360), Gdiplus::PointF(Rotator_Pos.x, Rotator_Pos.y)); // 플랫폼 중점을 기준으로 회전
 
 		graphics.SetTransform(&mat);
-		float temp_x = Player_Pos.x + mat.OffsetX();
-		float temp_y = Player_Pos.y + mat.OffsetY();
-		/*
-		
-		void ObjectRectangle::Rotate()
-		{
-			//double RotationDirection = abs(x_speed) / x_speed;
-			RotationDirection = abs(x_speed) / x_speed;
-			Rotation_Angle += 5 * RotationDirection;
-			double angle_radian = Rotation_Angle / 180 * M_PI;
-		
-			for (int i = 0; i < 4; ++i)
-			{
-				double new_x = cos(angle_radian) * ((Rect_Point[i].x - Center.x)) - sin(angle_radian) * ((Rect_Point[i].y - Center.y));
-				double new_y = sin(angle_radian) * ((Rect_Point[i].x - Center.x)) + cos(angle_radian) * ((Rect_Point[i].y - Center.y));
-				Rect_Point[i].x = new_x + Center.x;
-				Rect_Point[i].y = new_y + Center.y;
-			}
-		}		
-		
-		*/
 
-		rot += decrease;
-		if (rot == 180 || rot == -180)
-		{
-			float temp_x = mat.OffsetX();
-			float temp_y = mat.OffsetY();
-			SetRotating(false);
-			rot = 0;
-			SetPos(Vec2(temp_x / 2, temp_y / 2));
-		}
+		m_Rotation_Degree += decrease;		
+	}
+
+	if (m_isAttached)
+	{
+		mat.RotateAt(Gdiplus::REAL(180 % 360), Gdiplus::PointF(Player_Pos.x, Player_Pos.y)); // 플레이어 중점을 기준으로 회전
+		graphics.SetTransform(&mat);
+
+		// 위아래가 뒤집혀서 반대방향이 되었으므로 방향 변화해줌
+		if (GetDirection() == -1)
+			yStart -= (int)(m_PlayerImg->GetHeight() / 2.f);
+		else
+			yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
+
 	}
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
-	graphics.DrawImage(m_PlayerImg, Rect((int)Temp_Pos.x - (int)Scale.x / 2, (int)Temp_Pos.y - (int)Scale.y / 2, w, h), xStart, yStart, w, h, UnitPixel, GetImgAttr());
+	graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
 }
 
 void cPlayer::CreateBomb()
@@ -458,11 +478,12 @@ bool cPlayer::Rotate_Platform()
 
 		// 플레이어의 현 위치 중심 값이 플랫폼의 좌우끝 안에 있을 때
 		if (curPos.x >= Left_End && curPos.x <= Right_End
-			&& ((!m_isJumping && Top_End <= Player_Y_Down + m_Dir.y * DELTA_TIME)
-			|| (m_isJumping && Bottom_End >= Player_Y_Up + m_Dir.y * DELTA_TIME)))
+			&& ((!m_isJumping && Top_End <= Player_Y_Down + m_Dir.y * DELTA_TIME && Top_End > curPos.y)
+				|| m_isAttached || (m_isJumping && Bottom_End >= Player_Y_Up + m_Dir.y * DELTA_TIME) && Bottom_End < curPos.y)  )
 		{
 			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotating(true);
 			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotator(curPos);
+			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotFromDown(GetRotFromDown());
 			return true;
 		}
 	}
