@@ -6,6 +6,8 @@ private:
     Image* m_BombImg;  // 이미지 파일
     double m_TimeLimit;
     double m_ExplosionRange;
+
+    bool m_isShoot;
     bool m_DirChanged;
 
     bool m_RotateToUp;

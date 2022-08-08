@@ -5,11 +5,10 @@
 // PI/2 => 아래직선			-PI/2 => 위 직선
 // PI/4 => 우측아래대각선		-PI/4 => 우측위 대각선
 
-cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_DirChanged(false), m_RotateToUp(false)
+cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_DirChanged(false), m_RotateToUp(false), m_isShoot(false)
 {
 	m_curGroupType = (INT)GROUP_TYPE::BOMB;
-	m_Dir = Vec2(-0.8f, -3.f);
-	m_Dir.Normalize();
+	SetDir(Vec2(-0.8f, -3.f));
 	m_BombImg = Image::FromFile((WCHAR*)L"Image/Bomb.png");
 	SetScale(Vec2((float)m_BombImg->GetWidth()/2, (float)m_BombImg->GetHeight()/2));
 
@@ -51,8 +50,16 @@ bool cBomb::Update()
 		curPos_y += 600.f * m_Dir.y * DELTA_TIME;
 		int Next_Down = (int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME);
 
-		if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
-			m_Dir.y += 8.f * DELTA_TIME;
+		if (!m_isShoot)
+		{
+			if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+				m_Dir.y += 8.f * DELTA_TIME;
+		}
+		else
+		{
+			if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+				m_Dir.y += 6.f * DELTA_TIME;
+		}
 
 		if (temp_dir == 1) // 우측 방향일때
 		{
@@ -89,7 +96,7 @@ bool cBomb::Update()
 							m_Dir.y = 0;
 						}
 					}
-					// 다음 우측 위치가 완전 맵 밖에 있을 때
+					// 다음 좌측 위치가 완전 맵 밖에 있을 때
 					else if (g_PossibleArea[Next_Right][Next_Down] != 1)
 						SetOnPlatform(true);
 				}
@@ -159,15 +166,47 @@ bool cBomb::Update()
 	// 회전 중이라면
 	if (GetRotating())
 	{
-		if (m_RotateToUp)
-		{
+		float diff = Pos.x - GetRotator().x;
 
+		// 플랫폼의 중심보다 우측에 있을 때
+		if (diff > 0)
+		{
+			//방향이 위로 날아가야할 때
+			if (m_RotateToUp)
+			{
+				//SetDirection(1);
+				m_Dir.x = 1.490705f;
+				m_Dir.y = -0.7f;
+				SetOnPlatform(false);
+				m_isShoot = true;
+			}
+			//방향이 아래로 떨어져야 할 때
+			else
+			{
+				SetOnPlatform(false);
+				Pos.y += 600.f * m_Dir.y * DELTA_TIME;
+			}
 		}
+		// 플랫폼의 중심보다 좌측에 있을 때
 		else
 		{
-			SetOnPlatform(false);
-			Pos.y += 600.f * m_Dir.y * DELTA_TIME;
-		}
+			//방향이 위로 날아가야할 때
+			if (m_RotateToUp)
+			{
+				//SetDirection(-1);
+				m_Dir.x = 1.490705f;
+				m_Dir.y = -0.7f;
+				SetOnPlatform(false);
+				m_isShoot = true;
+			}
+			//방향이 아래로 떨어져야 할 때
+			else
+			{
+				SetOnPlatform(false);
+				Pos.y += 600.f * m_Dir.y * DELTA_TIME;
+			}
+		}	
+		SetRotating(false);
 	}
 
 	if (m_Dir.x > 0) // 폭탄의 속도도 점점 0으로 향하도록
