@@ -17,7 +17,7 @@ void cObject::SetPos(Vec2 _Pos)
 		{
 			for (int j = (int)(_Pos.y - m_Scale.y / 2); j < (int)(_Pos.y + m_Scale.y / 2); ++j)
 			{
-				g_PossibleArea[i][j] = false;
+				g_PossibleArea[i][j] = (m_curGroupType == (INT)GROUP_TYPE::PLATFORM) ? 0 : 2;
 			}
 		}
 	}

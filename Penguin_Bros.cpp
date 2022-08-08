@@ -11,7 +11,7 @@
 #define MAX_LOADSTRING 100
 
 // 전역 변수:
-bool** g_PossibleArea = nullptr;
+short** g_PossibleArea = nullptr;
 HINSTANCE hInst;                                // 현재 인스턴스입니다. HINSTANCE는 하나 밖에 없음. HINSTANCE > HWND > H
 HWND hWnd;                                     // 현재 윈도우 핸들
 WCHAR szTitle[MAX_LOADSTRING];                  // 제목 표시줄 텍스트입니다.

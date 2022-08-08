@@ -1,7 +1,9 @@
 #include "Platform.h"
 #include "Scene.h"
+#include "Player.h"
+#include "Bomb.h"
 
-cPlatform::cPlatform() : m_PlatformImg(NULL)
+cPlatform::cPlatform() : m_PlatformImg(NULL), m_DecreaseDegree(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLATFORM;
 	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform.png");
@@ -20,6 +22,54 @@ cPlatform::~cPlatform()
 
 bool cPlatform::Update()
 {
+	// Rotating 하라는 신호일때
+	if (GetRotating())
+	{
+		Vec2 Platform_Pos = GetPos();
+		Vec2 Platform_Scale = GetScale();
+
+		cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
+		cPlayer* curPlayer = dynamic_cast<cPlayer*>(curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]);
+		if (curPlayer->GetPos().x < Platform_Pos.x + Platform_Scale.x / 2
+			&& curPlayer->GetPos().x > Platform_Pos.x - Platform_Scale.x / 2)
+		{
+			curPlayer->SetRotator(Platform_Pos);
+			curPlayer->SetRotating(true);
+			curPlayer->SetUnsitted();
+		}
+
+		for (int i = 0; i < curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::BOMB].size(); ++i)
+		{
+			cBomb* curBomb = dynamic_cast<cBomb*>(curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::BOMB][i]);
+			float curBomb_x = curBomb->GetPos().x;
+			if (curBomb_x < Platform_Pos.x + Platform_Scale.x / 2
+				&& curBomb_x > Platform_Pos.x - Platform_Scale.x / 2)
+			{				
+				curBomb->SetRotator(Platform_Pos);
+				curBomb->SetRotating(true);
+
+				// 아랫방향
+				if (m_DecreaseDegree > 0)
+				{
+					if (curBomb_x > Platform_Pos.x)
+						curBomb->SetRotateDir(false);
+					else
+						curBomb->SetRotateDir(true);
+				}
+				// 윗 방향
+				else
+				{
+					if (curBomb_x > Platform_Pos.x)
+						curBomb->SetRotateDir(true);
+					else
+						curBomb->SetRotateDir(false);
+				}
+				
+			}
+			
+		}
+
+	}
 	return true;
 }
 
@@ -33,26 +83,21 @@ void cPlatform::Render(HDC _hdc)
 	// Rotating 하라는 신호일때
 	if (GetRotating())
 	{
-		Vec2 Rotator_Pos = GetRotator();
-		cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
-		curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->SetRotator(Platform_Pos);
-		curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->SetRotating(true);
-		
-		int decrease = 0;
+		Vec2 Rotator_Pos = GetRotator();		
 
 		if (GetRotFromDown())
 		{
 			if (Rotator_Pos.x <= Platform_Pos.x)
-				decrease = 10;
+				m_DecreaseDegree = 10;
 			else
-				decrease = -10;
+				m_DecreaseDegree = -10;
 		}
 		else
 		{
 			if (Rotator_Pos.x > Platform_Pos.x)
-				decrease = 10;
+				m_DecreaseDegree = 10;
 			else
-				decrease = -10;
+				m_DecreaseDegree = -10;
 		}
 
 		// Rotator의 위치값에 따라 회전 방향 다르게끔 구현해야함
@@ -63,7 +108,7 @@ void cPlatform::Render(HDC _hdc)
 
 		graphics.SetTransform(&mat);
 
-		rot += decrease;
+		rot += m_DecreaseDegree;
 		if (rot == 180 || rot == -180)
 		{
 			//curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->

@@ -1,7 +1,7 @@
 #include "Core.h"
 #include "Object.h"
 
-extern bool** g_PossibleArea;
+extern short** g_PossibleArea;
 
 cCore::cCore() : m_hBit(NULL), m_hDC(NULL)
 , m_hWnd(NULL), m_memDC(NULL), m_ptResolution({ 0, 0 })
@@ -36,11 +36,13 @@ int cCore::Init(HWND _hWnd, POINT _ptResolution)
 	m_ptResolution = _ptResolution;
 
 	// 맵 범위에 해당하는 동적 배열 만듦.
-	g_PossibleArea = new bool* [m_ptResolution.x];
+	g_PossibleArea = new short* [m_ptResolution.x];
 	for (int i = 0; i < m_ptResolution.x; ++i)
 	{
-		g_PossibleArea[i] = new bool[m_ptResolution.y];
-		memset(g_PossibleArea[i], true, sizeof(bool) * m_ptResolution.y);
+		g_PossibleArea[i] = new short[m_ptResolution.y];
+		for (int j = 0; j < m_ptResolution.y; ++j)
+			g_PossibleArea[i][j] = 1;
+		//memset(g_PossibleArea[i], true, sizeof(int) * m_ptResolution.y);
 	}
 
 	RECT rt = { 0, 0, m_ptResolution.x, m_ptResolution.y };

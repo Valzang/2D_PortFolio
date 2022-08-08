@@ -25,7 +25,7 @@ void cScene_Start::Enter()
 
 
 	// 몬스터 배치	
-	SetMonsterSize(5);			// 몬스터 수
+	SetMonsterSize(10);			// 몬스터 수
 	float MoveDist = 40.f;		// 몬스터의 행동 반경
 	float ObjectScale = 81.f;	// 몬스터 사진의 크기
 
@@ -48,25 +48,29 @@ void cScene_Start::Enter()
 
 	//Platform Object 추가
 	cPlatform* PlatformObj = nullptr;
-	PlatformObj = new cPlatform_SideWall;
-	PlatformObj->SetPos(Vec2 { (PlatformObj->GetScale().x / 2.f), Resolution.y/2.f });
+	PlatformObj = new cPlatform_Rotate;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f+120 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM_ROTATE);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 350, Resolution.y / 2.f + 120 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f + 350, Resolution.y / 2.f + 120 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_SideWall;
-	PlatformObj->SetPos(Vec2 { Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f });
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform_SideWall;
+	PlatformObj->SetPos(Vec2{ Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_Under;
-	PlatformObj->SetPos(Vec2 { Resolution.x/2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
-
-	PlatformObj = new cPlatform_Rotate;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f+150 }); // 중심좌표..?
-	AddObject(PlatformObj, GROUP_TYPE::PLATFORM_ROTATE);
-
-	//PlatformObj = new cPlatform;
-	//PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f }); // 중심좌표..?
-	//AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	//for (; i < GetPlatformSize(); ++i)
 	//{

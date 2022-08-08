@@ -5,10 +5,10 @@
 // PI/2 => 아래직선			-PI/2 => 위 직선
 // PI/4 => 우측아래대각선		-PI/4 => 우측위 대각선
 
-cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_DirChanged(false)
+cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_DirChanged(false), m_RotateToUp(false)
 {
 	m_curGroupType = (INT)GROUP_TYPE::BOMB;
-	m_Dir = Vec2(-2.f, -3.f);
+	m_Dir = Vec2(-0.8f, -3.f);
 	m_Dir.Normalize();
 	m_BombImg = Image::FromFile((WCHAR*)L"Image/Bomb.png");
 	SetScale(Vec2((float)m_BombImg->GetWidth()/2, (float)m_BombImg->GetHeight()/2));
@@ -69,9 +69,9 @@ bool cBomb::Update()
 					// 다음 좌측 위치가 완전 맵 안에 있을 때
 					if (Next_Left >= 0 && Next_Left < Map_Max_x)
 					{
-						if (!(g_PossibleArea[Next_Right][Next_Down]))
+						if (g_PossibleArea[Next_Right][Next_Down] != 1)
 						{
-							if (g_PossibleArea[Next_Left][Next_Down])
+							if (g_PossibleArea[Next_Left][Next_Down] == 1)
 							{
 								SetDirection(-1);
 								m_Dir.x /= 2.f;
@@ -83,19 +83,19 @@ bool cBomb::Update()
 								m_Dir.y = 0;
 							}
 						}
-						else if (!m_DirChanged && !(g_PossibleArea[Next_Left][Next_Down]))
+						else if (!m_DirChanged && g_PossibleArea[Next_Left][Next_Down] != 1)
 						{
 							SetOnPlatform(true);
 							m_Dir.y = 0;
 						}
 					}
 					// 다음 우측 위치가 완전 맵 밖에 있을 때
-					else if (!(g_PossibleArea[Next_Right][Next_Down]))
+					else if (g_PossibleArea[Next_Right][Next_Down] != 1)
 						SetOnPlatform(true);
 				}
 				// 다음 우측 위치가 완전 맵 밖에 있을 때
 				else if (Next_Left >= 0 && Next_Left < Map_Max_x
-						 && !(g_PossibleArea[Next_Left][Next_Down]))
+						 && g_PossibleArea[Next_Left][Next_Down] != 1)
 				{
 					SetOnPlatform(true);
 					m_Dir.y = 0;
@@ -117,9 +117,9 @@ bool cBomb::Update()
 					// 다음 우측 위치가 완전 맵 안에 있을 때
 					if (Next_Right >= 0 && Next_Right < Map_Max_x)
 					{
-						if (!(g_PossibleArea[Next_Left][Next_Down]))
+						if (g_PossibleArea[Next_Left][Next_Down] != 1)
 						{
-							if (g_PossibleArea[Next_Right][Next_Down])
+							if (g_PossibleArea[Next_Right][Next_Down] == 1)
 							{
 								SetDirection(1);
 								m_Dir.x /= 2.f;
@@ -131,14 +131,14 @@ bool cBomb::Update()
 								m_Dir.y = 0;
 							}
 						}
-						else if (!m_DirChanged && !(g_PossibleArea[Next_Right][Next_Down]))
+						else if (!m_DirChanged && g_PossibleArea[Next_Right][Next_Down] != 1)
 						{
 							SetOnPlatform(true);
 							m_Dir.y = 0;
 						}
 					}
 					// 다음 우측 위치가 완전 맵 밖에 있을 때
-					else if (!(g_PossibleArea[Next_Left][Next_Down]))
+					else if (g_PossibleArea[Next_Left][Next_Down] != 1)
 					{
 						SetOnPlatform(true);
 						m_Dir.y = 0;
@@ -146,12 +146,27 @@ bool cBomb::Update()
 				}
 				// 다음 좌측 위치가 완전 맵 밖에 있을 때
 				else if(Next_Right >= 0 && Next_Right < Map_Max_x
-					   && !(g_PossibleArea[Next_Right][Next_Down]))
+					   && g_PossibleArea[Next_Right][Next_Down] != 1 )
 				{
 					SetOnPlatform(true);
 					m_Dir.y = 0;
 				}
 			}
+		}
+	}
+
+	// 플랫폼에 어디에 놓여있느냐에 따라 다르게 해야할 듯.
+	// 회전 중이라면
+	if (GetRotating())
+	{
+		if (m_RotateToUp)
+		{
+
+		}
+		else
+		{
+			SetOnPlatform(false);
+			Pos.y += 600.f * m_Dir.y * DELTA_TIME;
 		}
 	}
 

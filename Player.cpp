@@ -11,7 +11,7 @@
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
-					, m_AttachingTime(0.f), m_isAttached(false)
+					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
@@ -43,6 +43,8 @@ bool cPlayer::Update()
 	float Map_Max_x = (float)(cCore::GetInstance()->GetResolution().x);
 	float Map_Max_y = (float)(cCore::GetInstance()->GetResolution().y);
 
+	int Next_Down = (int)(curPos_y + m_Dir.y * DELTA_TIME);
+
 	if (m_LifeCount < 0)
 		return false;
 
@@ -56,25 +58,24 @@ bool cPlayer::Update()
 		{
 			int Back_Left = (int)(curPos_x_l - Back * DELTA_TIME);
 			if (Back_Left < 0 || Back_Left >= Map_Max_x || curPos_y >= Map_Max_y
-				|| g_PossibleArea[Back_Left][(int)curPos_y])
+				|| g_PossibleArea[Back_Left][(int)curPos_y]==1)
 				Pos.x -= Back * DELTA_TIME;
 		}
 		else
 		{
 			int Back_Right = (int)(curPos_x_r + Back * DELTA_TIME);
 			if (Back_Right < 0 || Back_Right >= Map_Max_x || curPos_y >= Map_Max_y
-				|| g_PossibleArea[Back_Right][(int)curPos_y])
+				|| g_PossibleArea[Back_Right][(int)curPos_y]==1)
 				Pos.x += Back * DELTA_TIME;
 		}
 
 		m_AfterAttackTime -= DELTA_TIME;
 	}
 	
-	int Next_Down = (int)(curPos_y + m_Dir.y * DELTA_TIME);
 
 	// 캐릭터의 일부가 맵을 벗어났을 때
 	if (curPos_x_l < 0 || curPos_x_r >= (int)(Map_Max_x)
-		|| Next_Down >= Map_Max_y)
+		|| Next_Down >= Map_Max_y || Next_Down < 0)
 	{
 		if (curPos_x_l < 0) // 캐릭터의 좌측 좌표가 맵을 벗어났을 때
 		{			
@@ -82,7 +83,7 @@ bool cPlayer::Update()
 				Pos.y += m_Dir.y * DELTA_TIME;
 			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
 			{
-				if (g_PossibleArea[(int)curPos_x_r][Next_Down] && !m_isAttached) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+				if (g_PossibleArea[(int)curPos_x_r][Next_Down]==1 && !m_isAttached) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
 					Pos.y += m_Dir.y * DELTA_TIME;
 				else // 플랫폼이면 착지 멈추고 감소 속도 복구
 				{
@@ -97,7 +98,7 @@ bool cPlayer::Update()
 				Pos.y += m_Dir.y * DELTA_TIME;
 			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
 			{
-				if (g_PossibleArea[(int)curPos_x_l][Next_Down] && !m_isAttached)  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
+				if (g_PossibleArea[(int)curPos_x_l][Next_Down]==1 && !m_isAttached)  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
 					Pos.y += m_Dir.y * DELTA_TIME;
 				else // 플랫폼이면 착지 멈추고 감소 속도 복구
 				{ 
@@ -117,15 +118,15 @@ bool cPlayer::Update()
 	// 캐릭터 전체가 맵 안에 있을 때
 	else
 	{
-		if (g_PossibleArea[(int)curPos_x_l][Next_Down]
-			&& g_PossibleArea[(int)curPos_x_r][Next_Down] && !m_isAttached)
+		if (g_PossibleArea[(int)curPos_x_l][Next_Down]==1 && g_PossibleArea[(int)curPos_x_r][Next_Down]==1
+			&& !m_isAttached)
 		{
 			Pos.y += m_Dir.y * DELTA_TIME;
 			// 점프
-			if (m_isJumping)
+			if (m_isJumping ) // 문제 : 현재 회전문이 아니더라도 천장에 붙는 현상이 있음
 			{
 				float Check_Up = Pos.y - Scl.y / 2 + m_Dir.y * DELTA_TIME;
-				if (Check_Up >= 0 && !g_PossibleArea[(int)Pos.x][(int)Check_Up])
+				if (Check_Up >= 0 && g_PossibleArea[(int)Pos.x][(int)Check_Up] == 2)
 				{
 					//SetPos(Pos);
 					m_isAttached = true;
@@ -159,14 +160,14 @@ bool cPlayer::Update()
 		{
 			if ((int)(curPos_x_l - 400.f * DELTA_TIME) < 0)
 				Pos.x -= 400.f * DELTA_TIME;
-			else if(g_PossibleArea[(int)(curPos_x_l - 400.f * DELTA_TIME)][(int)curPos_y])
+			else if(g_PossibleArea[(int)(curPos_x_l - 400.f * DELTA_TIME)][(int)curPos_y]==1)
 				Pos.x -= 400.f * DELTA_TIME;
 		}
 		else
 		{
 			if ((int)(curPos_x_r + 400.f * DELTA_TIME) >= Map_Max_x)
 				Pos.x += 400.f * DELTA_TIME;
-			else if (g_PossibleArea[(int)(curPos_x_r + 400.f * DELTA_TIME)][(int)curPos_y])
+			else if (g_PossibleArea[(int)(curPos_x_r + 400.f * DELTA_TIME)][(int)curPos_y]==1)
 				Pos.x += 400.f * DELTA_TIME;
 		}
 
@@ -184,7 +185,7 @@ bool cPlayer::Update()
 	}
 	else
 	{
-		if (KEY_CHECK(KEY::I, KEY_STATE::DOWN)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
+		if (KEY_CHECK(KEY::I, KEY_STATE::DOWN) || KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 		{
 			if (m_isAttached && !GetRotating()
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
@@ -195,9 +196,9 @@ bool cPlayer::Update()
 				m_AttachingTime = 0.f;
 			}
 		}
-
-		if (KEY_CHECK(KEY::K, KEY_STATE::DOWN) && !GetRotating()) // 아래를 짚음.
+		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD) && !GetRotating()) // 아래를 짚음.
 		{
+			m_isSitted = true;
 			if (!m_isJumping && !m_isAttached
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
 				&& (KEY_CHECK(KEY::L, KEY_STATE::NONE) || KEY_CHECK(KEY::L, KEY_STATE::UP)))
@@ -205,17 +206,13 @@ bool cPlayer::Update()
 				SetRotFromDown(false);
 				Rotate_Platform();
 			}
-			if(m_isAttached)
+			if (m_isAttached)
 			{
 				m_isAttached = false;
 				m_AttachingTime = 0.f;
-			}
-		}
-		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD) && !GetRotating()) // 아래를 짚음.
-		{
-			m_isSitted = true;
+			}			
 			
-			if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_DashCoolTime > 0.55 && !m_isJumping && !m_isAttached) // 여기서 대쉬하면서 이동을 빠르게 해야함.
+			if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_DashCoolTime > 0.55 && !m_isJumping && !m_isAttached && !GetRotating()) // 여기서 대쉬하면서 이동을 빠르게 해야함.
 			{
 				m_isMoved = false;
 				m_isDashing = true;
@@ -254,7 +251,7 @@ bool cPlayer::Update()
 				Pos.x -= 250.f * DELTA_TIME;
 				SetDirection(-1);
 			}
-			else if (g_PossibleArea[Left_Check][(int)curPos_y])
+			else if (g_PossibleArea[Left_Check][(int)curPos_y]==1)
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
@@ -279,7 +276,7 @@ bool cPlayer::Update()
 				Pos.x += 250.f * DELTA_TIME;
 				SetDirection(1);
 			}
-			else if (g_PossibleArea[Right_Check][(int)curPos_y])
+			else if (g_PossibleArea[Right_Check][(int)curPos_y]==1)
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
@@ -324,12 +321,13 @@ bool cPlayer::Update()
 	if (m_Rotation_Degree == 180 || m_Rotation_Degree == -180)
 	{
 		// 플레이어의 위치를 회전 플랫폼 중점을 기준으로 점 대칭 이동
-		Pos.x -= ((Pos.x - GetRotator().x) * 2);
-		Pos.y -= ((Pos.y - GetRotator().y) * 2);
+		Vec2 Platform_Pos = GetRotator();
+		Pos.x -= ((Pos.x - Platform_Pos.x) * 2);
+		Pos.y -= ((Pos.y - Platform_Pos.y) * 2);
 		SetRotating(false);
 		m_Rotation_Degree = 0;
 		//SetPos(Player_Pos);
-		m_isAttached = Pos.y > GetRotator().y ? true : false;
+		m_isAttached = Pos.y > Platform_Pos.y ? true : false;
 	}
 
 	SetPos(Pos);
@@ -460,8 +458,12 @@ void cPlayer::CreateBomb()
 bool cPlayer::Rotate_Platform()
 {
 	Vec2 curPos = GetPos();
-	float Player_Y_Down = curPos.y + GetScale().y / 2.f;
-	float Player_Y_Up = curPos.y - GetScale().y / 2.f;
+	Vec2 curScale = GetScale();
+	float curPos_Left = curPos.x - curScale.x / 2.f;
+	float curPos_Right = curPos.x + curScale.x / 2.f;
+
+	float curPos_Down = curPos.y + curScale.y / 2.f;
+	float curPos_Up = curPos.y - curScale.y / 2.f;
 
 	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
 	int PLATFORM_ROTATE = (INT)GROUP_TYPE::PLATFORM_ROTATE;
@@ -476,10 +478,10 @@ bool cPlayer::Rotate_Platform()
 		float Top_End = Platform_Pos.y - Platform_Scale.y / 2.f;
 		float Bottom_End = Platform_Pos.y + Platform_Scale.y / 2.f;
 
-		// 플레이어의 현 위치 중심 값이 플랫폼의 좌우끝 안에 있을 때
-		if (curPos.x >= Left_End && curPos.x <= Right_End
-			&& ((!m_isJumping && Top_End <= Player_Y_Down + m_Dir.y * DELTA_TIME && Top_End > curPos.y)
-				|| m_isAttached || (m_isJumping && Bottom_End >= Player_Y_Up + m_Dir.y * DELTA_TIME) && Bottom_End < curPos.y)  )
+		// 플레이어의 좌우 끝 값이 플랫폼의 안에 있을 때
+		if (curPos_Right-15.f > Left_End && curPos_Left+15.f < Right_End
+			&& ((!m_isJumping && Top_End <= curPos_Down + m_Dir.y * DELTA_TIME && Top_End > curPos.y)
+				|| m_isAttached || (m_isJumping && Bottom_End >= curPos_Up + m_Dir.y * DELTA_TIME) && Bottom_End < curPos.y)  )
 		{
 			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotating(true);
 			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotator(curPos);

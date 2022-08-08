@@ -30,6 +30,7 @@ public:
     virtual void Render(HDC _hdc) override;
     void CreateBomb();
 
+    void SetUnsitted() { m_isSitted = false; }
     bool Rotate_Platform();
     bool isAttaching() { return m_isAttached; }
 };

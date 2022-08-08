@@ -4,7 +4,7 @@
 #include "KeyManager.h"
 #include "TimeManager.h"
 
-extern bool** g_PossibleArea;
+extern short** g_PossibleArea;
 
 class cObject
 {
@@ -32,7 +32,7 @@ public:
 	virtual ~cObject() {};
 
 	Vec2 GetPos() { return m_Pos; }
-	void SetPos(Vec2 _Pos);
+	virtual void SetPos(Vec2 _Pos);
 	void SetPosOtherside(); // ¸Ê ¾È¿¡¼­¸¸ ¸Éµ¹°Ô²û ÇØÁÖ´Â ÇÔ¼ö
 
 	bool isDead() { return m_IsDead; }
