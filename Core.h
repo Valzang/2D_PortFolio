@@ -11,7 +11,7 @@ private:
 	POINT	m_ptResolution; // 메인 윈도우 해상도
 	HDC		m_hDC;			// 메인 윈도우 핸들에서 가져온 DC
 	HDC		m_memDC;		// m_hDC 복사해준 m_memDC ( 그려주기 위한 용도로 )
-	HBITMAP m_hBit;
+	HBITMAP m_hBit;			// 비트맵
 
 public:
 	int Init(HWND _hWnd, POINT _ptResolution);

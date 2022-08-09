@@ -166,7 +166,7 @@ bool cBomb::Update()
 	// 회전 중이라면
 	if (GetRotating())
 	{
-		float diff = Pos.x - GetRotator().x;
+		static float diff = Pos.x - GetRotator().x;
 
 		// 플랫폼의 중심보다 우측에 있을 때
 		if (diff > 0)
@@ -175,7 +175,11 @@ bool cBomb::Update()
 			if (m_RotateToUp)
 			{
 				//SetDirection(1);
-				m_Dir.x = 1.490705f;
+				//float temp = diff / 24.f;
+				//m_Dir.x = 1.490705f;
+				//m_Dir.y = -0.7f;
+				SetDir(Vec2(diff, -0.7f));
+				m_Dir.x *= 1.5f;
 				m_Dir.y = -0.7f;
 				SetOnPlatform(false);
 				m_isShoot = true;
@@ -193,8 +197,11 @@ bool cBomb::Update()
 			//방향이 위로 날아가야할 때
 			if (m_RotateToUp)
 			{
-				//SetDirection(-1);
-				m_Dir.x = 1.490705f;
+				//SetDirection(1);
+				//m_Dir.x = 1.490705f;
+				//m_Dir.y = -0.7f;
+				SetDir(Vec2(diff, -0.7f));
+				m_Dir.x *= 1.5f;
 				m_Dir.y = -0.7f;
 				SetOnPlatform(false);
 				m_isShoot = true;
@@ -206,7 +213,7 @@ bool cBomb::Update()
 				Pos.y += 600.f * m_Dir.y * DELTA_TIME;
 			}
 		}	
-		SetRotating(false);
+		//SetRotating(false);
 	}
 
 	if (m_Dir.x > 0) // 폭탄의 속도도 점점 0으로 향하도록
