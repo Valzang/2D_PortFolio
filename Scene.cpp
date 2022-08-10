@@ -55,7 +55,7 @@ void cScene::Render(HDC _hdc)
 	int w = m_SceneImg->GetWidth();
 	int h = m_SceneImg->GetHeight();
 	
-	//graphics.DrawImage(m_SceneImg, Rect(0,0, w, h), 0, 0, w, h, UnitPixel, &m_imgAttr);
+	graphics.DrawImage(m_SceneImg, Rect(0,0, w, h), 0, 0, w, h, UnitPixel, &m_imgAttr);
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		for (UINT j = 0; j < m_arr_obj[i].size(); ++j)
