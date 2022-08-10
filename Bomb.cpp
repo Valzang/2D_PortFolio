@@ -179,7 +179,7 @@ bool cBomb::Update()
 				//m_Dir.x = 1.490705f;
 				//m_Dir.y = -0.7f;
 				SetDir(Vec2(diff, -0.7f));
-				m_Dir.x *= 1.5f;
+				//m_Dir.x *= 1.5f;
 				m_Dir.y = -0.7f;
 				SetOnPlatform(false);
 				m_isShoot = true;

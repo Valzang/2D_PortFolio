@@ -29,12 +29,6 @@
     <Filter Include="Engine\04. Scene\Header">
       <UniqueIdentifier>{e8a42ac2-3817-4853-aaf5-bddb0af60632}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\02. Manager\Header">
-      <UniqueIdentifier>{c0e483d2-9b26-448d-9357-968f91dde237}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\02. Manager\Source">
-      <UniqueIdentifier>{39d24566-30a2-4646-a7c0-a58a3eeb4829}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Object\Bomb">
       <UniqueIdentifier>{b30fce9d-3d0f-421a-9b00-2368304a399f}</UniqueIdentifier>
     </Filter>
@@ -46,6 +40,18 @@
     </Filter>
     <Filter Include="Engine\03. Object\Player">
       <UniqueIdentifier>{a2ee3d5b-fa11-4044-b62f-bb9bb05d5510}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Manager\KeyManager">
+      <UniqueIdentifier>{9d47dcd2-1a46-46b8-bec0-48563443e3bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Manager\TimeManager">
+      <UniqueIdentifier>{d31ddf77-3e4e-41d3-baeb-e80b1fe2fd4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\02. Manager\SceneManager">
+      <UniqueIdentifier>{d9c63b2d-33b7-4b72-8396-a2fb07f0bf7c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Default\etc">
+      <UniqueIdentifier>{956818e2-1185-49ed-943a-989371acf40c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,15 +66,6 @@
     </ClInclude>
     <ClInclude Include="Scene_Start.h">
       <Filter>Engine\04. Scene\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="KeyManager.h">
-      <Filter>Engine\02. Manager\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>Engine\02. Manager\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="TimeManager.h">
-      <Filter>Engine\02. Manager\Header</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Engine\03. Object\Player</Filter>
@@ -91,20 +88,29 @@
     <ClInclude Include="Object.h">
       <Filter>Engine\03. Object</Filter>
     </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>Default</Filter>
-    </ClInclude>
     <ClInclude Include="Penguin_Bros.h">
-      <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Default</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
       <Filter>Default</Filter>
     </ClInclude>
     <ClInclude Include="Platform_Rotate.h">
       <Filter>Engine\03. Object\Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyManager.h">
+      <Filter>Engine\02. Manager\KeyManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Engine\02. Manager\SceneManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeManager.h">
+      <Filter>Engine\02. Manager\TimeManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Default\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Default\etc</Filter>
+    </ClInclude>
+    <ClInclude Include="framework.h">
+      <Filter>Default\etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -116,15 +122,6 @@
     </ClCompile>
     <ClCompile Include="Scene_Start.cpp">
       <Filter>Engine\04. Scene\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="KeyManager.cpp">
-      <Filter>Engine\02. Manager\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>Engine\02. Manager\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="TimeManager.cpp">
-      <Filter>Engine\02. Manager\Source</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Engine\03. Object\Player</Filter>
@@ -152,6 +149,15 @@
     </ClCompile>
     <ClCompile Include="Platform_Rotate.cpp">
       <Filter>Engine\03. Object\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyManager.cpp">
+      <Filter>Engine\02. Manager\KeyManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Engine\02. Manager\SceneManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeManager.cpp">
+      <Filter>Engine\02. Manager\TimeManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
