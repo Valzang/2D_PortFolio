@@ -28,15 +28,30 @@ void cTimeManager::Update()
 	QueryPerformanceCounter(&m_curCount);
 
 	// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
-	m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
+	bool before1 = false;
+	// 프레임 제한 걸기
+	if(m_deltaTime < 0.014)
+	{
+		m_deltaTime += (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
+	}
+	else
+	{
+		m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
+		before1 = true;
+	}
+
 
 	// 이전 카운트 값을 전체값을 갱신(다음번 계산을 위해)
 	m_prevCount = m_curCount;
-	// 함수 호출 횟수 증가
-	++m_callCount;
 
 	// 초 체크
-	m_accumlate += m_deltaTime; // 델타타임 누적
+	if (before1)
+	{
+		// 함수 호출 횟수 증가
+		++m_callCount;
+		m_accumlate += m_deltaTime; // 델타타임 누적
+	}
+		
 
 	// 1초가 되면
 	if (m_accumlate >= 1.0)

@@ -13,14 +13,12 @@ class cScene
 private:
 	// 오브젝트들을 담을 벡터를 그룹 개수만큼 선언
 	vector<cObject*> m_arr_obj[(UINT)GROUP_TYPE::END];
-	wstring m_sceneName;
 	Image* m_SceneImg;  // 이미지 파일
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
-	int m_MonsterCount;
-	int m_PlatformCount;
+	int m_MonsterCount;					// 몬스터 수
 
 public:
-	cScene() : m_SceneImg(nullptr), m_MonsterCount(0), m_PlatformCount(0) {}
+	cScene() : m_SceneImg(nullptr), m_MonsterCount(0) {}
 	virtual ~cScene();
 
 
@@ -46,15 +44,10 @@ public:
 	int GetMonsterSize() { return m_MonsterCount; }
 	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
 
-	int GetPlatformSize() { return m_PlatformCount; }
-	void SetPlatformSize(int _s) { m_PlatformCount = _s; }
-
 	vector<cObject*>* GetCurObjectVec() { return m_arr_obj; }
 
 	virtual void SetSceneImg(const wchar_t* FileName);
 	virtual void DeleteSceneImg();
-	void SetName(const wstring& _strName);
-	const wstring& GetName() { return m_sceneName; }
 
 	virtual void Enter() = 0; // 해당 씬으로 진입 시 호출
 	virtual void Exit() = 0;  // 해당 씬에서 탈출 시 호출

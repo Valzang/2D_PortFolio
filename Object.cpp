@@ -1,8 +1,11 @@
 #include "Object.h"
 #include "Scene.h"
+#include "Player.h"
+#include "Bomb.h"
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
-					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false)
+					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false), m_curOnPlatform(nullptr)
+					,m_BombThruRotate(false), m_Rotator(nullptr)
 { 
 	m_Dir.Normalize(); 
 	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 
@@ -11,16 +14,6 @@ cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPl
 void cObject::SetPos(Vec2 _Pos)
 {
 	m_Pos = _Pos;
-	if (m_curGroupType == (INT)GROUP_TYPE::PLATFORM || m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
-	{
-		for (int i = (int)(_Pos.x - m_Scale.x / 2); i < (int)(_Pos.x + m_Scale.x / 2); ++i)
-		{
-			for (int j = (int)(_Pos.y - m_Scale.y / 2); j < (int)(_Pos.y + m_Scale.y / 2); ++j)
-			{
-				g_PossibleArea[i][j] = (m_curGroupType == (INT)GROUP_TYPE::PLATFORM) ? 0 : 2;
-			}
-		}
-	}
 }
 
 void cObject::SetPosOtherside()
@@ -40,4 +33,87 @@ void cObject::SetPosOtherside()
 		curPos.y = -start_Ypos + 1;
 
 	SetPos(curPos);
+}
+
+void cObject::CollisionCheck(cObject* curObj)
+{
+	Vec2 curObj_Pos = curObj->GetPos();
+	Vec2 curObj_Scale = curObj->GetScale();
+
+	float curObj_RightX = curObj_Pos.x + curObj_Scale.x / 2.f;
+	float curObj_LeftX = curObj_Pos.x - curObj_Scale.x / 2.f;
+	float curObj_UpY = curObj_Pos.y - curObj_Scale.y / 2.f;
+	float curObj_DownY = curObj_Pos.y + curObj_Scale.y / 2.f;
+
+	vector<cObject*> curPlatform = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLATFORM];
+
+	for (int i = 0; i < curPlatform.size(); ++i)
+	{
+		Vec2 curPlatform_Pos = curPlatform[i]->GetPos();
+		Vec2 curPlatform_Scale = curPlatform[i]->GetScale();
+
+		float curPlatform_RightX = curPlatform_Pos.x + curPlatform_Scale.x / 2.f;
+		float curPlatform_LeftX = curPlatform_Pos.x - curPlatform_Scale.x / 2.f;
+		float curPlatform_UpY = curPlatform_Pos.y - curPlatform_Scale.y / 2.f;
+		float curPlatform_DownY = curPlatform_Pos.y + curPlatform_Scale.y / 2.f;
+
+		// 충돌했을 때 (사각형 기준)
+		if ((abs(curObj_Pos.x - curPlatform_Pos.x) < (curObj_Scale.x + curPlatform_Scale.x) / 2.f)
+			&& (abs(curObj_Pos.y - curPlatform_Pos.y) < (curObj_Scale.y + curPlatform_Scale.y) / 2.f))
+		{			
+			// 아랫쪽에서 충돌했을 때
+			if (curObj_UpY < curPlatform_UpY && curObj_DownY >= curPlatform_UpY)
+			{				
+				curObj->SetOnPlatform(curPlatform[i]);			
+				if (curObj->GetThruRotate() && curPlatform[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
+				{					
+					static bool Already_Pass = false;					
+					if(!Already_Pass)
+						curObj->SetOnPlatform(false);
+					else
+						curObj->SetOnPlatform(true);
+					Already_Pass = true;
+				}
+				else
+				{
+					curObj_Pos.y -= (curObj_DownY - curPlatform_UpY);
+					curObj->SetOnPlatform(true);
+				}
+					
+			}
+			// 위쪽에서 충돌했을 때
+			else if (curObj_UpY <= curPlatform_DownY && curObj_DownY > curPlatform_DownY)
+			{
+				// 넘어온 만큼 위치 보정
+				curObj_Pos.y += (curPlatform_DownY - curObj_UpY);
+				if (curObj->m_curGroupType == (INT)GROUP_TYPE::PLAYER)
+				{
+					cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
+					curPlayer->SetRotFromDown(true);
+					if (curPlayer->Rotate_Platform())
+						curPlayer->SetAttach();
+					else
+						curPlayer->SetYspeedReverse();
+				}
+			}
+			// 왼쪽이 닿았을 때
+			else if (curObj_LeftX <= curPlatform_RightX && curObj_RightX > curPlatform_RightX)
+			{
+				// 넘어온 만큼 위치 보정
+				curObj_Pos.x += (curPlatform_RightX - curObj_LeftX);
+				if (curObj->m_curGroupType == (INT)GROUP_TYPE::BOMB)
+					curObj->SetDirection(1);
+			}
+
+			// 오른쪽이 닿았을 때
+			else if (curObj_RightX >= curPlatform_LeftX && curObj_LeftX < curPlatform_LeftX)
+			{
+				// 넘어온 만큼 위치 보정
+				curObj_Pos.x -= (curObj_RightX - curPlatform_LeftX);
+				if (curObj->m_curGroupType == (INT)GROUP_TYPE::BOMB)
+					curObj->SetDirection(-1);
+			}			
+		}
+	}
+	curObj->SetPos(curObj_Pos);
 }

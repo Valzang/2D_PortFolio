@@ -50,7 +50,7 @@ void cScene_Start::Enter()
 	cPlatform* PlatformObj = nullptr;
 	PlatformObj = new cPlatform_Rotate;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f+120 }); // Áß½ÉÁÂÇ¥..?
-	AddObject(PlatformObj, GROUP_TYPE::PLATFORM_ROTATE);
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
 
 	PlatformObj = new cPlatform;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f + 120 }); // Áß½ÉÁÂÇ¥..?
@@ -65,7 +65,7 @@ void cScene_Start::Enter()
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_SideWall;
-	PlatformObj->SetPos(Vec2{ Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // Áß½ÉÁÂÇ¥..?
+	PlatformObj->SetPos(Vec2{ Resolution.x - (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f }); // Áß½ÉÁÂÇ¥..?	
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_Under;

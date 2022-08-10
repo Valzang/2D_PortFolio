@@ -30,143 +30,34 @@ bool cBomb::Update()
 	if (m_TimeLimit >= 3.f) // 3초가 지나면 사라짐, 오브젝트와 충돌 시에도 사라지게끔 해야할 듯함
 		return false;
 
-	Vec2 Pos = GetPos();
-	Vec2 Scl = GetScale();
-
-	int temp_dir = GetDirection();
-
-	float curPos_x_l = Pos.x - Scl.x / 2;	// 폭탄의 좌측 좌표
-	float curPos_x_r = Pos.x + Scl.x / 2;	// 폭탄의 우측 좌표
-	float curPos_y = Pos.y + Scl.y / 2;		// 폭탄의 최하단 좌표
-
-	float Map_Max_x = (float)(cCore::GetInstance()->GetResolution().x);
-	float Map_Max_y = (float)(cCore::GetInstance()->GetResolution().y);
-	
+	Vec2 Pos = GetPos();	
 
 	// 공중에 있을 때
-	if (!isOnPlatform())
+	if (!isOnPlatform() || GetThruRotate())
 	{
+		if (GetThruRotate())
+			int temp_left = 4;
 		Pos.y += 600.f * m_Dir.y * DELTA_TIME;
-		curPos_y += 600.f * m_Dir.y * DELTA_TIME;
-		int Next_Down = (int)(curPos_y + 600.f * m_Dir.y * DELTA_TIME);
-
-		if (!m_isShoot)
+		if (m_Dir.y <= 2)
 		{
-			if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+			// 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+			if (!m_isShoot)
 				m_Dir.y += 8.f * DELTA_TIME;
-		}
-		else
-		{
-			if (m_Dir.y <= 2) // 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+			else
 				m_Dir.y += 6.f * DELTA_TIME;
 		}
-
-		if (temp_dir == 1) // 우측 방향일때
-		{
-			// 하단 좌표가 맵 안에 있을 때
-			if (Next_Down < Map_Max_y)
-			{
-				Pos.x += -600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
-				curPos_x_r += -600.f * m_Dir.x * DELTA_TIME;
-				int Next_Left = (int)(curPos_x_l - 600.f * m_Dir.x * DELTA_TIME);
-				int Next_Right = (int)(curPos_x_r - 600.f * m_Dir.x * DELTA_TIME);
-				// 다음 우측 위치가 완전 맵 안에 있을 때
-				if (Next_Right >= 0 && Next_Right < Map_Max_x)
-				{
-					// 다음 좌측 위치가 완전 맵 안에 있을 때
-					if (Next_Left >= 0 && Next_Left < Map_Max_x)
-					{
-						if (g_PossibleArea[Next_Right][Next_Down] != 1)
-						{
-							if (g_PossibleArea[Next_Left][Next_Down] == 1)
-							{
-								SetDirection(-1);
-								m_Dir.x /= 2.f;
-								m_DirChanged = true;
-							}
-							else
-							{
-								SetOnPlatform(true);
-								m_Dir.y = 0;
-							}
-						}
-						else if (!m_DirChanged && g_PossibleArea[Next_Left][Next_Down] != 1)
-						{
-							SetOnPlatform(true);
-							m_Dir.y = 0;
-						}
-					}
-					// 다음 좌측 위치가 완전 맵 밖에 있을 때
-					else if (g_PossibleArea[Next_Right][Next_Down] != 1)
-						SetOnPlatform(true);
-				}
-				// 다음 우측 위치가 완전 맵 밖에 있을 때
-				else if (Next_Left >= 0 && Next_Left < Map_Max_x
-						 && g_PossibleArea[Next_Left][Next_Down] != 1)
-				{
-					SetOnPlatform(true);
-					m_Dir.y = 0;
-				}
-			}			
-		}
+		if (GetDirection() == 1) // 우측 방향일때
+			Pos.x += -600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
 		else // 좌측 방향일 때
-		{
-			// 하단 좌표가 맵 안에 있을 때
-			if (Next_Down < Map_Max_y)
-			{				
-				Pos.x += 600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
-				curPos_x_l += 600.f * m_Dir.x * DELTA_TIME;
-				int Next_Left = (int)(curPos_x_l + 600.f * m_Dir.x * DELTA_TIME);
-				int Next_Right = (int)(curPos_x_r + 600.f * m_Dir.x * DELTA_TIME);
-				// 다음 좌측 위치가 완전 맵 안에 있을 때
-				if (Next_Left >= 0 && Next_Left < Map_Max_x)
-				{
-					// 다음 우측 위치가 완전 맵 안에 있을 때
-					if (Next_Right >= 0 && Next_Right < Map_Max_x)
-					{
-						if (g_PossibleArea[Next_Left][Next_Down] != 1)
-						{
-							if (g_PossibleArea[Next_Right][Next_Down] == 1)
-							{
-								SetDirection(1);
-								m_Dir.x /= 2.f;
-								m_DirChanged = true;
-							}
-							else
-							{
-								SetOnPlatform(true);
-								m_Dir.y = 0;
-							}
-						}
-						else if (!m_DirChanged && g_PossibleArea[Next_Right][Next_Down] != 1)
-						{
-							SetOnPlatform(true);
-							m_Dir.y = 0;
-						}
-					}
-					// 다음 우측 위치가 완전 맵 밖에 있을 때
-					else if (g_PossibleArea[Next_Left][Next_Down] != 1)
-					{
-						SetOnPlatform(true);
-						m_Dir.y = 0;
-					}
-				}
-				// 다음 좌측 위치가 완전 맵 밖에 있을 때
-				else if(Next_Right >= 0 && Next_Right < Map_Max_x
-					   && g_PossibleArea[Next_Right][Next_Down] != 1 )
-				{
-					SetOnPlatform(true);
-					m_Dir.y = 0;
-				}
-			}
-		}
+			Pos.x += 600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
 	}
 
 	// 플랫폼에 어디에 놓여있느냐에 따라 다르게 해야할 듯.
 	// 회전 중이라면
-	if (GetRotating())
+	
+	if (GetRotating() && !GetThruRotate())
 	{
-		static float diff = Pos.x - GetRotator().x;
+		static float diff = Pos.x - GetRotator()->GetPos().x;
 
 		// 플랫폼의 중심보다 우측에 있을 때
 		if (diff > 0)
@@ -174,7 +65,7 @@ bool cBomb::Update()
 			//방향이 위로 날아가야할 때
 			if (m_RotateToUp)
 			{
-				//SetDirection(1);
+				SetDirection(1);
 				//float temp = diff / 24.f;
 				//m_Dir.x = 1.490705f;
 				//m_Dir.y = -0.7f;
@@ -188,7 +79,9 @@ bool cBomb::Update()
 			else
 			{
 				SetOnPlatform(false);
-				Pos.y += 600.f * m_Dir.y * DELTA_TIME;
+				SetThruRotate(true);
+				SetDir(Vec2(0.f, 2.f));
+				//Pos.y = GetRotator()->GetPos().y + GetRotator()->GetScale().y / 2.f;
 			}
 		}
 		// 플랫폼의 중심보다 좌측에 있을 때
@@ -197,11 +90,11 @@ bool cBomb::Update()
 			//방향이 위로 날아가야할 때
 			if (m_RotateToUp)
 			{
-				//SetDirection(1);
+				SetDirection(1);
 				//m_Dir.x = 1.490705f;
 				//m_Dir.y = -0.7f;
 				SetDir(Vec2(diff, -0.7f));
-				m_Dir.x *= 1.5f;
+				//m_Dir.x *= 1.5f;
 				m_Dir.y = -0.7f;
 				SetOnPlatform(false);
 				m_isShoot = true;
@@ -209,12 +102,15 @@ bool cBomb::Update()
 			//방향이 아래로 떨어져야 할 때
 			else
 			{
-				SetOnPlatform(false);
-				Pos.y += 600.f * m_Dir.y * DELTA_TIME;
+				SetOnPlatform(false);		
+				SetThruRotate(true);
+				SetDir(Vec2(0.f, 2.f));
+				//Pos.y = GetRotator()->GetPos().y + GetRotator()->GetScale().y / 2.f;
 			}
 		}	
-		//SetRotating(false);
+		SetRotating(false);
 	}
+	
 
 	if (m_Dir.x > 0) // 폭탄의 속도도 점점 0으로 향하도록
 		m_Dir.x -= 0.3f * DELTA_TIME;
@@ -222,6 +118,8 @@ bool cBomb::Update()
 		m_Dir.x += 0.3f * DELTA_TIME;
 
 	SetPos(Pos);
+	CollisionCheck(this);
+
 	SetPosOtherside();
 	return true;
 }
@@ -231,7 +129,7 @@ void cBomb::Render(HDC _hdc)
 	Graphics graphics(_hdc);
 
 	Vec2 Pos = GetPos();
-	Vec2 Scale = GetScale()/2;
+	Vec2 Scale = GetScale();
 
 	static int xStart = 0;
 	int yStart = 0;
@@ -245,4 +143,5 @@ void cBomb::Render(HDC _hdc)
 
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 	graphics.DrawImage(m_BombImg, Rect((int)Pos.x - (int)Scale.x / 2, (int)Pos.y - (int)Scale.y / 2, w, h), xStart, yStart, w, h, UnitPixel, GetImgAttr());
+
 }

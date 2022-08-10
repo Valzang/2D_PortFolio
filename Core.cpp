@@ -19,11 +19,6 @@ cCore::~cCore()
 	DeleteDC(m_memDC);
 	DeleteObject(m_hBit);
 
-	for (int i = 0; i < m_ptResolution.x; ++i)
-	{
-		delete[] g_PossibleArea[i];
-	}
-	delete[] g_PossibleArea;
 }
 
 
@@ -35,23 +30,13 @@ int cCore::Init(HWND _hWnd, POINT _ptResolution)
 	m_hWnd = _hWnd;
 	m_ptResolution = _ptResolution;
 
-	// 맵 범위에 해당하는 동적 배열 만듦.
-	g_PossibleArea = new short* [m_ptResolution.x];
-	for (int i = 0; i < m_ptResolution.x; ++i)
-	{
-		g_PossibleArea[i] = new short[m_ptResolution.y];
-		for (int j = 0; j < m_ptResolution.y; ++j)
-			g_PossibleArea[i][j] = 1;
-		//memset(g_PossibleArea[i], true, sizeof(int) * m_ptResolution.y);
-	}
-
 	RECT rt = { 0, 0, m_ptResolution.x, m_ptResolution.y };
 
 	// 작업 창의 크기를 rt 사이즈로 만들어주기. ( 기존에는 윈도우 메뉴바를 포함한 사이즈임 )
 	AdjustWindowRect(&rt, WS_OVERLAPPEDWINDOW, true);
 
 	// Core의 핸들에 지정한 사이즈만큼 출력
-	SetWindowPos(m_hWnd, nullptr, 300, 200, rt.right - rt.left, rt.bottom - rt.top, 0);
+	SetWindowPos(m_hWnd, nullptr, 300, 300, rt.right - rt.left, rt.bottom - rt.top, 0);
 
 	// Core의 핸들(from 메인 핸들)로 부터 가져온 DC를 복사해주기
 	m_hDC = GetDC(m_hWnd);
@@ -79,19 +64,22 @@ void cCore::Progress()
 {
 
 	cTimeManager::GetInstance()->Update();
-	cKeyManager::GetInstance()->Update();
-	cSceneManager::GetInstance()->Update();
+	if (DELTA_TIME >= 0.014f)
+	{
+		cKeyManager::GetInstance()->Update();
+		cSceneManager::GetInstance()->Update();
 
 
-	// Render해주는 부분 =====================================================
+		// Render해주는 부분 =====================================================
 
-	Rectangle(m_memDC, -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1); // 빈 화면으로 초기화
+		Rectangle(m_memDC, -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1); // 빈 화면으로 초기화
 
-	cSceneManager::GetInstance()->Render(m_memDC);
+		cSceneManager::GetInstance()->Render(m_memDC);
 
-	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
-		   , m_memDC, 0, 0, SRCCOPY);
-	// m_memDC : 그려주는 도화지, m_hDC : 메인 도화지
+		BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
+			   , m_memDC, 0, 0, SRCCOPY);
+		// m_memDC : 그려주는 도화지, m_hDC : 메인 도화지
+	}
 
 }
 

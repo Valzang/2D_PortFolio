@@ -23,7 +23,7 @@ void cSceneManager::Init()
 {
 	// Scene 생성
 	m_arrScene[(UINT)SCENE_TYPE::START] = new cScene_Start;
-	m_arrScene[(UINT)SCENE_TYPE::START]->SetName(L"Start Scene");
+	//m_arrScene[(UINT)SCENE_TYPE::START]->SetName(L"Start Scene");
 	// 현재 씬 지정
 	m_curScene = m_arrScene[(UINT)SCENE_TYPE::START];
 	m_curScene->Enter();

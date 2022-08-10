@@ -40,11 +40,6 @@ bool cPlayer::Update()
 	float curPos_x_r = Pos.x + Scl.x / 2;
 	float curPos_y = Pos.y + Scl.y / 2;
 
-	float Map_Max_x = (float)(cCore::GetInstance()->GetResolution().x);
-	float Map_Max_y = (float)(cCore::GetInstance()->GetResolution().y);
-
-	int Next_Down = (int)(curPos_y + m_Dir.y * DELTA_TIME);
-
 	if (m_LifeCount < 0)
 		return false;
 
@@ -57,92 +52,28 @@ bool cPlayer::Update()
 		if (GetDirection() == 1)
 		{
 			int Back_Left = (int)(curPos_x_l - Back * DELTA_TIME);
-			if (Back_Left < 0 || Back_Left >= Map_Max_x || curPos_y >= Map_Max_y
-				|| g_PossibleArea[Back_Left][(int)curPos_y]==1)
-				Pos.x -= Back * DELTA_TIME;
+			Pos.x -= Back * DELTA_TIME;
 		}
 		else
 		{
 			int Back_Right = (int)(curPos_x_r + Back * DELTA_TIME);
-			if (Back_Right < 0 || Back_Right >= Map_Max_x || curPos_y >= Map_Max_y
-				|| g_PossibleArea[Back_Right][(int)curPos_y]==1)
-				Pos.x += Back * DELTA_TIME;
+			Pos.x += Back * DELTA_TIME;
 		}
 
 		m_AfterAttackTime -= DELTA_TIME;
 	}
-	
-
-	// 캐릭터의 일부가 맵을 벗어났을 때
-	if (curPos_x_l < 0 || curPos_x_r >= (int)(Map_Max_x)
-		|| Next_Down >= Map_Max_y || Next_Down < 0)
+	// 안 붙어있다면
+	if (!m_isAttached)
 	{
-		if (curPos_x_l < 0) // 캐릭터의 좌측 좌표가 맵을 벗어났을 때
-		{			
-			if(curPos_x_r < 0 && !m_isAttached) // 캐릭터의 우측 좌표도 맵을 벗어났으면 그냥 떨어짐
-				Pos.y += m_Dir.y * DELTA_TIME;
-			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
-			{
-				if (g_PossibleArea[(int)curPos_x_r][Next_Down]==1 && !m_isAttached) // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
-					Pos.y += m_Dir.y * DELTA_TIME;
-				else // 플랫폼이면 착지 멈추고 감소 속도 복구
-				{
-					m_isJumping = false;
-					m_Dir.y = 450.f;
-				}
-			}
-		}
-		if (curPos_x_r >= (int)(Map_Max_x)) // 캐릭터의 우측 좌표가 맵을 벗어났을 때
-		{
-			if (curPos_x_l >= (int)(Map_Max_x) && !m_isAttached) // 캐릭터의 좌측 좌표도 맵을 벗어났으면 그냥 떨어짐
-				Pos.y += m_Dir.y * DELTA_TIME;
-			else if (Next_Down < Map_Max_y) // 우측 좌표는 맵 안, 캐릭터의 다음 하단 좌표가 맵 안에 있을 때
-			{
-				if (g_PossibleArea[(int)curPos_x_l][Next_Down]==1 && !m_isAttached)  // 캐릭터 다음 하단 좌표가 플랫폼이 아닐 때
-					Pos.y += m_Dir.y * DELTA_TIME;
-				else // 플랫폼이면 착지 멈추고 감소 속도 복구
-				{ 
-					m_isJumping = false;
-					m_Dir.y = 450.f;
-				}
-			}
-		}
-		if (m_Dir.y < 800.f) // 감소속도가 일정 수준 되기 전 까지는 꾸준히 증가
-		{
-			if (m_isJumping) // 점프 중에서는 빠르게 감소
-				m_Dir.y += 1200.f * DELTA_TIME;
-			else // 그냥 낙하 중인 경우는 천천히 감소
-				m_Dir.y += 250.f * DELTA_TIME;
-		}
-	}
-	// 캐릭터 전체가 맵 안에 있을 때
-	else
-	{
-		if (g_PossibleArea[(int)curPos_x_l][Next_Down]==1 && g_PossibleArea[(int)curPos_x_r][Next_Down]==1
-			&& !m_isAttached)
+		// 현재 바닥에 안 닿아있을 때
+		if (!isOnPlatform())
 		{
 			Pos.y += m_Dir.y * DELTA_TIME;
-			// 점프
-			if (m_isJumping ) // 문제 : 현재 회전문이 아니더라도 천장에 붙는 현상이 있음
+			if (m_Dir.y < 800.f) // 감소속도가 일정 수준 되기 전 까지는 꾸준히 증가
 			{
-				float Check_Up = Pos.y - Scl.y / 2 + m_Dir.y * DELTA_TIME;
-				if (Check_Up >= 0 && g_PossibleArea[(int)Pos.x][(int)Check_Up] == 2)
-				{
-					//SetPos(Pos);
-					m_isAttached = true;
-					SetRotFromDown(true);
-					Rotate_Platform();
-					m_isJumping = false;
-					m_Dir.y = 450.f;
-				}
-			}
-			
-			
-			if (m_Dir.y < 800.f)
-			{
-				if (m_isJumping)
+				if (m_isJumping) // 점프 중에서는 빠르게 감소
 					m_Dir.y += 1200.f * DELTA_TIME;
-				else
+				else // 그냥 낙하 중인 경우는 천천히 감소
 					m_Dir.y += 250.f * DELTA_TIME;
 			}
 		}
@@ -151,25 +82,20 @@ bool cPlayer::Update()
 			m_isJumping = false;
 			m_Dir.y = 450.f;
 		}
-	}		
+	}
+	else
+	{
+		m_isJumping = false;
+		m_Dir.y = 450.f;
+	}
 
 	// 대쉬 중이라면
 	if (m_isDashing) 
 	{		
 		if (GetDirection() == -1) // 방향에 따른 이동
-		{
-			if ((int)(curPos_x_l - 400.f * DELTA_TIME) < 0)
-				Pos.x -= 400.f * DELTA_TIME;
-			else if(g_PossibleArea[(int)(curPos_x_l - 400.f * DELTA_TIME)][(int)curPos_y]==1)
-				Pos.x -= 400.f * DELTA_TIME;
-		}
+			Pos.x -= 400.f * DELTA_TIME;
 		else
-		{
-			if ((int)(curPos_x_r + 400.f * DELTA_TIME) >= Map_Max_x)
-				Pos.x += 400.f * DELTA_TIME;
-			else if (g_PossibleArea[(int)(curPos_x_r + 400.f * DELTA_TIME)][(int)curPos_y]==1)
-				Pos.x += 400.f * DELTA_TIME;
-		}
+			Pos.x += 400.f * DELTA_TIME;
 
 		if (m_DashTime >= 0.5) // 0.5초 이상 대시중일 시 초기화
 		{
@@ -185,7 +111,7 @@ bool cPlayer::Update()
 	}
 	else
 	{
-		if (KEY_CHECK(KEY::I, KEY_STATE::DOWN) || KEY_CHECK(KEY::I, KEY_STATE::HOLD)) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
+		if (!(KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && (KEY_CHECK(KEY::I, KEY_STATE::DOWN) || KEY_CHECK(KEY::I, KEY_STATE::HOLD))) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 		{
 			if (m_isAttached && !GetRotating()
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
@@ -210,6 +136,7 @@ bool cPlayer::Update()
 			{
 				m_isAttached = false;
 				m_AttachingTime = 0.f;
+				SetOnPlatform(false);
 			}			
 			
 			if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && m_DashCoolTime > 0.55 && !m_isJumping && !m_isAttached && !GetRotating()) // 여기서 대쉬하면서 이동을 빠르게 해야함.
@@ -231,9 +158,12 @@ bool cPlayer::Update()
 			{
 				m_isAttached = false;
 				m_AttachingTime = 0.f;
+				SetOnPlatform(false);
 			}
-			else
+			else if(isOnPlatform())
 			{
+				SetOnPlatform(false);
+				SetOnPlatform(nullptr);
 				m_isJumping = true;
 				m_Dir.y *= -1;
 			}
@@ -251,7 +181,7 @@ bool cPlayer::Update()
 				Pos.x -= 250.f * DELTA_TIME;
 				SetDirection(-1);
 			}
-			else if (g_PossibleArea[Left_Check][(int)curPos_y]==1)
+			else //if (g_PossibleArea[Left_Check][(int)curPos_y]==1)
 			{
 				if (!m_isDashing)
 					m_isMoved = true;
@@ -268,21 +198,10 @@ bool cPlayer::Update()
 		if ((KEY_CHECK(KEY::L, KEY_STATE::DOWN) || KEY_CHECK(KEY::L, KEY_STATE::HOLD)) && (KEY_CHECK(KEY::J, KEY_STATE::UP) || KEY_CHECK(KEY::J, KEY_STATE::NONE))
 			&& m_AfterAttackTime <= 0.f && !GetRotating())
 		{
-			int Right_Check = (int)(curPos_x_r + 250.f * DELTA_TIME);
-			if (Right_Check >= (int)Map_Max_x)
-			{
-				if (!m_isDashing)
-					m_isMoved = true;
-				Pos.x += 250.f * DELTA_TIME;
-				SetDirection(1);
-			}
-			else if (g_PossibleArea[Right_Check][(int)curPos_y]==1)
-			{
-				if (!m_isDashing)
-					m_isMoved = true;
-				Pos.x += 250.f * DELTA_TIME;
-				SetDirection(1);
-			}
+			if (!m_isDashing)
+				m_isMoved = true;
+			Pos.x += 250.f * DELTA_TIME;
+			SetDirection(1);
 			
 		}
 		if (KEY_CHECK(KEY::L, KEY_STATE::UP))
@@ -313,24 +232,31 @@ bool cPlayer::Update()
 		{
 			m_isAttached = false;
 			m_AttachingTime = 0.f;
+			SetOnPlatform(false);
 		}
 		else
 			m_AttachingTime += DELTA_TIME;
 	}
 
-	if (m_Rotation_Degree == 180 || m_Rotation_Degree == -180)
-	{
-		// 플레이어의 위치를 회전 플랫폼 중점을 기준으로 점 대칭 이동
-		Vec2 Platform_Pos = GetRotator();
-		Pos.x -= ((Pos.x - Platform_Pos.x) * 2);
-		Pos.y -= ((Pos.y - Platform_Pos.y) * 2);
-		SetRotating(false);
-		m_Rotation_Degree = 0;
-		//SetPos(Player_Pos);
-		m_isAttached = Pos.y > Platform_Pos.y ? true : false;
-	}
-
 	SetPos(Pos);
+	CollisionCheck(this);
+	if (GetRotating())
+	{
+		if (m_Rotation_Degree == 180 || m_Rotation_Degree == -180)
+		{
+			// 플레이어의 위치를 회전 플랫폼 중점을 기준으로 점 대칭 이동
+			Vec2 Platform_Pos = GetRotator()->GetPos();
+			Vec2 Player_Pos = GetPos();
+			Player_Pos.x -= ((Player_Pos.x - Platform_Pos.x) * 2);
+			Player_Pos.y -= ((Player_Pos.y - Platform_Pos.y) * 2);
+			SetRotating(false);
+			m_Rotation_Degree = 0;
+			SetPos(Player_Pos);
+			m_isAttached = Player_Pos.y > Platform_Pos.y ? true : false;
+		}
+	}
+	
+
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
 
 	return true;
@@ -389,7 +315,7 @@ void cPlayer::Render(HDC _hdc)
 
 	if (GetRotating())
 	{
-		Vec2 Rotator_Pos = GetRotator();
+		Vec2 Rotator_Pos = GetRotator()->GetPos();
 
 		int decrease = 0;
 
@@ -465,13 +391,14 @@ bool cPlayer::Rotate_Platform()
 	float curPos_Down = curPos.y + curScale.y / 2.f;
 	float curPos_Up = curPos.y - curScale.y / 2.f;
 
-	cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
-	int PLATFORM_ROTATE = (INT)GROUP_TYPE::PLATFORM_ROTATE;
+	vector<cObject*> curRotate = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLATFORM];// _ROTATE];
 
-	for (int i = 0; i < curScene->GetCurObjectVec()[PLATFORM_ROTATE].size(); ++i)
+	for (int i = 0; i < curRotate.size(); ++i)
 	{
-		Vec2 Platform_Pos = curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->GetPos();
-		Vec2 Platform_Scale = curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->GetScale();		
+		if (curRotate[i]->GetCurGroupType() != (INT)GROUP_TYPE::PLATFORM_ROTATE)
+			continue;
+		Vec2 Platform_Pos = curRotate[i]->GetPos();
+		Vec2 Platform_Scale = curRotate[i]->GetScale();
 
 		float Left_End = Platform_Pos.x - Platform_Scale.x / 2.f;
 		float Right_End = Platform_Pos.x + Platform_Scale.x / 2.f;
@@ -483,9 +410,9 @@ bool cPlayer::Rotate_Platform()
 			&& ((!m_isJumping && Top_End <= curPos_Down + m_Dir.y * DELTA_TIME && Top_End > curPos.y)
 				|| m_isAttached || (m_isJumping && Bottom_End >= curPos_Up + m_Dir.y * DELTA_TIME) && Bottom_End < curPos.y)  )
 		{
-			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotating(true);
-			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotator(curPos);
-			curScene->GetCurObjectVec()[PLATFORM_ROTATE][i]->SetRotFromDown(GetRotFromDown());
+			curRotate[i]->SetRotating(true);
+			curRotate[i]->SetRotator(this);
+			curRotate[i]->SetRotFromDown(GetRotFromDown());
 			return true;
 		}
 	}

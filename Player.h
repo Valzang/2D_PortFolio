@@ -31,7 +31,10 @@ public:
     void CreateBomb();
 
     void SetUnsitted() { m_isSitted = false; }
+    void SetYspeedReverse() { m_Dir.y = 450.f; }
     bool Rotate_Platform();
+
     bool isAttaching() { return m_isAttached; }
+    void SetAttach() { m_isAttached = true; }
 };
 

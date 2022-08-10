@@ -4,7 +4,7 @@
 #include "KeyManager.h"
 #include "TimeManager.h"
 
-extern short** g_PossibleArea;
+//extern short** g_PossibleArea;
 
 class cObject
 {
@@ -18,6 +18,9 @@ private:
 	bool m_isRotating;
 	Vec2 m_RotatorPos;
 
+	cObject* m_Rotator;
+	cObject* m_curOnPlatform;
+
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
 protected:
@@ -25,39 +28,59 @@ protected:
 	bool m_Blocked[(UINT)KEY::RIGHT+1]; // 좌측/우측 벽이 막혔는지
 	int m_curGroupType;					// 현재 무슨 타입인지
 	bool RotFromDown;
+
+	bool m_BombThruRotate;
 	
 
 public:
 	cObject();
 	virtual ~cObject() {};
 
+	// 위치 조정 관련
 	Vec2 GetPos() { return m_Pos; }
 	virtual void SetPos(Vec2 _Pos);
 	void SetPosOtherside(); // 맵 안에서만 맴돌게끔 해주는 함수
 
+	// 죽었는지
 	bool isDead() { return m_IsDead; }
 	void Dead() { m_IsDead = true; }
 
+	// 현재 플랫폼 위인지
 	bool isOnPlatform() { return m_OnPlatform; }
 	void SetOnPlatform(bool _val) { m_OnPlatform = _val; }
 
+	bool GetThruRotate() { return m_BombThruRotate;	}
+	void SetThruRotate(bool _val) { m_BombThruRotate = _val; }
+
+	// 크기 관련
 	Vec2 GetScale() { return m_Scale; }
 	void SetScale(Vec2 _Scale) { m_Scale = _Scale; }
 
+
+	// 움직이는 속도 관련
 	Vec2 GetDir() { return m_Dir; }
 	void SetDir(Vec2 _Dir) { m_Dir = _Dir; m_Dir.Normalize(); }
 
+	// 바라보고 있는 방향 관련
 	int GetDirection() { return m_Direction; }
 	void SetDirection(int _dir) { m_Direction = _dir; }
 
+	// 현재 회전 중인지
 	bool GetRotating() { return m_isRotating; }
 	void SetRotating(bool _val) { m_isRotating = _val; }
 
-	Vec2 GetRotator() { return m_RotatorPos; }
-	void SetRotator(Vec2 _val) { m_RotatorPos = _val; }
+	// 자신을 회전시킨 존재가 누구인지
+	cObject* GetRotator() { return m_Rotator; }
+	void SetRotator(cObject* _val) { m_Rotator = _val; }
 
 	bool GetRotFromDown() { return RotFromDown; }
 	void SetRotFromDown(bool _val) { RotFromDown = _val; }
+
+	// 충돌체크
+	void CollisionCheck(cObject* curObj);
+	void SetOnPlatform(cObject* curPlatform) {m_curOnPlatform = curPlatform;}
+
+	int GetCurGroupType() { return m_curGroupType; }
 
 
 

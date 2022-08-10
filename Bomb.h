@@ -11,7 +11,6 @@ private:
     bool m_DirChanged;
 
     bool m_RotateToUp;
-    //float m_Theta; // 각도로 방향을 정함.
 
 public:
     cBomb();
