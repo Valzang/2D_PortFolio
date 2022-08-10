@@ -365,7 +365,7 @@ void cPlayer::CreateBomb()
 	if (GetDirection() == 1)
 		bomb_Pos.x += GetScale().x / 2.5f;
 	else
-		bomb_Pos.x -= GetScale().x / 1.5f;
+		bomb_Pos.x -= GetScale().x / 2.5f;
 	// 폭탄 오브젝트
 	cBomb* bomb = new cBomb;
 	if (m_isMoved) // 움직이면서 폭탄을 날렸을 시

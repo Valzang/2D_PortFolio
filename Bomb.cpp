@@ -35,8 +35,6 @@ bool cBomb::Update()
 	// 공중에 있을 때, 또는 회전플랫폼을 뚫고 내려가야 할 때
 	if (!isOnPlatform() || GetThruRotate())
 	{
-		if (GetThruRotate())
-			int temp_left = 4;
 		Pos.y += 600.f * m_Dir.y * DELTA_TIME;
 		if (m_Dir.y <= 2)
 		{
@@ -57,7 +55,7 @@ bool cBomb::Update()
 	
 	if (GetRotating() && !GetThruRotate() && !m_isShoot)
 	{
-		static float diff = Pos.x - GetRotator()->GetPos().x;
+		float diff = Pos.x - GetRotator()->GetPos().x;
 
 		// 플랫폼의 중심보다 우측에 있을 때
 		if (diff > 0)
@@ -66,8 +64,9 @@ bool cBomb::Update()
 			if (m_RotateToUp)
 			{
 				SetDirection(-1);
-				SetDir(Vec2(diff, -0.7f));
-				m_Dir.y = -1.1f;
+				SetDir(Vec2(-diff, -0.7f));		
+				m_Dir.x -= diff / 95.f;
+				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
 				m_isShoot = true;
 			}
@@ -87,8 +86,8 @@ bool cBomb::Update()
 			{
 				SetDirection(1);
 				SetDir(Vec2(diff, -0.7f));
-				m_Dir.x *= -1;
-				m_Dir.y = -1.1f;
+				m_Dir.x += diff/95.f;
+				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
 				m_isShoot = true;
 			}
@@ -104,10 +103,15 @@ bool cBomb::Update()
 	}
 	
 
-	if (m_Dir.x > 0) // 폭탄의 속도도 점점 0으로 향하도록
-		m_Dir.x -= 0.3f * DELTA_TIME;
-	else if (m_Dir.x < 0)
-		m_Dir.x += 0.3f * DELTA_TIME;
+	//if (m_Dir.x > 0) // 폭탄의 속도도 점점 0으로 향하도록
+	//{
+	//	m_Dir.x -= 0.3f * DELTA_TIME;
+	//}		
+	//else if (m_Dir.x < 0)
+	//{
+	//	m_Dir.x += 0.3f * DELTA_TIME;
+	//}
+	//	
 
 	SetPos(Pos);
 	CollisionCheck(this);
