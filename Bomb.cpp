@@ -32,7 +32,7 @@ bool cBomb::Update()
 
 	Vec2 Pos = GetPos();	
 
-	// 공중에 있을 때
+	// 공중에 있을 때, 또는 회전플랫폼을 뚫고 내려가야 할 때
 	if (!isOnPlatform() || GetThruRotate())
 	{
 		if (GetThruRotate())
@@ -55,7 +55,7 @@ bool cBomb::Update()
 	// 플랫폼에 어디에 놓여있느냐에 따라 다르게 해야할 듯.
 	// 회전 중이라면
 	
-	if (GetRotating() && !GetThruRotate())
+	if (GetRotating() && !GetThruRotate() && !m_isShoot)
 	{
 		static float diff = Pos.x - GetRotator()->GetPos().x;
 
@@ -65,13 +65,9 @@ bool cBomb::Update()
 			//방향이 위로 날아가야할 때
 			if (m_RotateToUp)
 			{
-				SetDirection(1);
-				//float temp = diff / 24.f;
-				//m_Dir.x = 1.490705f;
-				//m_Dir.y = -0.7f;
+				SetDirection(-1);
 				SetDir(Vec2(diff, -0.7f));
-				//m_Dir.x *= 1.5f;
-				m_Dir.y = -0.7f;
+				m_Dir.y = -1.1f;
 				SetOnPlatform(false);
 				m_isShoot = true;
 			}
@@ -81,7 +77,6 @@ bool cBomb::Update()
 				SetOnPlatform(false);
 				SetThruRotate(true);
 				SetDir(Vec2(0.f, 2.f));
-				//Pos.y = GetRotator()->GetPos().y + GetRotator()->GetScale().y / 2.f;
 			}
 		}
 		// 플랫폼의 중심보다 좌측에 있을 때
@@ -91,11 +86,9 @@ bool cBomb::Update()
 			if (m_RotateToUp)
 			{
 				SetDirection(1);
-				//m_Dir.x = 1.490705f;
-				//m_Dir.y = -0.7f;
 				SetDir(Vec2(diff, -0.7f));
-				//m_Dir.x *= 1.5f;
-				m_Dir.y = -0.7f;
+				m_Dir.x *= -1;
+				m_Dir.y = -1.1f;
 				SetOnPlatform(false);
 				m_isShoot = true;
 			}
@@ -105,7 +98,6 @@ bool cBomb::Update()
 				SetOnPlatform(false);		
 				SetThruRotate(true);
 				SetDir(Vec2(0.f, 2.f));
-				//Pos.y = GetRotator()->GetPos().y + GetRotator()->GetScale().y / 2.f;
 			}
 		}	
 		SetRotating(false);
