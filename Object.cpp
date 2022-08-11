@@ -65,6 +65,7 @@ void cObject::CollisionCheck(cObject* curObj)
 			if (curObj_UpY < curPlatform_UpY && curObj_DownY >= curPlatform_UpY)
 			{				
 				curObj->SetOnPlatform(curPlatform[i]);			
+				// 회전문을 1번만 통과해야할 때
 				if (curObj->GetThruRotate() && curPlatform[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
 				{					
 					static bool Already_Pass = false;					
@@ -74,8 +75,10 @@ void cObject::CollisionCheck(cObject* curObj)
 						curObj->SetOnPlatform(true);
 					Already_Pass = true;
 				}
+				// 통과할 필요 없을 때 ( 일반적 케이스 )
 				else
 				{
+					// 넘어간 만큼 위치 보정
 					curObj_Pos.y -= (curObj_DownY - curPlatform_UpY);
 					if (curObj->m_curGroupType == (INT)GROUP_TYPE::BOMB)
 					{
@@ -92,6 +95,8 @@ void cObject::CollisionCheck(cObject* curObj)
 								curObj->SetOnPlatform(true);
 							}
 						}
+						else
+							curObj->SetOnPlatform(true);
 					}
 					else
 						curObj->SetOnPlatform(true);
