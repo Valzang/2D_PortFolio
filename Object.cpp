@@ -82,21 +82,26 @@ void cObject::CollisionCheck(cObject* curObj)
 					curObj_Pos.y -= (curObj_DownY - curPlatform_UpY);
 					if (curObj->m_curGroupType == (INT)GROUP_TYPE::BOMB)
 					{
-						static int Bounce_Count = 0;
 						cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-						if (curBomb->GetIsShoot())
+						int curBounceCnt = curBomb->GetBounceCount();
+						//cout << "Ä«¿îÆ® : " << curBomb->GetBounceCount() << " ÆøÅº ¹æÇâ : " << curBomb->GetDirection() << '\n';
+
+						if (curBomb->GetIsShoot() && curBounceCnt < 3)
 						{
-							Vec2 curBomb_Dir = curBomb->GetDir();
 							curBomb->SetBounce();
-							++Bounce_Count;
-							if (Bounce_Count >= 3)
+							curBomb->IncreaseBounceCount();
+							if (curBomb->GetBounceCount() >= 3)
 							{
 								curBomb->SetIsShoot(false);
-								curObj->SetOnPlatform(true);
+								curBomb->SetOnPlatform(true);
 							}
 						}
 						else
-							curObj->SetOnPlatform(true);
+						{
+							curBomb->SetIsShoot(false);
+							curBomb->SetOnPlatform(true);
+						}
+							
 					}
 					else
 						curObj->SetOnPlatform(true);

@@ -16,6 +16,13 @@
 #pragma comment(lib,"Gdiplus.lib")
 using namespace Gdiplus;
 
+#include <iostream>
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+
 static ULONG_PTR g_GdiToken;
 
 static bool GDI_INIT = false;

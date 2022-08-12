@@ -5,7 +5,8 @@
 // PI/2 => 아래직선			-PI/2 => 위 직선
 // PI/4 => 우측아래대각선		-PI/4 => 우측위 대각선
 
-cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_DirChanged(false), m_RotateToUp(false), m_isShoot(false)
+cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_BounceCount(0),
+				m_DirChanged(false), m_RotateToUp(false), m_isShoot(false), m_ShootSpeed(600.f)
 {
 	m_curGroupType = (INT)GROUP_TYPE::BOMB;
 	SetDir(Vec2(-0.8f, -3.f));
@@ -45,15 +46,17 @@ bool cBomb::Update()
 				m_Dir.y += 6.f * DELTA_TIME;
 		}
 		if (GetDirection() == 1) // 우측 방향일때
-			Pos.x += -600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
+			Pos.x += (float)(-m_ShootSpeed * m_Dir.x * DELTA_TIME); // 바라보는 방향에 맞게끔
+			//Pos.x += -600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
 		else // 좌측 방향일 때
-			Pos.x += 600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔
+			Pos.x += (float)(m_ShootSpeed * m_Dir.x * DELTA_TIME); // 바라보는 방향에 맞게끔					
+			//Pos.x += 600.f * m_Dir.x * DELTA_TIME; // 바라보는 방향에 맞게끔		
 	}
 
 	// 플랫폼에 어디에 놓여있느냐에 따라 다르게 해야할 듯.
 	// 회전 중이라면
 	
-	if (GetRotating() && !GetThruRotate() && !m_isShoot)
+	else if (GetRotating() && !m_isShoot && GetBounceCount() < 3)
 	{
 		float diff = Pos.x - GetRotator()->GetPos().x;
 
@@ -65,7 +68,8 @@ bool cBomb::Update()
 			{
 				SetDirection(-1);
 				SetDir(Vec2(-diff, -0.7f));		
-				m_Dir.x -= diff / 95.f;
+				m_ShootSpeed += diff*4.f - 200.f;
+				//m_Dir.x -= diff / 97.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
 				m_isShoot = true;
@@ -80,13 +84,14 @@ bool cBomb::Update()
 		}
 		// 플랫폼의 중심보다 좌측에 있을 때
 		else
-		{
+		{			
 			//방향이 위로 날아가야할 때
 			if (m_RotateToUp)
 			{
 				SetDirection(1);
 				SetDir(Vec2(diff, -0.7f));
-				m_Dir.x += diff/95.f;
+				m_ShootSpeed += -diff * 4.f - 200.f;
+				//m_Dir.x += diff/97.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
 				m_isShoot = true;
@@ -111,7 +116,7 @@ bool cBomb::Update()
 	//{
 	//	m_Dir.x += 0.3f * DELTA_TIME;
 	//}
-	//	
+		
 
 	SetPos(Pos);
 	CollisionCheck(this);

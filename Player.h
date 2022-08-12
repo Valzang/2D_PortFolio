@@ -1,6 +1,8 @@
 #pragma once
 #include "Object.h"
 
+enum { Moving, Sitting, Dashing, Jumping, Attaching };
+
 class cPlayer :
     public cObject
 {
@@ -31,7 +33,7 @@ public:
     void CreateBomb();
 
     void SetUnsitted() { m_isSitted = false; }
-    void SetYspeedReverse() { m_Dir.y = 450.f; }
+    void SetYspeedReverse() { m_Dir.y = 300.f; }
     bool Rotate_Platform();
 
     bool isAttaching() { return m_isAttached; }

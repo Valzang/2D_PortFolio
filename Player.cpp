@@ -212,7 +212,7 @@ bool cPlayer::Update()
 		// ============================================= ÆøÅº ¼³Ä¡
 		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN))
 		{
-			if (m_AtkCoolTime >= 1.5f)
+			if (m_AtkCoolTime >= 3.f)
 			{
 				m_AtkCoolTime = 0.f;
 				if (m_isJumping)
