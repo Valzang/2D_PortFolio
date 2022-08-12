@@ -34,14 +34,15 @@ bool cPlatform::Update()
 		Vec2 curPlayer_Scale = curPlayer->GetScale();
 
 		if ((curPlayer_Pos.x > Platform_Pos.x - Platform_Scale.x/2.f) && (curPlayer_Pos.x < Platform_Pos.x + Platform_Scale.x / 2.f)
-			&& (abs(curPlayer_Pos.y - Platform_Pos.y) <= (curPlayer_Scale.y + Platform_Scale.y) / 2.f))
+			&& (abs(curPlayer_Pos.y - Platform_Pos.y) <= (curPlayer_Scale.y + Platform_Scale.y) / 2.f)
+			&& !curPlayer->GetDashing())
 		{
 			curPlayer->SetRotator(this);
 			curPlayer->SetRotating(true);
 			curPlayer->SetUnsitted();
 		}
 
-		for (int i = 0; i < curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::BOMB].size(); ++i)
+		for (int i = 0; i < curScene->GetCurObjectVec()[(INT)GROUP_TYPE::BOMB].size(); ++i)
 		{
 			cBomb* curBomb = dynamic_cast<cBomb*>(curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::BOMB][i]);
 			Vec2 curBomb_Pos = curBomb->GetPos();

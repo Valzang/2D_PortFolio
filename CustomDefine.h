@@ -123,12 +123,12 @@ struct Vec2
 enum class GROUP_TYPE
 {
 	DEFAULT,
-	BOMB,
 	PLATFORM,
 	PLATFORM_ROTATE,
 	PLAYER,
 	MONSTER,
 	THING,
+	BOMB,
 
 	END = 8,
 };

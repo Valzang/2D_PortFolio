@@ -32,6 +32,9 @@ public:
     virtual void Render(HDC _hdc) override;
     void CreateBomb();
 
+
+    bool GetDashing() { return m_isDashing; }
+
     void SetUnsitted() { m_isSitted = false; }
     void SetYspeedReverse() { m_Dir.y = 300.f; }
     bool Rotate_Platform();

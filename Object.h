@@ -49,6 +49,7 @@ public:
 	bool isOnPlatform() { return m_OnPlatform; }
 	void SetOnPlatform(bool _val) { m_OnPlatform = _val; }
 
+	// 회전 플랫폼을 한번 통과하는지
 	bool GetThruRotate() { return m_BombThruRotate;	}
 	void SetThruRotate(bool _val) { m_BombThruRotate = _val; }
 
@@ -73,13 +74,15 @@ public:
 	cObject* GetRotator() { return m_Rotator; }
 	void SetRotator(cObject* _val) { m_Rotator = _val; }
 
+	// 아래에서부터 회전하는지
 	bool GetRotFromDown() { return RotFromDown; }
 	void SetRotFromDown(bool _val) { RotFromDown = _val; }
 
 	// 충돌체크
-	void CollisionCheck(cObject* curObj);
+	void CollisionCheck(cObject* curObj, int GROUP_TYPE);
 	void SetOnPlatform(cObject* curPlatform) {m_curOnPlatform = curPlatform;}
 
+	// 현재 그룹타입
 	int GetCurGroupType() { return m_curGroupType; }
 
 

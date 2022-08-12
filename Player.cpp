@@ -122,9 +122,10 @@ bool cPlayer::Update()
 				m_AttachingTime = 0.f;
 			}
 		}
-		if (KEY_CHECK(KEY::K, KEY_STATE::HOLD) && !GetRotating()) // ¾Æ·¡¸¦ Â¤À½.
+		if ((KEY_CHECK(KEY::K, KEY_STATE::DOWN) || KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && !GetRotating()) // ¾Æ·¡¸¦ Â¤À½.
 		{
-			m_isSitted = true;
+			if(!m_isAttached)
+				m_isSitted = true;
 			if (!m_isJumping && !m_isAttached
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
 				&& (KEY_CHECK(KEY::L, KEY_STATE::NONE) || KEY_CHECK(KEY::L, KEY_STATE::UP)))
@@ -132,7 +133,7 @@ bool cPlayer::Update()
 				SetRotFromDown(false);
 				Rotate_Platform();
 			}
-			if (m_isAttached)
+			if (m_isAttached && KEY_CHECK(KEY::K, KEY_STATE::DOWN))
 			{
 				m_isAttached = false;
 				m_AttachingTime = 0.f;
@@ -210,7 +211,7 @@ bool cPlayer::Update()
 		}
 
 		// ============================================= ÆøÅº ¼³Ä¡
-		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN))
+		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN) && !GetRotating())
 		{
 			if (m_AtkCoolTime >= 3.f)
 			{
@@ -239,7 +240,7 @@ bool cPlayer::Update()
 	}
 
 	SetPos(Pos);
-	CollisionCheck(this);
+	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
 	if (GetRotating())
 	{
 		if (m_Rotation_Degree == 180 || m_Rotation_Degree == -180)
@@ -311,7 +312,6 @@ void cPlayer::Render(HDC _hdc)
 
 	xStart = curFrame * Width;
 	Gdiplus::Matrix mat;
-	//static int Rotation_Degree = 0;
 
 	if (GetRotating())
 	{
