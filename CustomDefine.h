@@ -10,23 +10,14 @@
 
 #pragma comment(lib,"Msimg32.lib")
 
-// GDI================================
+// GDI==================================================================
 #include <objidl.h>
 #include <gdiplus.h>
 #pragma comment(lib,"Gdiplus.lib")
 using namespace Gdiplus;
 
-#include <iostream>
-#ifdef UNICODE
-#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-#else
-#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-#endif
-
 static ULONG_PTR g_GdiToken;
-
 static bool GDI_INIT = false;
-
 static void Gdi_Init()
 {
 	if (!GDI_INIT)
@@ -43,7 +34,17 @@ static void Gdi_End()
 	GDI_INIT = false;
 }
 
-// GDI================================
+// =====================================================================
+
+
+// For Debugging========================================================
+#include <iostream>
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
+// =====================================================================
 
 using namespace std;
 

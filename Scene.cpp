@@ -51,7 +51,7 @@ void cScene::Update()
 
 void cScene::Render(HDC _hdc)
 {
-	Graphics graphics(_hdc);
+	Gdiplus::Graphics graphics(_hdc);
 	int w = m_SceneImg->GetWidth();
 	int h = m_SceneImg->GetHeight();
 	

@@ -90,7 +90,7 @@ bool cBomb::Update()
 			{
 				SetDirection(1);
 				SetDir(Vec2(diff, -0.7f));
-				m_ShootSpeed += -diff * 4.f - 200.f;
+				m_ShootSpeed += diff * -4.f - 200.f;
 				//m_Dir.x += diff/97.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
@@ -105,18 +105,7 @@ bool cBomb::Update()
 			}
 		}	
 		SetRotating(false);
-	}
-	
-
-	//if (m_Dir.x > 0) // 폭탄의 속도도 점점 0으로 향하도록
-	//{
-	//	m_Dir.x -= 0.3f * DELTA_TIME;
-	//}		
-	//else if (m_Dir.x < 0)
-	//{
-	//	m_Dir.x += 0.3f * DELTA_TIME;
-	//}
-		
+	}		
 
 	SetPos(Pos);
 	CollisionCheck(this);
