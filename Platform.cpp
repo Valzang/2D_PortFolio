@@ -113,7 +113,7 @@ void cPlatform::Render(HDC _hdc)
 
 		graphics.SetTransform(&mat);
 
-		rot += m_DecreaseDegree * 60.f * DELTA_TIME;
+		rot += (int)(m_DecreaseDegree * 60.f * DELTA_TIME);
 		if (rot >= 180 || rot <= -180)
 		{
 			SetRotating(false);

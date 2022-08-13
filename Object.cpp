@@ -5,7 +5,7 @@
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
 					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false), m_curOnPlatform(nullptr)
-					,m_BombThruRotate(false), m_Rotator(nullptr)
+					,m_BombThruRotate(false), m_Rotator(nullptr), m_FirstPos_Y(0.f)
 { 
 	m_Dir.Normalize(); 
 	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 

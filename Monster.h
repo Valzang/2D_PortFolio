@@ -1,10 +1,9 @@
 #pragma once
 #include "Object.h"
 
-class cMonster :
-    public cObject
+class cMonster : public cObject
 {
-private:
+protected:
     Vec2 m_CenterPos;
     int m_HP;
     float m_Speed;
@@ -20,8 +19,8 @@ public:
     void SetCenterPos(Vec2 _Pos) { m_CenterPos = _Pos; }
     void SetMaxDist(float _dist) { m_MaxDistance = _dist; }
 
-    virtual bool Update() override;
-    virtual void Render(HDC _hdc) override;
+    virtual bool Update() override = 0;
+    virtual void Render(HDC _hdc) override = 0;
 
 };
 

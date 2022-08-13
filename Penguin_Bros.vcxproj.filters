@@ -112,6 +112,9 @@
     <ClInclude Include="framework.h">
       <Filter>Default\etc</Filter>
     </ClInclude>
+    <ClInclude Include="Monster_Flying.h">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -158,6 +161,9 @@
     </ClCompile>
     <ClCompile Include="TimeManager.cpp">
       <Filter>Engine\02. Manager\TimeManager</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster_Flying.cpp">
+      <Filter>Engine\03. Object\Monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

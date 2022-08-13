@@ -153,7 +153,7 @@ bool cPlayer::Update()
 			m_isSitted = false;
 		}
 
-		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && !GetRotating())//&& isOnPlatform())
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && !GetRotating())
 		{
 			if (m_isAttached)
 			{
@@ -340,7 +340,7 @@ void cPlayer::Render(HDC _hdc)
 
 		graphics.SetTransform(&mat);
 
-		m_Rotation_Degree += decrease * 60.f * DELTA_TIME;
+		m_Rotation_Degree += (int)(decrease * 60.f * DELTA_TIME);
 	}
 
 	if (m_isAttached)

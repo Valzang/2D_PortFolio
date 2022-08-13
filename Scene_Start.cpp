@@ -1,6 +1,7 @@
 #include "Scene_Start.h"
 #include "Player.h"
 #include "Monster.h"
+#include "Monster_Flying.h"
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
 #include "Platform_Rotate.h"
@@ -26,21 +27,19 @@ void cScene_Start::Enter()
 
 	// 몬스터 배치	
 	SetMonsterSize(1);			// 몬스터 수
-	float MoveDist = 40.f;		// 몬스터의 행동 반경
-	float ObjectScale = 81.f;	// 몬스터 사진의 크기
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
-	float temp = (Resolution.x - ((MoveDist+ ObjectScale /2.f) * 2)) / (float)(GetMonsterSize()-1);
 
 	//Monster Object 추가
 	cMonster* MonsterObj = nullptr;
 	for (int i = 0; i < GetMonsterSize(); ++i)
 	{
-		MonsterObj = new cMonster;
-		MonsterObj->SetPos(Vec2 { (MoveDist + ObjectScale / 2.f) + temp*(float)i, 50.f });
+		MonsterObj = new cMonster_Flying;
+		MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y*2.5f });
 		MonsterObj->SetCenterPos(MonsterObj->GetPos());
-		MonsterObj->SetMaxDist(MoveDist);
+		MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+		
 		AddObject(MonsterObj, GROUP_TYPE::MONSTER);		
 	}
 

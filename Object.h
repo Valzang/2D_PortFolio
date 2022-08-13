@@ -21,6 +21,8 @@ private:
 	cObject* m_Rotator;
 	cObject* m_curOnPlatform;
 
+	float m_FirstPos_Y;
+
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
 protected:
@@ -85,7 +87,8 @@ public:
 	// 현재 그룹타입
 	int GetCurGroupType() { return m_curGroupType; }
 
-
+	float GetFirstY() { return m_FirstPos_Y; }
+	void SetFirstY(float _val) { m_FirstPos_Y = _val; }
 
 	Gdiplus::ImageAttributes* GetImgAttr() { return &m_imgAttr; }
 	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); } // A 컬러에서부터 B 컬러 사이 값들을 투명하게 만들어줌
