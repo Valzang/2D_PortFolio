@@ -243,7 +243,7 @@ bool cPlayer::Update()
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
 	if (GetRotating())
 	{
-		if (m_Rotation_Degree == 180 || m_Rotation_Degree == -180)
+		if (m_Rotation_Degree >= 180 || m_Rotation_Degree <= -180)
 		{
 			// 플레이어의 위치를 회전 플랫폼 중점을 기준으로 점 대칭 이동
 			Vec2 Platform_Pos = GetRotator()->GetPos();
@@ -340,7 +340,7 @@ void cPlayer::Render(HDC _hdc)
 
 		graphics.SetTransform(&mat);
 
-		m_Rotation_Degree += decrease;		
+		m_Rotation_Degree += decrease * 60.f * DELTA_TIME;
 	}
 
 	if (m_isAttached)

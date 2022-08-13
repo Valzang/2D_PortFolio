@@ -113,10 +113,9 @@ void cPlatform::Render(HDC _hdc)
 
 		graphics.SetTransform(&mat);
 
-		rot += m_DecreaseDegree;
-		if (rot == 180 || rot == -180)
+		rot += m_DecreaseDegree * 60.f * DELTA_TIME;
+		if (rot >= 180 || rot <= -180)
 		{
-			//curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]->
 			SetRotating(false);
 			rot = 0;
 		}
