@@ -10,6 +10,7 @@ cMonster::cMonster() :
 	, m_MonsterImg(nullptr)
 	, m_HP(10)
 {
+	m_curGroupType = (INT)GROUP_TYPE::MONSTER;
 	//m_MonsterImg = Image::FromFile((WCHAR*)L"Image/FlyingMonster.png");		
 	//SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));	
 	//SetImgAttr();

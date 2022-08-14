@@ -23,6 +23,22 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 	SetDirection(1);
 }
 
+cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
+									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
+									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
+{
+	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
+	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
+	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 6.f));
+	SetSpawnPlace(_SpawnPlace);
+	SetPos(_SpawnPlace);
+
+	SetDir(Vec2(-2.f, 3.f));
+
+	SetImgAttr();
+	SetDirection(1);
+}
+
 cPlayer::~cPlayer()
 {
 	if (m_PlayerImg != NULL)
@@ -164,7 +180,6 @@ bool cPlayer::Update()
 			else if(isOnPlatform())
 			{
 				SetOnPlatform(false);
-				SetOnPlatform(nullptr);
 				m_isJumping = true;
 				m_Dir.y *= -1;
 			}
@@ -182,7 +197,7 @@ bool cPlayer::Update()
 				Pos.x -= 250.f * DELTA_TIME;
 				SetDirection(-1);
 			}
-			else //if (g_PossibleArea[Left_Check][(int)curPos_y]==1)
+			else
 			{
 				if (!m_isDashing)
 					m_isMoved = true;

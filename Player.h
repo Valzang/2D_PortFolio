@@ -3,8 +3,7 @@
 
 enum { Moving, Sitting, Dashing, Jumping, Attaching };
 
-class cPlayer :
-    public cObject
+class cPlayer : public cObject
 {
 private:
     Image* m_PlayerImg;  // 이미지 파일    
@@ -24,9 +23,12 @@ private:
     double m_AfterAttackTime; //폭탄 후 몇초간 뒤로 밀려날건지
     double m_AttachingTime;
 
+    Vec2 m_SpawnPlace; //스폰되는 장소
+
 
 public:
     cPlayer();
+    cPlayer(Vec2 _SpawnPlace);
     virtual ~cPlayer();
     virtual bool Update() override;
     virtual void Render(HDC _hdc) override;
@@ -41,5 +43,8 @@ public:
 
     bool isAttaching() { return m_isAttached; }
     void SetAttach() { m_isAttached = true; }
+
+    void SetSpawnPlace(Vec2 _Val) { m_SpawnPlace = _Val; }
+    void Respawn() { SetPos(m_SpawnPlace); }
 };
 

@@ -19,7 +19,6 @@ private:
 	Vec2 m_RotatorPos;
 
 	cObject* m_Rotator;
-	cObject* m_curOnPlatform;
 
 	float m_FirstPos_Y;
 
@@ -82,7 +81,6 @@ public:
 
 	// 충돌체크
 	void CollisionCheck(cObject* curObj, int GROUP_TYPE);
-	void SetOnPlatform(cObject* curPlatform) {m_curOnPlatform = curPlatform;}
 
 	// 현재 그룹타입
 	int GetCurGroupType() { return m_curGroupType; }

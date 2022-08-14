@@ -20,8 +20,7 @@ cScene_Start::~cScene_Start()
 void cScene_Start::Enter()
 {
 	// 플레이어 추가 및 위치 설정
-	cPlayer* PlayerObj = new cPlayer;
-	PlayerObj->SetPos(Vec2 { 640.f, 300.f });
+	cPlayer* PlayerObj = new cPlayer(Vec2(640.f,300.f));
 	AddObject(PlayerObj, GROUP_TYPE::PLAYER);
 
 

@@ -1,8 +1,6 @@
 #include "Core.h"
 #include "Object.h"
 
-extern short** g_PossibleArea;
-
 cCore::cCore() : m_hBit(NULL), m_hDC(NULL)
 , m_hWnd(NULL), m_memDC(NULL), m_ptResolution({ 0, 0 })
 {
@@ -68,19 +66,8 @@ void cCore::Progress()
 	{
 		cKeyManager::GetInstance()->Update();
 		cSceneManager::GetInstance()->Update();
-
-
-		// Render해주는 부분 =====================================================
-
-		Rectangle(m_memDC, -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1); // 빈 화면으로 초기화
-
-		cSceneManager::GetInstance()->Render(m_memDC);
-
-		BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
-			   , m_memDC, 0, 0, SRCCOPY);
-		// m_memDC : 그려주는 도화지, m_hDC : 메인 도화지
+		Render();	
 	}
-
 }
 
 void cCore::Update()
@@ -89,4 +76,13 @@ void cCore::Update()
 
 void cCore::Render()
 {
+	// Render해주는 부분 =====================================================
+
+	Rectangle(m_memDC, -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1); // 빈 화면으로 초기화
+
+	cSceneManager::GetInstance()->Render(m_memDC);
+
+	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
+		   , m_memDC, 0, 0, SRCCOPY);
+	// m_memDC : 그려주는 도화지, m_hDC : 메인 도화지
 }

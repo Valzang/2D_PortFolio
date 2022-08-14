@@ -4,8 +4,8 @@
 #include "Bomb.h"
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
-					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false), m_curOnPlatform(nullptr)
-					,m_BombThruRotate(false), m_Rotator(nullptr), m_FirstPos_Y(0.f)
+					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false),
+					m_BombThruRotate(false), m_Rotator(nullptr), m_FirstPos_Y(0.f)
 { 
 	m_Dir.Normalize(); 
 	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 
@@ -64,7 +64,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 		// 충돌했을 때 (사각형 기준)
 		if ((abs(curObj_Pos.x - otherObj_Pos.x) < (curObj_Scale.x + otherObj_Scale.x) / 2.f)
 			&& (abs(curObj_Pos.y - otherObj_Pos.y) < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
-		{			
+		{					
 			// 아랫쪽에서 충돌했을 때
 			if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
 			{				
