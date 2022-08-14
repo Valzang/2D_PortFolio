@@ -14,7 +14,6 @@ private:
     bool m_isJumping;   // 현재 점프 중인지
     bool m_isAttached;  // 회전 후 천장에 붙어있는지
 
-    int m_LifeCount;     // 현재 목숨
     int m_Rotation_Degree; // 돌아가는 각도
 
     double m_AtkCoolTime; // 폭탄 간 쿨타임

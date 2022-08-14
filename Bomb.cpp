@@ -119,17 +119,23 @@ bool cBomb::Update()
 			}
 
 			SetPos(Pos);
-			CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
+			CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);			
+			if(m_isShoot)
+				CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
 
 			SetPosOtherside();
-		}
-		
+		}		
 	}
-
 	// Æø¹ßÇßÀ» ¶§
 	else
 	{
-		
+		if (m_BombImg != NULL)
+			delete m_BombImg;
+		m_BombImg = Image::FromFile((WCHAR*)L"Image/Explosion.png");
+		SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight() / 8.f));
+		m_isExploded = true;
+		CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
+		CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
 	}
 
 	

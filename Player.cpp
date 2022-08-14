@@ -10,13 +10,14 @@
 
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
-					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
+					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
 					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight()/6.f));
 
+	SetHP(2);
 	SetDir(Vec2(-2.f, 3.f));
 
 	SetImgAttr();
@@ -24,7 +25,7 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 }
 
 cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
-									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_LifeCount(3), m_AfterAttackTime(0.f)
+									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
 									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
@@ -32,6 +33,7 @@ cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_i
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 6.f));
 	SetSpawnPlace(_SpawnPlace);
 	SetPos(_SpawnPlace);
+	SetHP(2);
 
 	SetDir(Vec2(-2.f, 3.f));
 
@@ -50,13 +52,23 @@ cPlayer::~cPlayer()
 
 bool cPlayer::Update()
 {
+	if (GetHP() == 1)
+	{
+		static bool btemp = false;
+		if(!btemp)
+		{
+		btemp = true;
+		}
+	}
 	Vec2 Pos = GetPos(); 
 	Vec2 Scl = GetScale();
 	float curPos_x_l = Pos.x - Scl.x / 2;
 	float curPos_x_r = Pos.x + Scl.x / 2;
 	float curPos_y = Pos.y + Scl.y / 2;
 
-	if (m_LifeCount < 0)
+	
+
+	if (GetHP() < 0)
 		return false;
 
 	// 공격 시 뒤로 밀려나게끔

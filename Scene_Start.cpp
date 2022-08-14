@@ -25,22 +25,24 @@ void cScene_Start::Enter()
 
 
 	// 몬스터 배치	
-	SetMonsterSize(1);			// 몬스터 수
+	SetMonsterSize(2);			// 몬스터 수
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
 
 	//Monster Object 추가
 	cMonster* MonsterObj = nullptr;
-	for (int i = 0; i < GetMonsterSize(); ++i)
-	{
-		MonsterObj = new cMonster_Flying;
-		MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y*2.5f });
-		MonsterObj->SetCenterPos(MonsterObj->GetPos());
-		MonsterObj->SetFirstY(MonsterObj->GetPos().y);
-		
-		AddObject(MonsterObj, GROUP_TYPE::MONSTER);		
-	}
+	MonsterObj = new cMonster_Flying;
+	MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 2.5f });
+	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+
+	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+
+	MonsterObj = new cMonster_Flying;
+	MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 4.f });
+	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+
+	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 	//SetPlatformSize(6);
 

@@ -12,6 +12,8 @@ private:
 	Vec2 m_Pos;
 	Vec2 m_Scale;
 	int m_Direction;
+
+	int m_HP;
 	bool m_IsDead;
 	bool m_OnPlatform;
 
@@ -87,6 +89,11 @@ public:
 
 	float GetFirstY() { return m_FirstPos_Y; }
 	void SetFirstY(float _val) { m_FirstPos_Y = _val; }
+
+	// HP 관련
+	int GetHP() { return m_HP; }
+	void SetHP(int _val) { m_HP = _val; }
+	void Damage() { --m_HP; }
 
 	Gdiplus::ImageAttributes* GetImgAttr() { return &m_imgAttr; }
 	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); } // A 컬러에서부터 B 컬러 사이 값들을 투명하게 만들어줌

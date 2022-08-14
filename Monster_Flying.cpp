@@ -4,7 +4,7 @@ cMonster_Flying::cMonster_Flying()
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/FlyingMonster.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
-
+	SetHP(1);
 	SetImgAttr();
 	SetDirection(1);
 }
@@ -21,7 +21,7 @@ cMonster_Flying::~cMonster_Flying()
 bool cMonster_Flying::Update()
 {
 	//m_MonsterImg->RotateFlip(RotateNoneFlipX);
-	if (m_HP <= 0)
+	if (GetHP() <= 0)
 		return false;
 	Vec2 CurPos = GetPos();
 
