@@ -5,7 +5,8 @@
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
 					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false),
-					m_BombThruRotate(false), m_Rotator(nullptr), m_FirstPos_Y(0.f), m_HP(1)
+					m_BombThruRotate(false), m_Rotator(nullptr), m_FirstPos_Y(0.f), m_HP(1),
+					dwID(0), mciOpen(), mciPlay()
 { 
 	m_Dir.Normalize(); 
 	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 
@@ -119,8 +120,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
 						otherObj_Player->Damage();
-						otherObj_Player->Respawn();
-						otherObj_Player->SetOnPlatform(false);
 					}						
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -160,8 +159,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
 						otherObj_Player->Damage();
-						otherObj_Player->Respawn();
-						otherObj_Player->SetOnPlatform(false);
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -195,8 +192,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
 						otherObj_Player->Damage();
-						otherObj_Player->Respawn();
-						otherObj_Player->SetOnPlatform(false);
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -233,8 +228,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
 						otherObj_Player->Damage();
-						otherObj_Player->Respawn();
-						otherObj_Player->SetOnPlatform(false);
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:

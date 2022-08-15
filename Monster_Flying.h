@@ -9,7 +9,6 @@ public:
 	cMonster_Flying();
 	virtual ~cMonster_Flying();
 
-
 	virtual bool Update() override;
 	virtual void Render(HDC _hdc) override;
 

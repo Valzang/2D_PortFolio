@@ -1,8 +1,6 @@
 #pragma once
 #include "Object.h"
 
-enum { Moving, Sitting, Dashing, Jumping, Attaching };
-
 class cPlayer : public cObject
 {
 private:
@@ -14,6 +12,7 @@ private:
     bool m_isJumping;   // 현재 점프 중인지
     bool m_isAttached;  // 회전 후 천장에 붙어있는지
     bool m_Spawning;    // 나타나는 중인지
+    bool m_isDamaging;  // 데미지 받고 있을 때
 
     int m_Rotation_Degree; // 돌아가는 각도
 
@@ -44,9 +43,9 @@ public:
     bool isAttaching() { return m_isAttached; }
     void SetAttach() { m_isAttached = true; }    
 
-    virtual void Damage() { SetHP(GetHP() - 1); BGM_SetAndPlay(L"Sound/EFFECT/Player_Damaged.wav"); }
+    virtual void Damage();
 
     void SetSpawnPlace(Vec2 _Val) { m_SpawnPlace = _Val; }
-    void Respawn() { SetPos(m_SpawnPlace); }
+    void Respawn();
 };
 

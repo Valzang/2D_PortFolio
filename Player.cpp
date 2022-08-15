@@ -9,7 +9,7 @@
 
 
 
-cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true)
+cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true), m_isDamaging(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
 					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
 {	
@@ -69,6 +69,24 @@ bool cPlayer::Update()
 	if (GetHP() < 0)
 		return false;
 
+	// 데미지를 받았을 때
+	if (m_isDamaging)
+	{			
+		static float Screen_Bottom = (float)cCore::GetInstance()->GetResolution().y;
+		SetOnPlatform(false);
+		Pos.y += m_Dir.y * DELTA_TIME;
+		if (m_Dir.y < 800.f) // 감소속도가 일정 수준 되기 전 까지는 꾸준히 증가
+			m_Dir.y += 250.f * DELTA_TIME;
+		if (Pos.y - Scl.y / 2.f >= Screen_Bottom)
+		{
+			m_isDamaging = false;
+			Respawn();
+		}
+		else
+			SetPos(Pos);
+		return true;
+	}
+
 	// 공격 시 뒤로 밀려나게끔
 	if (m_AfterAttackTime > 0.f)
 	{
@@ -109,11 +127,6 @@ bool cPlayer::Update()
 			m_Dir.y = 450.f;
 		}
 	}
-	else
-	{
-		m_isJumping = false;
-		m_Dir.y = 450.f;
-	}
 
 	// 대쉬 중이라면
 	if (m_isDashing)
@@ -145,7 +158,6 @@ bool cPlayer::Update()
 			{
 				SetRotFromDown(true);
 				Rotate_Platform();
-				m_AttachingTime = 0.f;
 			}
 		}
 		if ((KEY_CHECK(KEY::K, KEY_STATE::DOWN) || KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && !GetRotating()) // 아래를 짚음.
@@ -254,7 +266,9 @@ bool cPlayer::Update()
 
 	if (m_isAttached)
 	{
-		if (m_AttachingTime >= 1) // 0.5초 이상 대시중일 시 초기화
+		m_isJumping = false;
+		m_Dir.y = 450.f;
+		if (m_AttachingTime >= 1.1f)
 		{
 			m_isAttached = false;
 			m_AttachingTime = 0.f;
@@ -310,7 +324,7 @@ void cPlayer::Render(HDC _hdc)
 		if (GetDirection() == -1)
 			yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
 
-		if (m_isJumping)
+		if (m_isJumping || m_isDamaging)
 		{
 			// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
 			yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
@@ -465,4 +479,33 @@ bool cPlayer::Rotate_Platform()
 		}
 	}
 	return false;
+}
+
+void cPlayer::Damage()
+{
+	if (!m_Spawning && !m_isDamaging)
+	{
+		SetHP(GetHP() - 1);
+		BGM_SetAndPlay(L"Sound/EFFECT/Player_Damaged.wav");
+		m_isDamaging = true;
+		m_Dir.y = 450.f;
+		SetOnPlatform(false);
+	}	
+}
+
+void cPlayer::Respawn()
+{
+	if(m_PlayerImg != NULL)
+		delete m_PlayerImg;
+	SetPos(m_SpawnPlace);
+	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
+	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
+	m_Spawning = true;
+	m_isMoved = false;
+	m_isSitted = false;
+	m_isDashing = false;
+	m_isJumping = false;
+	m_isAttached = false;
+	SetDir(Vec2(-2.f, 3.f));
+	SetDirection(1);
 }

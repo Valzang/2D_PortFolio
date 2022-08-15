@@ -145,9 +145,9 @@ void cBomb::Render(HDC _hdc)
 	{
 		xStart = 0;
 		w = m_BombImg->GetWidth();
-		h = m_BombImg->GetHeight() / 8;
+		h = m_BombImg->GetHeight() / 11;
 		yStart = h * (m_ExplosionTime++/2);
-		if(m_ExplosionTime > 12)
+		if(m_ExplosionTime > 21)
 			Dead();
 	}
 	else
@@ -174,5 +174,5 @@ void cBomb::SetExplode()
 	if (m_BombImg != NULL)
 		delete m_BombImg;
 	m_BombImg = Image::FromFile((WCHAR*)L"Image/Explosion.png");
-	SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight() / 8.f));
+	SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight() / 11.f));
 }
