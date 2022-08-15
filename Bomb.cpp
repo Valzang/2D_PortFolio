@@ -10,6 +10,7 @@ cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_
 {
 	m_curGroupType = (INT)GROUP_TYPE::BOMB;
 	SetDir(Vec2(-0.8f, -3.f));
+	dwID = 2;
 	m_BombImg = Image::FromFile((WCHAR*)L"Image/Bomb.png");
 	SetScale(Vec2((float)m_BombImg->GetWidth()/2, (float)m_BombImg->GetHeight()/2));
 
@@ -35,13 +36,7 @@ bool cBomb::Update()
 	{
 		// 곧 폭발할 때
 		if (m_TimeLimit >= 3.f)
-		{
-			if (m_BombImg != NULL)
-				delete m_BombImg;
-			m_BombImg = Image::FromFile((WCHAR*)L"Image/Explosion.png");
-			SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight() / 8.f));
-			m_isExploded = true;
-		}
+			SetExplode();
 		else
 		{
 			Vec2 Pos = GetPos();
@@ -129,11 +124,6 @@ bool cBomb::Update()
 	// 폭발했을 때
 	else
 	{
-		if (m_BombImg != NULL)
-			delete m_BombImg;
-		m_BombImg = Image::FromFile((WCHAR*)L"Image/Explosion.png");
-		SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight() / 8.f));
-		m_isExploded = true;
 		CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
 		CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
 	}
@@ -174,4 +164,15 @@ void cBomb::Render(HDC _hdc)
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 	graphics.DrawImage(m_BombImg, Rect((int)Pos.x - (int)Scale.x / 2, (int)Pos.y - (int)Scale.y / 2, w, h), xStart, yStart, w, h, UnitPixel, GetImgAttr());
 
+}
+
+void cBomb::SetExplode()
+{
+	BGM_SetAndPlay(L"Sound/EFFECT/Explosion.wav");
+	//PlaySound(TEXT("Sound/EFFECT/Explosion.wav"), NULL, SND_ASYNC);
+	m_isExploded = true;
+	if (m_BombImg != NULL)
+		delete m_BombImg;
+	m_BombImg = Image::FromFile((WCHAR*)L"Image/Explosion.png");
+	SetScale(Vec2((float)m_BombImg->GetWidth(), (float)m_BombImg->GetHeight() / 8.f));
 }

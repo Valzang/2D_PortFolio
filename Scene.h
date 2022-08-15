@@ -17,16 +17,20 @@ private:
 	Image* m_SceneImg;  // 이미지 파일
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 	int m_MonsterCount;					// 몬스터 수
-	//cSound* m_BGM;
+
+	DWORD m_dwDeviceID;
+	MCI_OPEN_PARMS mciOpen;
+	MCI_PLAY_PARMS mciPlay;
+	int dwID;
 
 public:
-	cScene() : m_SceneImg(nullptr), m_MonsterCount(0){}
+	cScene() : m_SceneImg(nullptr), m_MonsterCount(0), m_dwDeviceID(), mciOpen(), mciPlay(), dwID(0){}
 	virtual ~cScene();
 
 
 	// 함수 정의를 헤더파일에 할 시에 inline 처리 되서 함수 호출 비용이 줆
 	void AddObject(cObject* _Obj, GROUP_TYPE _Type)
-	{
+	{		
 		m_arr_obj[(UINT)_Type].push_back(_Obj);
 	}
 
@@ -57,6 +61,8 @@ public:
 
 	virtual void Enter() = 0; // 해당 씬으로 진입 시 호출
 	virtual void Exit() = 0;  // 해당 씬에서 탈출 시 호출
+
+	void BGM_SetAndPlay(const LPCWSTR File_Path);
 
 	void Update();
 	void Render(HDC _hdc);

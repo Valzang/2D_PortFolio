@@ -26,7 +26,7 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 
 cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false)
 									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
-									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
+									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_Spawning(true)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
@@ -52,21 +52,11 @@ cPlayer::~cPlayer()
 
 bool cPlayer::Update()
 {
-	if (GetHP() == 1)
-	{
-		static bool btemp = false;
-		if(!btemp)
-		{
-		btemp = true;
-		}
-	}
 	Vec2 Pos = GetPos(); 
 	Vec2 Scl = GetScale();
 	float curPos_x_l = Pos.x - Scl.x / 2;
 	float curPos_x_r = Pos.x + Scl.x / 2;
-	float curPos_y = Pos.y + Scl.y / 2;
-
-	
+	float curPos_y = Pos.y + Scl.y / 2;	
 
 	if (GetHP() < 0)
 		return false;
@@ -304,7 +294,6 @@ void cPlayer::Render(HDC _hdc)
 	int xStart = 0, yStart = 0;
 
 	static int Img_Jump_Cursor = 1;
-
 	static int Img_Move_Cursor = 1;
 
 	if (GetDirection() == -1)

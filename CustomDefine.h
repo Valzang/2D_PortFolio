@@ -11,17 +11,11 @@
 
 #pragma comment(lib,"Msimg32.lib")
 
-
-
 // SOUND ================================================================
+#include <mmsystem.h> // Playsound를 위한 함수 (wav)
+#include <Digitalv.h> //
 
-//#pragma comment(lib, "fmodex_vc.lib")
-//#include "fmod.hpp"
-//#include "fmod_codec.h"
-//#include "fmod_dsp.h"
-//#include "fmod_errors.h"
-//#include "fmod_memoryinfo.h"
-//#include "fmod_output.h"
+#pragma comment(lib, "winmm.lib")
 
 // GDI==================================================================
 #include <objidl.h>

@@ -44,7 +44,7 @@ public:
 
     // 폭발했는지
     bool GetExplode() { return m_isExploded; }
-    void SetExplode() { m_isExploded = true; }
+    void SetExplode();
 
     void SetRotateDir(bool _val) { m_RotateToUp = _val; }
 

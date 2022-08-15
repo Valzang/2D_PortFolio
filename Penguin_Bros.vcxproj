@@ -144,6 +144,7 @@
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Monster_Flying.h" />
+    <ClInclude Include="Monster_Thorn.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="CustomDefine.h" />
     <ClInclude Include="framework.h" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Monster_Flying.cpp" />
+    <ClCompile Include="Monster_Thorn.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="KeyManager.cpp" />
     <ClCompile Include="Monster.cpp" />

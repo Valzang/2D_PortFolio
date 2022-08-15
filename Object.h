@@ -24,7 +24,7 @@ private:
 
 	float m_FirstPos_Y;
 
-	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
+	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수	
 
 protected:
 	Vec2 m_Dir;
@@ -33,6 +33,11 @@ protected:
 	bool RotFromDown;
 
 	bool m_BombThruRotate;
+
+	// 음악 재생 관련
+	MCI_OPEN_PARMS mciOpen;
+	MCI_PLAY_PARMS mciPlay;
+	int dwID;
 	
 
 public:
@@ -93,8 +98,12 @@ public:
 	// HP 관련
 	int GetHP() { return m_HP; }
 	void SetHP(int _val) { m_HP = _val; }
-	void Damage() { --m_HP; }
+	virtual void Damage() { --m_HP; }
 
+	//사운드 관련
+	void BGM_SetAndPlay(const LPCWSTR File_Path);
+
+	// 이미지 관련
 	Gdiplus::ImageAttributes* GetImgAttr() { return &m_imgAttr; }
 	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); } // A 컬러에서부터 B 컬러 사이 값들을 투명하게 만들어줌
 

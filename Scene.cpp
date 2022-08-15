@@ -33,6 +33,21 @@ void cScene::DeleteSceneImg()
 	}
 }
 
+void cScene::BGM_SetAndPlay(const LPCWSTR File_Path)
+{
+	mciOpen.lpstrDeviceType = L"mpegvideo";
+
+	mciSendCommandW(dwID, MCI_CLOSE, 0, NULL); // 음악 종료
+	mciOpen.lpstrElementName = File_Path; // 파일 경로 입력
+
+	mciSendCommandW(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD_PTR)&mciOpen);
+	dwID = mciOpen.wDeviceID;
+
+	// play & repeat
+	mciSendCommandW(dwID, MCI_PLAY, MCI_DGV_PLAY_REPEAT, (DWORD_PTR)&mciPlay);
+
+}
+
 void cScene::Update()
 {
 	//m_BGM->Update();

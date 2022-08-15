@@ -121,6 +121,9 @@
     <ClInclude Include="Monster_Flying.h">
       <Filter>Engine\03. Object\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Monster_Thorn.h">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -169,6 +172,9 @@
       <Filter>Engine\02. Manager\TimeManager</Filter>
     </ClCompile>
     <ClCompile Include="Monster_Flying.cpp">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster_Thorn.cpp">
       <Filter>Engine\03. Object\Monster</Filter>
     </ClCompile>
   </ItemGroup>
