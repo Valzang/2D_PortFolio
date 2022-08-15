@@ -53,6 +53,12 @@
     <Filter Include="Default\etc">
       <UniqueIdentifier>{956818e2-1185-49ed-943a-989371acf40c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\05. Sound">
+      <UniqueIdentifier>{1a06cd83-a55a-40b4-acd7-f5f487dfd91c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\05. Sound\FMOD">
+      <UniqueIdentifier>{aecacfa7-0d0c-49c8-b731-874561f4a14c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">

@@ -2,6 +2,7 @@
 #include "CustomDefine.h"
 #include "Object.h"
 
+
 // 헤더 파일을 부를 때와는 다르게
 // 전방선언을 사용할 시 해당 class 내용이 바뀌어도 대응하지 않음.
 // 즉, 컴파일 시간에 이득.
@@ -16,9 +17,10 @@ private:
 	Image* m_SceneImg;  // 이미지 파일
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 	int m_MonsterCount;					// 몬스터 수
+	//cSound* m_BGM;
 
 public:
-	cScene() : m_SceneImg(nullptr), m_MonsterCount(0) {}
+	cScene() : m_SceneImg(nullptr), m_MonsterCount(0){}
 	virtual ~cScene();
 
 
@@ -43,6 +45,10 @@ public:
 
 	int GetMonsterSize() { return m_MonsterCount; }
 	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
+
+	//cSound* GetBGM() { return m_BGM; }
+	//void SetBGM(const char* _BGM_Path) { if (m_BGM == nullptr) { m_BGM = new cSound(_BGM_Path, true); } }
+	//void DeleteBGM() { if (m_BGM != nullptr) { delete m_BGM; m_BGM = nullptr; } }
 
 	vector<cObject*>* GetCurObjectVec() { return m_arr_obj; }
 

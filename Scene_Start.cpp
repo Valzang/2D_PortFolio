@@ -11,6 +11,7 @@
 cScene_Start::cScene_Start()
 {
 	SetSceneImg(L"Image/Scene1.png");
+	//SetBGM("Sound/BGM/Penguin Brothers OST Ship Area.mp3");
 }
 
 cScene_Start::~cScene_Start()

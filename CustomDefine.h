@@ -8,7 +8,20 @@
 #include <assert.h>
 #include <map>
 
+
 #pragma comment(lib,"Msimg32.lib")
+
+
+
+// SOUND ================================================================
+
+//#pragma comment(lib, "fmodex_vc.lib")
+//#include "fmod.hpp"
+//#include "fmod_codec.h"
+//#include "fmod_dsp.h"
+//#include "fmod_errors.h"
+//#include "fmod_memoryinfo.h"
+//#include "fmod_output.h"
 
 // GDI==================================================================
 #include <objidl.h>

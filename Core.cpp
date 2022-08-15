@@ -4,7 +4,7 @@
 cCore::cCore() : m_hBit(NULL), m_hDC(NULL)
 , m_hWnd(NULL), m_memDC(NULL), m_ptResolution({ 0, 0 })
 {
-
+	//cSound::Init();
 }
 
 cCore::~cCore()
@@ -16,6 +16,8 @@ cCore::~cCore()
 	// CreateCompatibleDC로 만든건 DeleteDC로 지워야함.
 	DeleteDC(m_memDC);
 	DeleteObject(m_hBit);
+
+	//cSound::Release();
 
 }
 

@@ -3,6 +3,7 @@
 class cMonster_Flying : public cMonster
 {
 private:
+	double m_FlyingTime;
 
 public:
 	cMonster_Flying();

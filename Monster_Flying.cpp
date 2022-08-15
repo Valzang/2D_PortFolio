@@ -1,6 +1,6 @@
 #include "Monster_Flying.h"
 
-cMonster_Flying::cMonster_Flying()
+cMonster_Flying::cMonster_Flying() : m_FlyingTime(0)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/FlyingMonster.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
@@ -24,16 +24,22 @@ bool cMonster_Flying::Update()
 	if (GetHP() <= 0)
 		return false;
 	Vec2 CurPos = GetPos();
-
-	// 진행 방향으로 시간당 m_Speed 만큼 이동
-	if (CurPos.y >= GetFirstY() + 30.f)
+	m_FlyingTime += DELTA_TIME;
+	if (m_FlyingTime >= 0.9f)
+	{
 		m_Speed *= -1;
-	else if(CurPos.y <= GetFirstY() - 30.f)
+		m_FlyingTime = 0;
+	}
+	else if (m_FlyingTime >= 0.45f && m_Speed > 0)
+	{
 		m_Speed *= -1;
+	}
 
 	CurPos.y += DELTA_TIME * m_Speed;
 
 	SetPos(CurPos);
+	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
+	CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
 	SetPosOtherside();
 	return true;
 }

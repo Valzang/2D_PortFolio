@@ -35,6 +35,7 @@ void cScene::DeleteSceneImg()
 
 void cScene::Update()
 {
+	//m_BGM->Update();
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		for (INT j = (INT)(m_arr_obj[i].size())-1; j >= 0; --j)
