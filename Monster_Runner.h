@@ -20,6 +20,10 @@ public:
 	virtual bool Update() override;
 	virtual void Render(HDC _hdc) override;
 
+	int GetCurBHState() { return m_CurBehaviorState; }
+	void SetCurBHState(int _val) { m_CurBehaviorState = _val; }
+	void SetBHTime(double _val) { m_BehaviorTime = _val; }
+
 	void ChooseBehavior();
 	void SensePlayer();
 	bool SenseBomb();

@@ -101,8 +101,9 @@ bool cMonster_Runner::Update()
 	}
 	else
 	{
+
 		if (!isOnPlatform() || GetThruRotate())
-			CurPos.y += 800.f * DELTA_TIME;
+			CurPos.y += 100.f * m_Dir.y * DELTA_TIME;
 		else
 			m_Speed = 200.f;
 

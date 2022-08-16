@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Bomb.h"
+#include "Monster_Runner.h"
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
 					m_Dir(Vec2(-2.f, 600.f)), m_isRotating(), RotFromDown(false),
@@ -66,6 +67,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 		if ((abs(curObj_Pos.x - otherObj_Pos.x) < (curObj_Scale.x + otherObj_Scale.x) / 2.f)
 			&& (abs(curObj_Pos.y - otherObj_Pos.y) < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
 		{					
+			if (GROUP_TYPE == (INT)GROUP_TYPE::MONSTER)
+				int temp = 4;
 			// 아랫쪽에서 충돌했을 때
 			if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
 			{
@@ -139,7 +142,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
-						}
+						}						
 					}
 					break;
 				}				
@@ -220,6 +223,19 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							else if (curBomb->GetShoot())
 								curBomb->SetExplode();
 						}
+						else if (curObj_GroupType == (INT)GROUP_TYPE::PLAYER
+								 && otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						{
+							cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
+							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(otherObj[i]);
+							if (curMonster->GetCurBHState() != 4)
+							{
+								curPlayer->SetAttackTime(0.2f);
+								curMonster->SetBHTime(1.f);
+								curMonster->SetCurBHState(0);
+								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX), curMonster->GetPos().y));								
+							}
+						}
 					}
 						break;
 				}
@@ -260,6 +276,19 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								otherObj[i]->Damage();
 							else if (curBomb->GetShoot())
 								curBomb->SetExplode();
+						}
+						else if (curObj_GroupType == (INT)GROUP_TYPE::PLAYER
+								 && otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						{
+							cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
+							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(otherObj[i]);
+							if (curMonster->GetCurBHState() != 4)
+							{
+								curPlayer->SetAttackTime(0.2f);
+								curMonster->SetBHTime(1.f);
+								curMonster->SetCurBHState(0);
+								curMonster->SetPos(Vec2(curMonster->GetPos().x + (curObj_RightX - otherObj_LeftX), curMonster->GetPos().y));
+							}
 						}
 					}
 						break;

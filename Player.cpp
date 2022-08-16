@@ -281,6 +281,7 @@ bool cPlayer::Update()
 
 	SetPos(Pos);
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
+	CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
 	if (GetRotating())
 	{
 		if (m_Rotation_Degree >= 180 || m_Rotation_Degree <= -180)
@@ -296,7 +297,6 @@ bool cPlayer::Update()
 			m_isAttached = Player_Pos.y > Platform_Pos.y ? true : false;
 		}
 	}
-
 
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
 	

@@ -43,7 +43,7 @@ void cScene_Start::Enter()
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 	MonsterObj = new cMonster_Runner;
-	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 6.f });
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
 	Vec2 curcurPos = MonsterObj->GetPos();
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);

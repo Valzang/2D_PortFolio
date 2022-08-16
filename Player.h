@@ -43,6 +43,8 @@ public:
     bool isAttaching() { return m_isAttached; }
     void SetAttach() { m_isAttached = true; }    
 
+    void SetAttackTime(double _val) { m_AfterAttackTime = _val; }
+
     virtual void Damage();
 
     void SetSpawnPlace(Vec2 _Val) { m_SpawnPlace = _Val; }
