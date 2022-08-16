@@ -124,6 +124,9 @@
     <ClInclude Include="Monster_Thorn.h">
       <Filter>Engine\03. Object\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="Monster_Runner.h">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -175,6 +178,9 @@
       <Filter>Engine\03. Object\Monster</Filter>
     </ClCompile>
     <ClCompile Include="Monster_Thorn.cpp">
+      <Filter>Engine\03. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster_Runner.cpp">
       <Filter>Engine\03. Object\Monster</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@
 #include "Monster.h"
 #include "Monster_Flying.h"
 #include "Monster_Thorn.h"
+#include "Monster_Runner.h"
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
 #include "Platform_Rotate.h"
@@ -36,16 +37,24 @@ void cScene_Start::Enter()
 	cMonster* MonsterObj = nullptr;
 	MonsterObj = new cMonster_Flying;
 	MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 2.5f });
+	//Vec2 curcurPos = MonsterObj->GetPos();
 	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
-	MonsterObj = new cMonster_Thorn;
-	MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
-	Vec2 curcurPos = MonsterObj->GetPos();
+	MonsterObj = new cMonster_Runner;
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
+	
 	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+
+	//MonsterObj = new cMonster_Thorn;
+	//MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
+	//Vec2 curcurPos = MonsterObj->GetPos();
+	//MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+
+	//AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 	//SetPlatformSize(6);
 

@@ -119,7 +119,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
-						otherObj_Player->Damage();
+						if(!otherObj_Player->GetRotating())
+							otherObj_Player->Damage();
 					}						
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -158,7 +159,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
-						otherObj_Player->Damage();
+						if (!otherObj_Player->GetRotating())
+							otherObj_Player->Damage();
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -191,7 +193,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
-						otherObj_Player->Damage();
+						if (!otherObj_Player->GetRotating())
+							otherObj_Player->Damage();
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -227,7 +230,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
-						otherObj_Player->Damage();
+						if (!otherObj_Player->GetRotating())
+							otherObj_Player->Damage();
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:

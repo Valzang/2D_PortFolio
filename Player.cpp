@@ -157,7 +157,8 @@ bool cPlayer::Update()
 				&& (KEY_CHECK(KEY::L, KEY_STATE::NONE) || KEY_CHECK(KEY::L, KEY_STATE::UP)))
 			{
 				SetRotFromDown(true);
-				Rotate_Platform();
+				if(Rotate_Platform())
+					m_AttachingTime = 0.f;
 			}
 		}
 		if ((KEY_CHECK(KEY::K, KEY_STATE::DOWN) || KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && !GetRotating()) // ¾Æ·¡¸¦ Â¤À½.
