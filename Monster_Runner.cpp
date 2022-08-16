@@ -109,21 +109,16 @@ bool cMonster_Runner::Update()
 		switch (m_CurBehaviorState)
 		{
 			case Forward:
-			{
 				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
-			}
-			break;
+				break;
+				
 			case Run:
-			{
 				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
 				CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
-			}
-			break;
+				break;
 			case Retreat:
-			{
 				CurPos.x -= DELTA_TIME * (m_Speed / 1.5f) * GetDirection();
-			}
-			break;
+				break;
 			default:
 				break;
 		}
