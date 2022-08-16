@@ -11,9 +11,6 @@ private:
     bool m_isExploded;
     int m_ExplosionTime;
 
-    // 플랫폼에 의해 발사되었는지
-    bool m_isShoot;
-
     // 발사속도
     float m_ShootSpeed;
 
@@ -23,8 +20,6 @@ private:
     // 
     bool m_DirChanged;
 
-    // 플랫폼에 의해 위쪽으로 튕겨나가는지
-    bool m_RotateToUp;
 
 public:
     cBomb();
@@ -32,10 +27,6 @@ public:
 
     virtual bool Update();
     virtual void Render(HDC _hdc);
-
-    // 발사되었는지
-    bool GetIsShoot() { return m_isShoot; }
-    void SetIsShoot(bool _val) { m_isShoot = _val; }
 
     // 몇번 땅에 튕기는 지
     int GetBounceCount() { return m_BounceCount; }
@@ -46,7 +37,6 @@ public:
     bool GetExplode() { return m_isExploded; }
     void SetExplode();
 
-    void SetRotateDir(bool _val) { m_RotateToUp = _val; }
 
 };
 

@@ -6,7 +6,7 @@
 // PI/4 => 우측아래대각선		-PI/4 => 우측위 대각선
 
 cBomb::cBomb() : m_BombImg(nullptr), m_TimeLimit(0.0), m_ExplosionRange(0.0), m_BounceCount(0), m_isExploded(false),
-				m_DirChanged(false), m_RotateToUp(false), m_isShoot(false), m_ShootSpeed(600.f), m_ExplosionTime(0)
+				m_DirChanged(false), m_ShootSpeed(600.f), m_ExplosionTime(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::BOMB;
 	SetDir(Vec2(-0.8f, -3.f));
@@ -48,7 +48,7 @@ bool cBomb::Update()
 				if (m_Dir.y <= 2)
 				{
 					// 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
-					if (!m_isShoot)
+					if (!GetShoot())
 						m_Dir.y += 8.f * DELTA_TIME;
 					else
 						m_Dir.y += 6.f * DELTA_TIME;
@@ -62,7 +62,7 @@ bool cBomb::Update()
 			}
 
 			// 회전 중이라면
-			else if (GetRotating() && !m_isShoot && GetBounceCount() < 3)
+			else if (GetRotating() && !GetShoot() && GetBounceCount() < 3)
 			{
 				float diff = Pos.x - GetRotator()->GetPos().x;
 
@@ -70,7 +70,7 @@ bool cBomb::Update()
 				if (diff > 0)
 				{
 					//방향이 위로 날아가야할 때
-					if (m_RotateToUp)
+					if (GetRotateDir())
 					{
 						SetDirection(-1);
 						SetDir(Vec2(-diff, -0.7f));
@@ -78,7 +78,7 @@ bool cBomb::Update()
 						//m_Dir.x -= diff / 97.f;
 						m_Dir.y = -1.2f;
 						SetOnPlatform(false);
-						m_isShoot = true;
+						SetShoot(true);
 					}
 					//방향이 아래로 떨어져야 할 때
 					else
@@ -92,7 +92,7 @@ bool cBomb::Update()
 				else
 				{
 					//방향이 위로 날아가야할 때
-					if (m_RotateToUp)
+					if (GetRotateDir())
 					{
 						SetDirection(1);
 						SetDir(Vec2(diff, -0.7f));
@@ -100,7 +100,7 @@ bool cBomb::Update()
 						//m_Dir.x += diff/97.f;
 						m_Dir.y = -1.2f;
 						SetOnPlatform(false);
-						m_isShoot = true;
+						SetShoot(true);
 					}
 					//방향이 아래로 떨어져야 할 때
 					else
@@ -115,7 +115,7 @@ bool cBomb::Update()
 
 			SetPos(Pos);
 			CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);			
-			if(m_isShoot)
+			if(GetShoot())
 				CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
 
 			SetPosOtherside();

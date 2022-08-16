@@ -46,12 +46,12 @@ static void Gdi_End()
 //
 // For Debugging========================================================
 //
-//#include <iostream>
-//#ifdef UNICODE
-//#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
-//#else
-//#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
-//#endif
+#include <iostream>
+#ifdef UNICODE
+#pragma comment(linker, "/entry:wWinMainCRTStartup /subsystem:console")
+#else
+#pragma comment(linker, "/entry:WinMainCRTStartup /subsystem:console")
+#endif
 // =====================================================================
 
 using namespace std;
@@ -135,10 +135,11 @@ enum class GROUP_TYPE
 	PLATFORM_ROTATE,
 	PLAYER,
 	MONSTER,
+	MONSTER_RUNNER,
 	THING,
 	BOMB,
 
-	END = 8,
+	END = 10,
 };
 
 enum class SCENE_TYPE

@@ -4,9 +4,9 @@
 #include "Bomb.h"
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
-					m_Dir(Vec2(-2.f, 600.f)), m_Blocked {}, m_isRotating(), RotFromDown(false),
-					m_BombThruRotate(false), m_Rotator(nullptr), m_FirstPos_Y(0.f), m_HP(1),
-					dwID(0), mciOpen(), mciPlay()
+					m_Dir(Vec2(-2.f, 600.f)), m_isRotating(), RotFromDown(false),
+					m_BombThruRotate(false), m_Rotator(nullptr), m_RotateToUp(false), m_FirstPos_Y(0.f), m_HP(1),
+					dwID(0), mciOpen(), mciPlay(), m_isShoot(false)
 { 
 	m_Dir.Normalize(); 
 	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 
@@ -79,9 +79,15 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						{
 							static bool Already_Pass = false;
 							if (!Already_Pass)
+							{
 								curObj->SetOnPlatform(false);
+								curObj->SetShoot(false);
+							}
 							else
+							{
 								curObj->SetOnPlatform(true);
+								curObj->SetShoot(false);
+							}
 							Already_Pass = true;
 						}
 						// 통과할 필요 없을 때 ( 일반적 케이스 )
@@ -94,25 +100,28 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 								int curBounceCnt = curBomb->GetBounceCount();
 								// 3번 튕기기 전이면서 발사된 상태였을 때
-								if (curBomb->GetIsShoot() && curBounceCnt < 3)
+								if (curBomb->GetShoot() && curBounceCnt < 3)
 								{
 									curBomb->SetBounce();
 									curBomb->IncreaseBounceCount();
 									int temp = curBomb->GetBounceCount();
 									if (curBomb->GetBounceCount() >= 3)
 									{
-										curBomb->SetIsShoot(false);
+										curBomb->SetShoot(false);
 										curBomb->SetOnPlatform(true);
 									}
 								}
 								else
 								{
-									curBomb->SetIsShoot(false);
+									curBomb->SetShoot(false);
 									curBomb->SetOnPlatform(true);
 								}
 							}
 							else
+							{
 								curObj->SetOnPlatform(true);
+								curObj->SetShoot(false);
+							}
 						}
 					}
 					break;
@@ -188,6 +197,10 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						curObj_Pos.x += (otherObj_RightX - curObj_LeftX);
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
 							curObj->SetDirection(1);
+						if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						{
+							curObj->SetShoot(false);
+						}
 					}
 					break;
 					case (INT)GROUP_TYPE::PLAYER:
@@ -204,7 +217,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
-							else if (curBomb->GetIsShoot())
+							else if (curBomb->GetShoot())
 								curBomb->SetExplode();
 						}
 					}
@@ -224,7 +237,11 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						// 넘어온 만큼 위치 보정
 						curObj_Pos.x -= (curObj_RightX - otherObj_LeftX);
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
-							curObj->SetDirection(-1);
+							curObj->SetDirection(-1); 
+						if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						{
+							curObj->SetShoot(false);
+						}
 					}
 					break;
 					case (INT)GROUP_TYPE::PLAYER:
@@ -241,7 +258,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
-							else if (curBomb->GetIsShoot())
+							else if (curBomb->GetShoot())
 								curBomb->SetExplode();
 						}
 					}

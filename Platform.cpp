@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Bomb.h"
+#include "Monster.h"
 
 cPlatform::cPlatform() : m_PlatformImg(NULL), m_DecreaseDegree(0)
 {
@@ -29,6 +30,8 @@ bool cPlatform::Update()
 		Vec2 Platform_Scale = GetScale();
 
 		cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
+
+		// 플레이어 관련 ==========================================================
 		cPlayer* curPlayer = dynamic_cast<cPlayer*>(curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]);
 		Vec2 curPlayer_Pos = curPlayer->GetPos();
 		Vec2 curPlayer_Scale = curPlayer->GetScale();
@@ -41,6 +44,42 @@ bool cPlatform::Update()
 			curPlayer->SetRotating(true);
 			curPlayer->SetUnsitted();
 		}
+
+		// 몬스터 관련 ==========================================================
+
+		vector<cObject*> curMonsterVec = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(UINT)GROUP_TYPE::MONSTER];
+		for (int i = 0; i < curMonsterVec.size(); ++i)
+		{
+			if (curMonsterVec[i]->GetCurGroupType() != (INT)GROUP_TYPE::MONSTER_RUNNER)
+				continue;
+			cObject* curMonster		= curMonsterVec[i];
+			Vec2 curMonster_Pos		= curMonster->GetPos();
+			Vec2 curMonster_Scale	= curMonster->GetScale();
+
+			if ((curMonster_Pos.x > Platform_Pos.x - Platform_Scale.x / 2.f) && (curMonster_Pos.x < Platform_Pos.x + Platform_Scale.x / 2.f)
+				&& (abs(curMonster_Pos.y - Platform_Pos.y) <= (curMonster_Scale.y + Platform_Scale.y) / 2.f))
+			{
+				curMonster->SetRotator(this);
+				curMonster->SetRotating(true);
+				// 아랫방향
+				if (m_DecreaseDegree > 0)
+				{
+					if (curMonster_Pos.x > Platform_Pos.x)
+						curMonster->SetRotateDir(false);
+					else
+						curMonster->SetRotateDir(true);
+				}
+				// 윗 방향
+				else
+				{
+					if (curMonster_Pos.x > Platform_Pos.x)
+						curMonster->SetRotateDir(true);
+					else
+						curMonster->SetRotateDir(false);
+				}
+			}
+		}
+		
 
 		for (int i = 0; i < curScene->GetCurObjectVec()[(INT)GROUP_TYPE::BOMB].size(); ++i)
 		{

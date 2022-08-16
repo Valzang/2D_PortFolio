@@ -26,9 +26,14 @@ private:
 
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수	
 
+    // 플랫폼에 의해 위쪽으로 튕겨나가는지
+	bool m_RotateToUp;
+
+	// 회전 플랫폼에 의해 발사되는지
+	bool m_isShoot;
+
 protected:
 	Vec2 m_Dir;
-	bool m_Blocked[(UINT)KEY::RIGHT+1]; // 좌측/우측 벽이 막혔는지
 	int m_curGroupType;					// 현재 무슨 타입인지
 	bool RotFromDown;
 
@@ -61,6 +66,10 @@ public:
 	bool GetThruRotate() { return m_BombThruRotate;	}
 	void SetThruRotate(bool _val) { m_BombThruRotate = _val; }
 
+	// 플랫폼에 의해 발사되는지
+	bool GetShoot() { return m_isShoot; }
+	void SetShoot(bool _val) { m_isShoot = _val; }
+
 	// 크기 관련
 	Vec2 GetScale() { return m_Scale; }
 	void SetScale(Vec2 _Scale) { m_Scale = _Scale; }
@@ -86,8 +95,12 @@ public:
 	bool GetRotFromDown() { return RotFromDown; }
 	void SetRotFromDown(bool _val) { RotFromDown = _val; }
 
+	// 플랫폼에 의해 위쪽으로 튕겨나가는지
+	bool GetRotateDir() { return m_RotateToUp; }
+	void SetRotateDir(bool _val) { m_RotateToUp = _val; }
+
 	// 충돌체크
-	void CollisionCheck(cObject* curObj, int GROUP_TYPE);
+	virtual void CollisionCheck(cObject* curObj, int GROUP_TYPE);
 
 	// 현재 그룹타입
 	int GetCurGroupType() { return m_curGroupType; }
