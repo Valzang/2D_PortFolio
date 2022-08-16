@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Bomb.h"
 #include "Monster.h"
+#include "Object.h"
 
 cPlatform::cPlatform() : m_PlatformImg(NULL), m_DecreaseDegree(0)
 {

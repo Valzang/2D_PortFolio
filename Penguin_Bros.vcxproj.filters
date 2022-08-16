@@ -53,11 +53,8 @@
     <Filter Include="Default\etc">
       <UniqueIdentifier>{956818e2-1185-49ed-943a-989371acf40c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\05. Sound">
-      <UniqueIdentifier>{1a06cd83-a55a-40b4-acd7-f5f487dfd91c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\05. Sound\FMOD">
-      <UniqueIdentifier>{aecacfa7-0d0c-49c8-b731-874561f4a14c}</UniqueIdentifier>
+    <Filter Include="Engine\02. Manager\UI_Manager">
+      <UniqueIdentifier>{75611d97-3da1-4aaa-8f77-ef02e32d30f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +124,9 @@
     <ClInclude Include="Monster_Runner.h">
       <Filter>Engine\03. Object\Monster</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Manager.h">
+      <Filter>Engine\02. Manager\UI_Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -182,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="Monster_Runner.cpp">
       <Filter>Engine\03. Object\Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Manager.cpp">
+      <Filter>Engine\02. Manager\UI_Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -31,7 +31,6 @@ cMonster_Runner::~cMonster_Runner()
 
 bool cMonster_Runner::Update()
 {
-	//m_MonsterImg->RotateFlip(RotateNoneFlipX);
 	if (GetHP() <= 0)
 		return false;
 	Vec2 CurPos = GetPos();

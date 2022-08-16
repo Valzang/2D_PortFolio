@@ -4,8 +4,6 @@
 #include "KeyManager.h"
 #include "TimeManager.h"
 
-//extern short** g_PossibleArea;
-
 class cObject
 {
 private:
