@@ -20,7 +20,8 @@ private:
     double m_DashTime;    // 몇 초 간 대쉬를 하는지
     double m_DashCoolTime; // 대쉬 간 쿨타임    
     double m_AfterAttackTime; //폭탄 후 몇초간 뒤로 밀려날건지
-    double m_AttachingTime;
+    double m_AttachingTime; // 몇 초 간 천장에 붙어있을지
+    double m_InvincibleTime; // 몇 초간 무적일지
 
     Vec2 m_SpawnPlace; //스폰되는 장소
 

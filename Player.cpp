@@ -11,7 +11,7 @@
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true), m_isDamaging(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
-					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
+					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(2.f)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
@@ -150,7 +150,8 @@ bool cPlayer::Update()
 	}
 	else
 	{
-		if (!(KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && (KEY_CHECK(KEY::I, KEY_STATE::DOWN) || KEY_CHECK(KEY::I, KEY_STATE::HOLD))) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
+		if ((KEY_CHECK(KEY::I, KEY_STATE::DOWN) || KEY_CHECK(KEY::I, KEY_STATE::HOLD)) 
+			&& !(KEY_CHECK(KEY::K, KEY_STATE::HOLD))) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 		{
 			if (m_isAttached && !GetRotating()
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
@@ -299,6 +300,7 @@ bool cPlayer::Update()
 	}
 
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
+	m_InvincibleTime -= DELTA_TIME;
 	
 
 	return true;
@@ -471,7 +473,8 @@ bool cPlayer::Rotate_Platform()
 		// 플레이어의 좌우 끝 값이 플랫폼의 안에 있을 때
 		if (curPos_Right-15.f > Left_End && curPos_Left+15.f < Right_End
 			&& ((!m_isJumping && Top_End <= curPos_Down + m_Dir.y * DELTA_TIME && Top_End > curPos.y)
-				|| m_isAttached || (m_isJumping && Bottom_End >= curPos_Up + m_Dir.y * DELTA_TIME) && Bottom_End < curPos.y)  )
+				|| ((m_isAttached && Bottom_End >= curPos_Up) && Bottom_End < curPos.y)
+			|| ((m_isJumping && Bottom_End >= curPos_Up + m_Dir.y * DELTA_TIME) && Bottom_End < curPos.y)))
 		{
 			curRotate[i]->SetRotating(true);
 			curRotate[i]->SetRotator(this);
@@ -484,7 +487,7 @@ bool cPlayer::Rotate_Platform()
 
 void cPlayer::Damage()
 {
-	if (!m_Spawning && !m_isDamaging)
+	if (!m_Spawning && !m_isDamaging && m_InvincibleTime <= 0.f)
 	{
 		SetHP(GetHP() - 1);
 		BGM_SetAndPlay(L"Sound/EFFECT/Player_Damaged.wav");
@@ -507,6 +510,7 @@ void cPlayer::Respawn()
 	m_isDashing = false;
 	m_isJumping = false;
 	m_isAttached = false;
+	m_InvincibleTime = 2.f;
 	SetDir(Vec2(-2.f, 3.f));
 	SetDirection(1);
 }

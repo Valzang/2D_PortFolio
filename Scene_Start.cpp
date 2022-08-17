@@ -23,7 +23,7 @@ cScene_Start::~cScene_Start()
 void cScene_Start::Enter()
 {
 	// 플레이어 추가 및 위치 설정
-	cPlayer* PlayerObj = new cPlayer(Vec2(640.f,300.f));
+	cPlayer* PlayerObj = new cPlayer(Vec2(640.f,400.f));
 	AddObject(PlayerObj, GROUP_TYPE::PLAYER);
 
 
@@ -43,7 +43,7 @@ void cScene_Start::Enter()
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 	MonsterObj = new cMonster_Runner;
-	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y *11.f });
 	Vec2 curcurPos = MonsterObj->GetPos();
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
@@ -59,6 +59,18 @@ void cScene_Start::Enter()
 
 	//Platform Object 추가
 	cPlatform* PlatformObj = nullptr;
+	PlatformObj = new cPlatform_Rotate;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 30 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 30 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 30 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
 	PlatformObj = new cPlatform_Rotate;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f+120 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);

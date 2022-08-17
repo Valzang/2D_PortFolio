@@ -7,7 +7,7 @@ random_device rd;
 mt19937 gen(rd());
 uniform_int_distribution<int> state(0, 2);
 uniform_int_distribution<int> forward_time(2, 4);
-uniform_int_distribution<int> stay_time(1, 2);
+uniform_int_distribution<int> stay_time(0, 2);
 
 cMonster_Runner::cMonster_Runner()
 	:m_BehaviorTime(), m_CurBehaviorState(0), m_ChangeBehavior(true)

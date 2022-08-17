@@ -78,38 +78,42 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						// 회전문을 1번만 통과해야할 때
 						if (curObj->GetThruRotate() && otherObj[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
 						{
-							static cObject* curRotPlatform = otherObj[i];
-							if (curRotPlatform == nullptr)
-								curRotPlatform = otherObj[i];
-
-							if(curRotPlatform == otherObj[i])
+							if (curObj->GetCurGroupType() == (INT)GROUP_TYPE::BOMB)
 							{
-								curObj->SetOnPlatform(false);
-								curObj->SetShoot(false);
+								static bool Already_Pass = false;
+								if (!Already_Pass)
+								{
+									curObj->SetOnPlatform(false);
+									curObj->SetShoot(false);
+									Already_Pass = true;
+								}
+								else
+								{
+									curObj->SetOnPlatform(true);
+									curObj->SetShoot(false);
+									curObj->SetThruRotate(false);
+									Already_Pass = false;
+								}
 							}
 							else
 							{
-								curObj->SetOnPlatform(true);
-								curObj->SetShoot(false);
-								curObj->SetThruRotate(false);
-								curRotPlatform = nullptr;
+								static cObject* curRotPlatform = otherObj[i];
+								if (curRotPlatform == nullptr)
+									curRotPlatform = otherObj[i];
+
+								if (curRotPlatform == otherObj[i])
+								{
+									curObj->SetOnPlatform(false);
+									curObj->SetShoot(false);
+								}
+								else
+								{
+									curObj->SetOnPlatform(true);
+									curObj->SetShoot(false);
+									curObj->SetThruRotate(false);
+									curRotPlatform = nullptr;
+								}
 							}
-							
-							//static bool Already_Pass = false;
-							//if (!Already_Pass)
-							//{
-							//	curObj->SetOnPlatform(false);
-							//	curObj->SetShoot(false);
-							//	Already_Pass = true;
-							//}
-							//else
-							//{
-							//	curObj->SetOnPlatform(true);
-							//	curObj->SetShoot(false);
-							//	curObj->SetThruRotate(false);
-							//	Already_Pass = false;
-							//}
-							
 						}
 						// 통과할 필요 없을 때 ( 일반적 케이스 )
 						else
