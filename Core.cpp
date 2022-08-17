@@ -63,14 +63,17 @@ int cCore::Init(HWND _hWnd, POINT _ptResolution)
 
 void cCore::Progress()
 {
+	//포커싱 된 윈도우가 누구인지
+	HWND hWnd = GetFocus();
 
-	cTimeManager::GetInstance()->Update();
-	if (DELTA_TIME >= 0.014f)
+	// 포커싱 된 윈도우가 있다면
+	if (hWnd != nullptr)
 	{
+		cTimeManager::GetInstance()->Update();
 		cKeyManager::GetInstance()->Update();
 		cSceneManager::GetInstance()->Update();
 		cUI_Manager::GetInstance()->Update();
-		Render();	
+		Render();
 	}
 }
 

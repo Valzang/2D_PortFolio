@@ -66,9 +66,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 		// 충돌했을 때 (사각형 기준)
 		if ((abs(curObj_Pos.x - otherObj_Pos.x) < (curObj_Scale.x + otherObj_Scale.x) / 2.f)
 			&& (abs(curObj_Pos.y - otherObj_Pos.y) < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
-		{					
-			if (GROUP_TYPE == (INT)GROUP_TYPE::MONSTER)
-				int temp = 4;
+		{	
 			// 아랫쪽에서 충돌했을 때
 			if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
 			{
@@ -80,8 +78,11 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						// 회전문을 1번만 통과해야할 때
 						if (curObj->GetThruRotate() && otherObj[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
 						{
-							static bool Already_Pass = false;
-							if (!Already_Pass)
+							static cObject* curRotPlatform = otherObj[i];
+							if (curRotPlatform == nullptr)
+								curRotPlatform = otherObj[i];
+
+							if(curRotPlatform == otherObj[i])
 							{
 								curObj->SetOnPlatform(false);
 								curObj->SetShoot(false);
@@ -90,8 +91,25 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							{
 								curObj->SetOnPlatform(true);
 								curObj->SetShoot(false);
+								curObj->SetThruRotate(false);
+								curRotPlatform = nullptr;
 							}
-							Already_Pass = true;
+							
+							//static bool Already_Pass = false;
+							//if (!Already_Pass)
+							//{
+							//	curObj->SetOnPlatform(false);
+							//	curObj->SetShoot(false);
+							//	Already_Pass = true;
+							//}
+							//else
+							//{
+							//	curObj->SetOnPlatform(true);
+							//	curObj->SetShoot(false);
+							//	curObj->SetThruRotate(false);
+							//	Already_Pass = false;
+							//}
+							
 						}
 						// 통과할 필요 없을 때 ( 일반적 케이스 )
 						else
@@ -123,7 +141,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							else
 							{
 								curObj->SetOnPlatform(true);
-								curObj->SetShoot(false);
+								curObj->SetShoot(false);	
+								curObj->SetThruRotate(false);
 							}
 						}
 					}
@@ -233,7 +252,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								curPlayer->SetAttackTime(0.2f);
 								curMonster->SetBHTime(1.f);
 								curMonster->SetCurBHState(0);
-								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX), curMonster->GetPos().y));								
+								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX)*2, curMonster->GetPos().y));								
 							}
 						}
 					}
@@ -287,7 +306,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								curPlayer->SetAttackTime(0.2f);
 								curMonster->SetBHTime(1.f);
 								curMonster->SetCurBHState(0);
-								curMonster->SetPos(Vec2(curMonster->GetPos().x + (curObj_RightX - otherObj_LeftX), curMonster->GetPos().y));
+								curMonster->SetPos(Vec2(curMonster->GetPos().x + (curObj_RightX - otherObj_LeftX)*2, curMonster->GetPos().y));
 							}
 						}
 					}
@@ -295,9 +314,133 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				}
 				
 			}			
+			
 		}
 	}
 	curObj->SetPos(curObj_Pos);
+}
+
+void cObject::CollisionPlatform(cObject* curObj, cObject* otherObj)
+{
+	Vec2 curObj_Pos = curObj->GetPos();
+	Vec2 curObj_Scale = curObj->GetScale();
+
+	// 현 오브젝트의 끝점들
+	float curObj_RightX = curObj_Pos.x + curObj_Scale.x / 2.f;
+	float curObj_LeftX = curObj_Pos.x - curObj_Scale.x / 2.f;
+	float curObj_UpY = curObj_Pos.y - curObj_Scale.y / 2.f;
+	float curObj_DownY = curObj_Pos.y + curObj_Scale.y / 2.f;
+
+	int curObj_GroupType = curObj->GetCurGroupType();
+
+	// 부딪힌 오브젝트의 끝점들
+	Vec2 otherObj_Pos = otherObj->GetPos();
+	Vec2 otherObj_Scale = otherObj->GetScale();
+
+	float otherObj_RightX = otherObj_Pos.x + otherObj_Scale.x / 2.f;
+	float otherObj_LeftX = otherObj_Pos.x - otherObj_Scale.x / 2.f;
+	float otherObj_UpY = otherObj_Pos.y - otherObj_Scale.y / 2.f;
+	float otherObj_DownY = otherObj_Pos.y + otherObj_Scale.y / 2.f;
+
+	// 아랫쪽에서 충돌했을 때
+	if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
+	{
+		// 회전문을 1번만 통과해야할 때
+		if (curObj->GetThruRotate() && otherObj->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
+		{
+			static cObject* curRotPlatform = otherObj;
+			if (curRotPlatform == nullptr)
+				curRotPlatform = otherObj;
+
+			if (curRotPlatform == otherObj)
+			{
+				curObj->SetOnPlatform(false);
+				curObj->SetShoot(false);
+			}
+			else
+			{
+				curObj->SetOnPlatform(true);
+				curObj->SetShoot(false);
+				curObj->SetThruRotate(false);
+				curRotPlatform = nullptr;
+			}
+		}
+		// 통과할 필요 없을 때 ( 일반적 케이스 )
+		else
+		{
+			// 넘어간 만큼 위치 보정
+			curObj_Pos.y -= (curObj_DownY - otherObj_UpY);
+			if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
+			{
+				cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
+				int curBounceCnt = curBomb->GetBounceCount();
+				// 3번 튕기기 전이면서 발사된 상태였을 때
+				if (curBomb->GetShoot() && curBounceCnt < 3)
+				{
+					curBomb->SetBounce();
+					curBomb->IncreaseBounceCount();
+					int temp = curBomb->GetBounceCount();
+					if (curBomb->GetBounceCount() >= 3)
+					{
+						curBomb->SetShoot(false);
+						curBomb->SetOnPlatform(true);
+					}
+				}
+				else
+				{
+					curBomb->SetShoot(false);
+					curBomb->SetOnPlatform(true);
+				}
+			}
+			else
+			{
+				curObj->SetOnPlatform(true);
+				curObj->SetShoot(false);
+				curObj->SetThruRotate(false);
+			}
+		}
+	}
+	// 위쪽에서 충돌했을 때
+	else if (curObj_UpY <= otherObj_DownY && curObj_DownY > otherObj_DownY)
+	{
+		// 넘어온 만큼 위치 보정
+		curObj_Pos.y += (otherObj_DownY - curObj_UpY);
+		if (curObj_GroupType == (INT)GROUP_TYPE::PLAYER)
+		{
+			cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
+			curPlayer->SetRotFromDown(true);
+			if (curPlayer->Rotate_Platform())
+				curPlayer->SetAttach();
+			else
+				curPlayer->SetYspeedReverse();
+		}
+	}
+	// 왼쪽이 닿았을 때
+	else if (curObj_LeftX <= otherObj_RightX && curObj_RightX > otherObj_RightX)
+	{
+		// 넘어온 만큼 위치 보정
+		curObj_Pos.x += (otherObj_RightX - curObj_LeftX);
+		if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
+			curObj->SetDirection(1);
+		if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+		{
+			curObj->SetShoot(false);
+		}
+
+	}
+
+	// 오른쪽이 닿았을 때
+	else if (curObj_RightX >= otherObj_LeftX && curObj_LeftX < otherObj_LeftX)
+	{
+		// 넘어온 만큼 위치 보정
+		curObj_Pos.x -= (curObj_RightX - otherObj_LeftX);
+		if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
+			curObj->SetDirection(-1);
+		if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+		{
+			curObj->SetShoot(false);
+		}
+	}
 }
 
 void cObject::BGM_SetAndPlay(const LPCWSTR File_Path)

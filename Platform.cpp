@@ -33,6 +33,8 @@ bool cPlatform::Update()
 		cScene* curScene = cSceneManager::GetInstance()->GetCurScene();
 
 		// 플레이어 관련 ==========================================================
+		if (curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER].size() == 0)
+			return true;
 		cPlayer* curPlayer = dynamic_cast<cPlayer*>(curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::PLAYER][0]);
 		Vec2 curPlayer_Pos = curPlayer->GetPos();
 		Vec2 curPlayer_Scale = curPlayer->GetScale();
@@ -56,7 +58,7 @@ bool cPlatform::Update()
 			cObject* curMonster		= curMonsterVec[i];
 			Vec2 curMonster_Pos		= curMonster->GetPos();
 			Vec2 curMonster_Scale	= curMonster->GetScale();
-
+						
 			if ((curMonster_Pos.x > Platform_Pos.x - Platform_Scale.x / 2.f) && (curMonster_Pos.x < Platform_Pos.x + Platform_Scale.x / 2.f)
 				&& (abs(curMonster_Pos.y - Platform_Pos.y) <= (curMonster_Scale.y + Platform_Scale.y) / 2.f))
 			{
@@ -78,6 +80,11 @@ bool cPlatform::Update()
 					else
 						curMonster->SetRotateDir(false);
 				}
+			}
+			else
+			{
+				curMonster->SetRotator(NULL);
+				curMonster->SetRotating(false);
 			}
 		}
 		

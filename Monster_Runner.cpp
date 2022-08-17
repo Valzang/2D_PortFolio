@@ -14,7 +14,7 @@ cMonster_Runner::cMonster_Runner()
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Runner.png");	
 	m_curGroupType = (INT)GROUP_TYPE::MONSTER_RUNNER;
-	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()/ 2.f));
+	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
 	SetHP(1);
 	SetImgAttr();
 	SetDirection(1);
@@ -35,22 +35,32 @@ bool cMonster_Runner::Update()
 		return false;
 	Vec2 CurPos = GetPos();
 
-	if (GetRotating())
+	if (!isOnPlatform() || GetThruRotate())
+	{
+		CurPos.y += 600.f * m_Dir.y * DELTA_TIME;
+		if (m_Dir.y <= 2)
+		{
+			// 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
+			if (!GetShoot())
+				m_Dir.y += 8.f * DELTA_TIME;
+			else
+				m_Dir.y += 6.f * DELTA_TIME;
+		}
+		if (GetDirection() == 1) // 우측 방향일때
+			CurPos.x += (float)(m_Speed * DELTA_TIME); // 바라보는 방향에 맞게끔			
+		else // 좌측 방향일 때
+			CurPos.x -= (float)(m_Speed * DELTA_TIME); // 바라보는 방향에 맞게끔								
+	}
+	else if (GetRotating() && !GetShoot())
 	{
 		float diff = CurPos.x - GetRotator()->GetPos().x;
 		m_CurBehaviorState = Stay;
-
 		// 플랫폼의 중심보다 우측에 있을 때
 		if (diff > 0)
 		{
 			//방향이 위로 날아가야할 때
 			if (GetRotateDir())
-			{
-				if (GetDirection() == 1)
-				{
-					SetDirection(-1);
-					m_MonsterImg->RotateFlip(RotateNoneFlipX);
-				}				
+			{	
 				m_Speed = (m_Speed + diff) * 3.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
@@ -61,6 +71,7 @@ bool cMonster_Runner::Update()
 			{
 				SetOnPlatform(false);
 				SetThruRotate(true);
+				SetDir(Vec2(0.f, 2.f));
 			}
 		}
 		// 플랫폼의 중심보다 좌측에 있을 때
@@ -69,11 +80,6 @@ bool cMonster_Runner::Update()
 			//방향이 위로 날아가야할 때
 			if (GetRotateDir())
 			{
-				if (GetDirection() == -1)
-				{
-					SetDirection(1);
-					m_MonsterImg->RotateFlip(RotateNoneFlipX);
-				}
 				m_Speed = (m_Speed + -diff) * 3.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
@@ -84,10 +90,63 @@ bool cMonster_Runner::Update()
 			{
 				SetOnPlatform(false);
 				SetThruRotate(true);
+				SetDir(Vec2(0.f, 2.f));
 			}
 		}
 		SetRotating(false);
 	}
+	else
+	{
+		switch (m_CurBehaviorState)
+		{
+			case Forward:
+				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
+				break;
+			case Run:
+				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
+				CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
+				break;
+			case Retreat:
+				CurPos.x -= DELTA_TIME * (m_Speed / 1.5f) * GetDirection();
+				break;
+			default:
+				break;
+		}
+		// 달릴 때 이미지 변경
+		if (m_CurBehaviorState == Run)
+		{
+			if (GetScale().x == 89.f)
+			{
+				delete m_MonsterImg;
+				m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Runner_Run.png");
+				SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
+				if (GetDirection() == -1)
+					m_MonsterImg->RotateFlip(RotateNoneFlipX);
+			}			
+		}
+		// 안 달릴 때 이미지 변경
+		else if (GetScale().x == 129.f)
+		{
+			delete m_MonsterImg;
+			m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Runner.png");
+			SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
+			if (GetDirection() == -1)
+				m_MonsterImg->RotateFlip(RotateNoneFlipX);
+		}
+
+		m_BehaviorTime -= DELTA_TIME;
+
+
+		if (!SenseBomb())
+			SensePlayer();
+
+		if (m_BehaviorTime <= 0.f && m_CurBehaviorState != Run)
+			m_ChangeBehavior = true;
+
+		if (m_ChangeBehavior)
+			ChooseBehavior();
+	}
+	/*
 	if (GetShoot())
 	{		
 		CurPos.y += 800.f * m_Dir.y * DELTA_TIME;
@@ -101,9 +160,18 @@ bool cMonster_Runner::Update()
 	}
 	else
 	{
-
-		if (!isOnPlatform() || GetThruRotate())
-			CurPos.y += 100.f * m_Dir.y * DELTA_TIME;
+		if(GetThruRotate())
+		{
+			//cout << "회전 플랫폼 통과 중 1 : " << CurPos.y << '\n';
+			//CurPos.y += 1800.f * m_Dir.y * DELTA_TIME;
+			//cout << "회전 플랫폼 통과 중 2 : " << CurPos.y << '\n';
+		}
+		if (!isOnPlatform())
+		{
+			cout << "추락 중 1 : " << CurPos.y << '\n';
+			CurPos.y += 600.f * m_Dir.y * DELTA_TIME;
+			cout << "추락 중 2 : " << CurPos.y << '\n';
+		}
 		else
 			m_Speed = 200.f;
 
@@ -136,7 +204,7 @@ bool cMonster_Runner::Update()
 		if (m_ChangeBehavior)
 			ChooseBehavior();
 	}
-
+	*/
 	
 
 	SetPos(CurPos);
@@ -151,20 +219,15 @@ void cMonster_Runner::Render(HDC _hdc)
 	Graphics graphics(_hdc);
 
 	int w = m_MonsterImg->GetWidth() / 4;
-	int h = m_MonsterImg->GetHeight() / 2;
+	int h = m_MonsterImg->GetHeight();
 
 	int xStart = (curFrame/2) * w;
 	curFrame = curFrame >= 7 ? 0 : curFrame + 1;
 
-	int yStart = 0;
-
-	if (m_CurBehaviorState == Run)
-		yStart = h;
-
 	Vec2 Pos = GetPos();
 	Vec2 Scale = GetScale();
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
-	graphics.DrawImage(m_MonsterImg, Rect((int)Pos.x - (int)Scale.x / 2, (int)Pos.y - (int)Scale.y / 2, w, h), xStart, yStart, w, h, UnitPixel, GetImgAttr());
+	graphics.DrawImage(m_MonsterImg, Rect((int)Pos.x - (int)Scale.x / 2, (int)Pos.y - (int)Scale.y / 2, w, h), xStart, 0, w, h, UnitPixel, GetImgAttr());	
 }
 
 
@@ -218,8 +281,9 @@ void cMonster_Runner::SensePlayer()
 			&& curPlayer_y >= curMonster_top)
 		{
 			m_CurBehaviorState = Run;
+			
 			m_ChangeBehavior = false;
-			m_Speed = 200.f;
+			m_Speed = 300.f;
 		}
 	}
 	else if (GetDirection() == -1 && curMonster_x >= curPlayer_x)
@@ -227,13 +291,15 @@ void cMonster_Runner::SensePlayer()
 		if (curPlayer_y <= curMonster_down
 			&& curPlayer_y >= curMonster_top)
 		{
-			m_CurBehaviorState = Run;
+			m_CurBehaviorState = Run;			
 			m_ChangeBehavior = false;
-			m_Speed = 200.f;
+			m_Speed = 300.f;
 		}
 	}
 	else if (m_BehaviorTime < 0.f)
+	{
 		m_ChangeBehavior = true;
+	}
 }
 
 bool cMonster_Runner::SenseBomb()
