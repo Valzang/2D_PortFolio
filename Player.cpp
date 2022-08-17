@@ -11,7 +11,7 @@
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true), m_isDamaging(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
-					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(2.f)
+					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(3.f)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
@@ -214,6 +214,8 @@ bool cPlayer::Update()
 			&& m_AfterAttackTime <= 0.f && !GetRotating())
 		{
 			int Left_Check = (int)(curPos_x_l - 250.f * DELTA_TIME);
+			if(GetDirection() == 1)
+				m_PlayerImg->RotateFlip(RotateNoneFlipX);
 			if (Left_Check < 0)
 			{
 				if (!m_isDashing)
@@ -241,6 +243,8 @@ bool cPlayer::Update()
 			if (!m_isDashing)
 				m_isMoved = true;
 			Pos.x += 250.f * DELTA_TIME;
+			if( GetDirection() == -1)
+				m_PlayerImg->RotateFlip(RotateNoneFlipX);
 			SetDirection(1);
 
 		}
@@ -300,7 +304,19 @@ bool cPlayer::Update()
 	}
 
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
-	m_InvincibleTime -= DELTA_TIME;
+	if (m_InvincibleTime > 0.f)
+		m_InvincibleTime -= DELTA_TIME;
+	else
+	{
+		m_InvincibleTime = 0.f;
+		delete m_PlayerImg;
+		m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
+		SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 3.f));
+		if(GetDirection() == -1)
+			m_PlayerImg->RotateFlip(RotateNoneFlipX);
+
+	}
+	
 	
 
 	return true;
@@ -324,19 +340,44 @@ void cPlayer::Render(HDC _hdc)
 		static int Img_Jump_Cursor = 1;
 		static int Img_Move_Cursor = 1;
 
-		if (GetDirection() == -1)
-			yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
+		static int Blink = 0;
 
 		if (m_isJumping || m_isDamaging)
 		{
 			// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
-			yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
+			if (m_InvincibleTime > 0.f)
+			{
+				if(Blink<2)
+				{
+					yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
+					++Blink;
+				}
+				else
+				{
+					yStart += (int)(m_PlayerImg->GetHeight() / 6.f * 5.f);
+					if (Blink++ == 3)
+						Blink = 0;
+				}				
+			}				
+			else
+				yStart += (int)(m_PlayerImg->GetHeight() / 3.f * 2.f);
 			curFrame = Img_Jump_Cursor / 10;
 			Img_Jump_Cursor = Img_Jump_Cursor >= 59 ? 1 : Img_Jump_Cursor + 1;
 		}
 		else if (m_isMoved) // 움직이고 있다면
 		{
 			// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
+			if (m_InvincibleTime > 0.f)
+			{
+				if (Blink < 2)
+					++Blink;
+				else
+				{
+					yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
+					if (Blink++ == 3)
+						Blink = 0;
+				}
+			}
 			curFrame = Img_Move_Cursor / 4;
 			Img_Move_Cursor = Img_Move_Cursor >= 11 ? 1 : Img_Move_Cursor + 1;
 
@@ -344,11 +385,40 @@ void cPlayer::Render(HDC _hdc)
 		else if (m_isSitted)
 		{
 			// 앉아있다면
-			yStart += (int)(m_PlayerImg->GetHeight() / 6.f);
+			if (m_InvincibleTime > 0.f)
+			{
+				if (Blink < 2)
+				{
+					yStart += (int)(m_PlayerImg->GetHeight() / 6.f);
+					++Blink;
+				}
+				else
+				{
+					yStart += (int)(m_PlayerImg->GetHeight() / 3.f * 2.f);
+					if (Blink++ == 3)
+						Blink = 0;
+				}
+			}
+			else
+				yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
 			curFrame = m_isDashing ? 1 : 0;
 		}
 		else
 		{
+			if (m_InvincibleTime > 0.f)
+			{
+				if (m_InvincibleTime > 0.f)
+				{
+					if (Blink < 2)
+						++Blink;
+					else
+					{
+						yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
+						if (Blink++ == 3)
+							Blink = 0;
+					}
+				}
+			}
 			curFrame = 0;
 			Img_Jump_Cursor = 1;
 			Img_Move_Cursor = 1;
@@ -391,13 +461,8 @@ void cPlayer::Render(HDC _hdc)
 		{
 			mat.RotateAt(Gdiplus::REAL(180 % 360), Gdiplus::PointF(Player_Pos.x, Player_Pos.y)); // 플레이어 중점을 기준으로 회전
 			graphics.SetTransform(&mat);
-
+			m_PlayerImg->RotateFlip(RotateNoneFlipX);
 			// 위아래가 뒤집혀서 반대방향이 되었으므로 방향 변화해줌
-			if (GetDirection() == -1)
-				yStart -= (int)(m_PlayerImg->GetHeight() / 2.f);
-			else
-				yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
-
 		}
 		//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 		graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
@@ -411,8 +476,11 @@ void cPlayer::Render(HDC _hdc)
 			Enter_count = 0;
 			m_Spawning = false;
 			delete m_PlayerImg;
-			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
+			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move_Blink.png");
+			m_InvincibleTime = 3.f;
 			SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 6.f));
+			if(GetDirection() == -1)
+				m_PlayerImg->RotateFlip(RotateNoneFlipX);
 		}	
 		else
 			++Enter_count;
@@ -487,7 +555,7 @@ bool cPlayer::Rotate_Platform()
 
 void cPlayer::Damage()
 {
-	if (!m_Spawning && !m_isDamaging && m_InvincibleTime <= 0.f)
+	if (!m_Spawning && !m_isDamaging && m_InvincibleTime == 0.f)
 	{
 		SetHP(GetHP() - 1);
 		BGM_SetAndPlay(L"Sound/EFFECT/Player_Damaged.wav");
@@ -510,7 +578,7 @@ void cPlayer::Respawn()
 	m_isDashing = false;
 	m_isJumping = false;
 	m_isAttached = false;
-	m_InvincibleTime = 2.f;
+	m_InvincibleTime = 3.f;
 	SetDir(Vec2(-2.f, 3.f));
 	SetDirection(1);
 }

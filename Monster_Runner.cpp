@@ -61,6 +61,7 @@ bool cMonster_Runner::Update()
 			//방향이 위로 날아가야할 때
 			if (GetRotateDir())
 			{	
+				SetDirection(-1);
 				m_Speed = (m_Speed + diff) * 3.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
@@ -80,6 +81,7 @@ bool cMonster_Runner::Update()
 			//방향이 위로 날아가야할 때
 			if (GetRotateDir())
 			{
+				SetDirection(1);
 				m_Speed = (m_Speed + -diff) * 3.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
