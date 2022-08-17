@@ -20,9 +20,20 @@ private:
 
 	bool m_isFocusing;
 
+	bool m_GrabTitle;
+
 public:
 	void Init();
 	void Update();
+
+	bool GetGrabTitle() { return m_GrabTitle; }
+	void SetGrabTitle() { m_GrabTitle = true; }
+
+	void Reset() {
+		m_deltaTime = 0.f;
+		QueryPerformanceCounter(&m_prevCount); m_curCount = m_prevCount;
+		m_GrabTitle = false;
+	}
 
 	float GetDT() { return (float)m_deltaTime; }
 

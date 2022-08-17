@@ -67,10 +67,12 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                 break;
             else
             {
+                if (msg.message == WM_NCLBUTTONDOWN)
+                    cTimeManager::GetInstance()->SetGrabTitle();
                 TranslateMessage(&msg);
-                DispatchMessage(&msg);
-                cTimeManager::GetInstance()->Update();
+                DispatchMessage(&msg);                
             }
+
         }
         else
             cCore::GetInstance()->Progress();

@@ -3,7 +3,7 @@
 cTimeManager::cTimeManager() : m_prevCount(), m_curCount(),
 m_curFrequency(), m_deltaTime(), m_deltaTime_temp(0.f),
 m_callCount(), m_accumlate(),
-m_FPS(), m_isFocusing(true)
+m_FPS(), m_isFocusing(true), m_GrabTitle(false)
 {
 
 }
@@ -24,25 +24,36 @@ void cTimeManager::Init()
 
 void cTimeManager::Update()
 {
-	/*
+	
 	//포커싱 된 윈도우가 누구인지
 	HWND hWnd = GetFocus();
 
 	// 포커싱 된 윈도우가 있다면
 	if (hWnd != nullptr)
 	{
-		QueryPerformanceCounter(&m_curCount);
-		// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
-		if (m_isFocusing)
-			m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
+		if (GetGrabTitle())
+		{
+			QueryPerformanceCounter(&m_curCount);
+			m_prevCount = m_curCount;
+			m_deltaTime = 0.f;
+			m_GrabTitle = false;
+		}
 		else
 		{
-			m_isFocusing = true;
-			m_deltaTime = m_deltaTime_temp;
-			m_deltaTime_temp = 0.f;
+			QueryPerformanceCounter(&m_curCount);
+			// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
+			if (m_isFocusing)
+				m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
+			else
+			{
+				m_isFocusing = true;
+				m_deltaTime = m_deltaTime_temp;
+				m_deltaTime_temp = 0.f;
+			}
+			++m_callCount;
+			m_accumlate += m_deltaTime; // 델타타임 누적
 		}
-		++m_callCount;
-		m_accumlate += m_deltaTime; // 델타타임 누적
+		
 	}
 	else
 	{
@@ -50,18 +61,16 @@ void cTimeManager::Update()
 		m_isFocusing = false;
 		if (!m_isFocusing && m_deltaTime_temp == 0.f)
 			m_deltaTime_temp = m_deltaTime;
-		// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
-		//m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
 	}
-	*/
-	QueryPerformanceCounter(&m_curCount
-	);
+	/*
+	QueryPerformanceCounter(&m_curCount);
 	// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
 	m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
 
 	++m_callCount;
 	m_accumlate += m_deltaTime; // 델타타임 누적
 	// 이전 카운트 값을 전체값을 갱신(다음번 계산을 위해)
+	*/
 	m_prevCount = m_curCount;
 
 	// 1초가 되면
