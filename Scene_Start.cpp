@@ -30,7 +30,7 @@ void cScene_Start::Enter()
 
 
 	// 몬스터 배치	
-	SetMonsterSize(2);			// 몬스터 수
+	SetMonsterSize(4);			// 몬스터 수
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();

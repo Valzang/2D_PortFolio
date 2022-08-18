@@ -1,5 +1,5 @@
 #include "Monster.h"
-
+#include "Scene.h"
 #include "TimeManager.h"
 
 
@@ -18,4 +18,6 @@ cMonster::~cMonster()
 		delete m_MonsterImg;
 		m_MonsterImg = nullptr;
 	}
+	int MonsterDecrease = cSceneManager::GetInstance()->GetCurScene()->GetMonsterSize() - 1;
+	cSceneManager::GetInstance()->GetCurScene()->SetMonsterSize(MonsterDecrease);
 }

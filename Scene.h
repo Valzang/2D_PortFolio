@@ -22,7 +22,6 @@ private:
 	int m_curSceneType;
 	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
-	DWORD m_dwDeviceID;
 	MCI_OPEN_PARMS mciOpen;
 	MCI_PLAY_PARMS mciPlay;
 	int dwID;

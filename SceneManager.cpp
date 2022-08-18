@@ -7,7 +7,7 @@ cSceneManager::cSceneManager()
 	, m_arrScene {}
 	, m_curSceneLevel(1)
 {
-
+	
 }
 cSceneManager::~cSceneManager()
 {
@@ -49,12 +49,6 @@ void cSceneManager::Init()
 	//m_curScene = m_arrScene[(UINT)SCENE_TYPE::TOOL];
 	m_curScene->Enter();
 
-	//// Scene 생성
-	//m_arrScene[(UINT)SCENE_TYPE::START] = new cScene_Start;
-	////m_arrScene[(UINT)SCENE_TYPE::START]->SetName(L"Start Scene");
-	//// 현재 씬 지정
-	//m_curScene = m_arrScene[(UINT)SCENE_TYPE::START];
-	//m_curScene->Enter();
 }
 
 void cSceneManager::Update()
@@ -69,9 +63,8 @@ void cSceneManager::Render(HDC _hdc)
 		m_curScene->Render(_hdc);
 	else
 	{
-		delete m_curScene;
-		m_curScene = nullptr;
-		++m_curSceneLevel;
+		delete m_arrScene[m_curSceneLevel];
+		m_arrScene[m_curSceneLevel++] = nullptr;
 		Init();
 	}
 }
