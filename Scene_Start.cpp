@@ -13,6 +13,7 @@
 
 cScene_Start::cScene_Start()
 {
+	SetCurSceneType((INT)SCENE_TYPE::STAGE_11);
 	SetSceneImg(L"Image/Scene1.png");
 	BGM_SetAndPlay(L"Sound/BGM/PB_OST_STAGE1.mp3");
 }

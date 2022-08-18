@@ -1,4 +1,11 @@
 #include "Scene.h"
+#include "KeyManager.h"
+
+cScene::cScene() : m_SceneImg(nullptr), m_IntroAlramImg(nullptr), m_MonsterCount(0), m_dwDeviceID(), mciOpen(), mciPlay(), dwID(0), m_curSceneType(0)
+{
+	m_IntroAlramImg = Image::FromFile(L"Image/Intro_Alram.png");
+	m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 200, 201));
+}
 
 cScene::~cScene()
 {
@@ -51,18 +58,36 @@ void cScene::BGM_SetAndPlay(const LPCWSTR File_Path)
 void cScene::Update()
 {
 	//m_BGM->Update();
-	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
+	if (GetCurSceneType() == (INT)SCENE_TYPE::START)
 	{
-		for (INT j = (INT)(m_arr_obj[i].size())-1; j >= 0; --j)
+		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN))
 		{
-			if (m_arr_obj[i][j]->Update() == false)
+			for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 			{
-				delete m_arr_obj[i][j];
-				m_arr_obj[i][j] = nullptr;
-				m_arr_obj[i].erase(m_arr_obj[i].begin() + j);
+				for (INT j = (INT)(m_arr_obj[i].size()) - 1; j >= 0; --j)
+				{
+					delete m_arr_obj[i][j];
+					m_arr_obj[i][j] = nullptr;
+					m_arr_obj[i].erase(m_arr_obj[i].begin() + j);
+				}
 			}
 		}
 	}
+	else
+	{
+		for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
+		{
+			for (INT j = (INT)(m_arr_obj[i].size()) - 1; j >= 0; --j)
+			{
+				if (m_arr_obj[i][j]->Update() == false)
+				{
+					delete m_arr_obj[i][j];
+					m_arr_obj[i][j] = nullptr;
+					m_arr_obj[i].erase(m_arr_obj[i].begin() + j);
+				}
+			}
+		}
+	}	
 }
 
 void cScene::Render(HDC _hdc)
@@ -72,6 +97,7 @@ void cScene::Render(HDC _hdc)
 	int h = m_SceneImg->GetHeight();
 	
 	graphics.DrawImage(m_SceneImg, Rect(0,0, w, h), 0, 0, w, h, UnitPixel, &m_imgAttr);
+
 	for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 	{
 		for (UINT j = 0; j < m_arr_obj[i].size(); ++j)
@@ -79,4 +105,16 @@ void cScene::Render(HDC _hdc)
 			m_arr_obj[i][j]->Render(_hdc);
 		}
 	}
+
+	if (GetCurSceneType() == (INT)SCENE_TYPE::START)
+	{
+		Gdiplus::Graphics graphics_Alram(_hdc);
+		w = (int)m_IntroAlramImg->GetWidth();
+		h = (int)m_IntroAlramImg->GetHeight();
+		Vec2 Alram_Pos(Vec2(640.f, 550.f));
+		// Rect°¡ À§Ä¡
+		graphics_Alram.DrawImage(m_IntroAlramImg, Rect((int)Alram_Pos.x - w / 2, (int)Alram_Pos.y - h / 2, (int)Alram_Pos.x + w / 2, (int)Alram_Pos.y + h / 2), 0, 0, w, h, UnitPixel, &m_imgAttr);
+	}
+
+	
 }

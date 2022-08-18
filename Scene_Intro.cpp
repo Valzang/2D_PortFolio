@@ -1,18 +1,19 @@
 #include "Scene_Intro.h"
 #include "Scene_Start.h"
+#include "Player.h"
 #include "KeyManager.h"
+#include "Monster_Flying.h"
+#include "Core.h"
 
-cScene_Intro::cScene_Intro() : m_IntroAlramImg(nullptr), Alram_Pos(Vec2(640.f, 550.f)), Alram_Scale()
+cScene_Intro::cScene_Intro()
 {
+	SetCurSceneType((INT)SCENE_TYPE::START);
+	SetSceneImg(L"Image/Intro.png");
+	BGM_SetAndPlay(L"Sound/BGM/PB_OST_STAGE_PVP.mp3");
 }
 
 cScene_Intro::~cScene_Intro()
-{
-	if (m_IntroAlramImg != NULL)
-	{
-		delete m_IntroAlramImg;
-		m_IntroAlramImg = nullptr;
-	}
+{	
 }
 
 //void cScene_Intro::Update()
@@ -38,11 +39,25 @@ cScene_Intro::~cScene_Intro()
 
 void cScene_Intro::Enter()
 {
-	SetSceneImg(L"Image/Intro.png");
-	m_IntroAlramImg = Image::FromFile(L"Image/Intro_Alram.png");
-	Alram_Scale.x = (float)m_IntroAlramImg->GetWidth();
-	Alram_Scale.y = (float)m_IntroAlramImg->GetHeight();
-	BGM_SetAndPlay(L"Sound/BGM/PB_OST_STAGE_PVP.mp3");
+		// 플레이어 추가 및 위치 설정
+	//cPlayer* PlayerObj = new cPlayer(Vec2(640.f, 400.f));
+	//AddObject(PlayerObj, GROUP_TYPE::PLAYER);
+
+	// 몬스터 배치	
+	SetMonsterSize(1);			// 몬스터 수
+
+	// 화면 크기에 맞게 배치하기
+	Vec2 Resolution = cCore::GetInstance()->GetResolution();
+
+	// Monster Object 추가 ===================================================================================================
+	cMonster* MonsterObj = nullptr;
+	MonsterObj = new cMonster_Flying;
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 2.5f });
+	//Vec2 curcurPos = MonsterObj->GetPos();
+	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+
+	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+
 }
 
 void cScene_Intro::Exit()

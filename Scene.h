@@ -15,8 +15,12 @@ private:
 	// 오브젝트들을 담을 벡터를 그룹 개수만큼 선언
 	vector<cObject*> m_arr_obj[(UINT)GROUP_TYPE::END];
 	Image* m_SceneImg;  // 이미지 파일
-	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
+	Image* m_IntroAlramImg;				// 인트로 전용 알람 문구
+	
 	int m_MonsterCount;					// 몬스터 수
+
+	int m_curSceneType;
+	Gdiplus::ImageAttributes m_imgAttr; // 이미지 속성 담당 변수
 
 	DWORD m_dwDeviceID;
 	MCI_OPEN_PARMS mciOpen;
@@ -24,7 +28,7 @@ private:
 	int dwID;
 
 public:
-	cScene() : m_SceneImg(nullptr), m_MonsterCount(0), m_dwDeviceID(), mciOpen(), mciPlay(), dwID(0){}
+	cScene();
 	virtual ~cScene();
 
 
@@ -49,6 +53,9 @@ public:
 
 	int GetMonsterSize() { return m_MonsterCount; }
 	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
+
+	int GetCurSceneType() { return m_curSceneType; }
+	void SetCurSceneType(int _val) { m_curSceneType = _val; }
 
 	vector<cObject*>* GetCurObjectVec() { return m_arr_obj; }
 
