@@ -145,6 +145,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Monster_Flying.h" />
     <ClInclude Include="Monster_Runner.h" />
+    <ClInclude Include="Monster_SpitFire.h" />
     <ClInclude Include="Monster_Thorn.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="CustomDefine.h" />
@@ -160,7 +161,9 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="Scene_Intro.h" />
     <ClInclude Include="Scene_Start.h" />
+    <ClInclude Include="SpitFire.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="UI_Manager.h" />
@@ -170,6 +173,7 @@
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Monster_Flying.cpp" />
     <ClCompile Include="Monster_Runner.cpp" />
+    <ClCompile Include="Monster_SpitFire.cpp" />
     <ClCompile Include="Monster_Thorn.cpp" />
     <ClCompile Include="Platform.cpp" />
     <ClCompile Include="KeyManager.cpp" />
@@ -182,7 +186,9 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="Scene_Intro.cpp" />
     <ClCompile Include="Scene_Start.cpp" />
+    <ClCompile Include="SpitFire.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="UI_Manager.cpp" />
   </ItemGroup>

@@ -46,7 +46,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 	float curObj_RightX = curObj_Pos.x + curObj_Scale.x / 2.f;
 	float curObj_LeftX = curObj_Pos.x - curObj_Scale.x / 2.f;
 	float curObj_UpY = curObj_Pos.y - curObj_Scale.y / 2.f;
-	float curObj_DownY = curObj_Pos.y + curObj_Scale.y / 2.f;
+	float curObj_DownY = curObj_Pos.y + curObj_Scale.y / 2.f;	
 
 	// 부딪힌 오브젝트 가져오기
 	vector<cObject*> otherObj = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[GROUP_TYPE];
@@ -68,12 +68,12 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			&& (abs(curObj_Pos.y - otherObj_Pos.y) < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
 		{	
 			// 아랫쪽에서 충돌했을 때
-			if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
+			if (curObj_UpY < otherObj_UpY && curObj_DownY > otherObj_UpY)
 			{
 				switch (GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
-					case (INT)GROUP_TYPE::PLATFORM:
+					case (INT)GROUP_TYPE::PLATFORM:					
 					{
 						// 회전문을 1번만 통과해야할 때
 						if (curObj->GetThruRotate() && otherObj[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
@@ -149,8 +149,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								curObj->SetThruRotate(false);
 							}
 						}
-					}
-					break;
+					}					
+						break;
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
@@ -167,11 +167,11 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								otherObj[i]->Damage();
 						}						
 					}
-					break;
+						break;
 				}				
 			}
 			// 위쪽에서 충돌했을 때
-			else if (curObj_UpY <= otherObj_DownY && curObj_DownY > otherObj_DownY)
+			else if (curObj_UpY < otherObj_DownY && curObj_DownY > otherObj_DownY)
 			{
 				switch (GROUP_TYPE)
 				{
@@ -208,8 +208,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						}
 					}
 						break;
-				}
-				
+				}				
 			}
 			// 왼쪽이 닿았을 때
 			else if (curObj_LeftX <= otherObj_RightX && curObj_RightX > otherObj_RightX)
@@ -218,22 +217,50 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
 					case (INT)GROUP_TYPE::PLATFORM:
-					{
+					{						
 						// 넘어온 만큼 위치 보정
 						curObj_Pos.x += (otherObj_RightX - curObj_LeftX);
-						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
-							curObj->SetDirection(1);
-						if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						switch (curObj_GroupType)
 						{
-							curObj->SetShoot(false);
+							case (INT)GROUP_TYPE::BOMB:
+							case (INT)GROUP_TYPE::MONSTER_THORN:
+								curObj->SetDirection(1);
+								break;
+							case (INT)GROUP_TYPE::MONSTER_RUNNER:
+								curObj->SetShoot(false);
+								break;
+							case (INT)GROUP_TYPE::SPITFIRE:
+								curObj->Dead();
+								break;
 						}
 					}
-					break;
+						break;
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
-						if (!otherObj_Player->GetRotating())
-							otherObj_Player->Damage();
+						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB
+							|| curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+						{
+							if (!otherObj_Player->GetRotating())
+								otherObj_Player->Damage();
+							if(!otherObj_Player->GetRotating() && curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+								curObj->Dead();
+						}
+						else if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						{
+							cout << "우측 몬스터가 좌측 플레이어와 충돌 " << '\n';
+							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(curObj);
+							if (curMonster->GetCurBHState() != 4)
+							{
+								otherObj_Player->SetAttackTime(0.2f);
+								curMonster->SetBHTime(1.f);
+								curMonster->SetCurBHState(0);
+								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX) * 2, curMonster->GetPos().y));
+							}
+							else
+								otherObj_Player->Damage();
+						}
+						
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -245,19 +272,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								otherObj[i]->Damage();
 							else if (curBomb->GetShoot())
 								curBomb->SetExplode();
-						}
-						else if (curObj_GroupType == (INT)GROUP_TYPE::PLAYER
-								 && otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::MONSTER_RUNNER)
-						{
-							cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
-							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(otherObj[i]);
-							if (curMonster->GetCurBHState() != 4)
-							{
-								curPlayer->SetAttackTime(0.2f);
-								curMonster->SetBHTime(1.f);
-								curMonster->SetCurBHState(0);
-								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX)*2, curMonster->GetPos().y));								
-							}
 						}
 					}
 						break;
@@ -272,22 +286,49 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
 					case (INT)GROUP_TYPE::PLATFORM:
-					{
+					{						
 						// 넘어온 만큼 위치 보정
 						curObj_Pos.x -= (curObj_RightX - otherObj_LeftX);
-						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
-							curObj->SetDirection(-1); 
-						if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						switch (curObj_GroupType)
 						{
-							curObj->SetShoot(false);
-						}
+							case (INT)GROUP_TYPE::BOMB:
+							case (INT)GROUP_TYPE::MONSTER_THORN:
+								curObj->SetDirection(-1);
+								break;
+							case (INT)GROUP_TYPE::MONSTER_RUNNER:
+								curObj->SetShoot(false);
+								break;
+							case (INT)GROUP_TYPE::SPITFIRE:
+								curObj->Dead();
+								break;
+						}						
 					}
-					break;
+						break;
 					case (INT)GROUP_TYPE::PLAYER:
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
-						if (!otherObj_Player->GetRotating())
-							otherObj_Player->Damage();
+						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB
+							|| curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+						{
+							if (!otherObj_Player->GetRotating())
+								otherObj_Player->Damage();
+							if (!otherObj_Player->GetRotating() && curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+								curObj->Dead();
+						}
+						else if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
+						{
+							cout << "좌측 몬스터가 우측 플레이어와 충돌 " << '\n';
+							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(curObj);
+							if (curMonster->GetCurBHState() != 4)
+							{
+								otherObj_Player->SetAttackTime(0.2f);
+								curMonster->SetBHTime(1.f);
+								curMonster->SetCurBHState(0);
+								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX) * 2, curMonster->GetPos().y));
+							}
+							else
+								otherObj_Player->Damage();
+						}
 					}
 						break;
 					case (INT)GROUP_TYPE::MONSTER:
@@ -322,129 +363,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 		}
 	}
 	curObj->SetPos(curObj_Pos);
-}
-
-void cObject::CollisionPlatform(cObject* curObj, cObject* otherObj)
-{
-	Vec2 curObj_Pos = curObj->GetPos();
-	Vec2 curObj_Scale = curObj->GetScale();
-
-	// 현 오브젝트의 끝점들
-	float curObj_RightX = curObj_Pos.x + curObj_Scale.x / 2.f;
-	float curObj_LeftX = curObj_Pos.x - curObj_Scale.x / 2.f;
-	float curObj_UpY = curObj_Pos.y - curObj_Scale.y / 2.f;
-	float curObj_DownY = curObj_Pos.y + curObj_Scale.y / 2.f;
-
-	int curObj_GroupType = curObj->GetCurGroupType();
-
-	// 부딪힌 오브젝트의 끝점들
-	Vec2 otherObj_Pos = otherObj->GetPos();
-	Vec2 otherObj_Scale = otherObj->GetScale();
-
-	float otherObj_RightX = otherObj_Pos.x + otherObj_Scale.x / 2.f;
-	float otherObj_LeftX = otherObj_Pos.x - otherObj_Scale.x / 2.f;
-	float otherObj_UpY = otherObj_Pos.y - otherObj_Scale.y / 2.f;
-	float otherObj_DownY = otherObj_Pos.y + otherObj_Scale.y / 2.f;
-
-	// 아랫쪽에서 충돌했을 때
-	if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
-	{
-		// 회전문을 1번만 통과해야할 때
-		if (curObj->GetThruRotate() && otherObj->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
-		{
-			static cObject* curRotPlatform = otherObj;
-			if (curRotPlatform == nullptr)
-				curRotPlatform = otherObj;
-
-			if (curRotPlatform == otherObj)
-			{
-				curObj->SetOnPlatform(false);
-				curObj->SetShoot(false);
-			}
-			else
-			{
-				curObj->SetOnPlatform(true);
-				curObj->SetShoot(false);
-				curObj->SetThruRotate(false);
-				curRotPlatform = nullptr;
-			}
-		}
-		// 통과할 필요 없을 때 ( 일반적 케이스 )
-		else
-		{
-			// 넘어간 만큼 위치 보정
-			curObj_Pos.y -= (curObj_DownY - otherObj_UpY);
-			if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
-			{
-				cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-				int curBounceCnt = curBomb->GetBounceCount();
-				// 3번 튕기기 전이면서 발사된 상태였을 때
-				if (curBomb->GetShoot() && curBounceCnt < 3)
-				{
-					curBomb->SetBounce();
-					curBomb->IncreaseBounceCount();
-					int temp = curBomb->GetBounceCount();
-					if (curBomb->GetBounceCount() >= 3)
-					{
-						curBomb->SetShoot(false);
-						curBomb->SetOnPlatform(true);
-					}
-				}
-				else
-				{
-					curBomb->SetShoot(false);
-					curBomb->SetOnPlatform(true);
-				}
-			}
-			else
-			{
-				curObj->SetOnPlatform(true);
-				curObj->SetShoot(false);
-				curObj->SetThruRotate(false);
-			}
-		}
-	}
-	// 위쪽에서 충돌했을 때
-	else if (curObj_UpY <= otherObj_DownY && curObj_DownY > otherObj_DownY)
-	{
-		// 넘어온 만큼 위치 보정
-		curObj_Pos.y += (otherObj_DownY - curObj_UpY);
-		if (curObj_GroupType == (INT)GROUP_TYPE::PLAYER)
-		{
-			cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
-			curPlayer->SetRotFromDown(true);
-			if (curPlayer->Rotate_Platform())
-				curPlayer->SetAttach();
-			else
-				curPlayer->SetYspeedReverse();
-		}
-	}
-	// 왼쪽이 닿았을 때
-	else if (curObj_LeftX <= otherObj_RightX && curObj_RightX > otherObj_RightX)
-	{
-		// 넘어온 만큼 위치 보정
-		curObj_Pos.x += (otherObj_RightX - curObj_LeftX);
-		if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
-			curObj->SetDirection(1);
-		if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
-		{
-			curObj->SetShoot(false);
-		}
-
-	}
-
-	// 오른쪽이 닿았을 때
-	else if (curObj_RightX >= otherObj_LeftX && curObj_LeftX < otherObj_LeftX)
-	{
-		// 넘어온 만큼 위치 보정
-		curObj_Pos.x -= (curObj_RightX - otherObj_LeftX);
-		if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
-			curObj->SetDirection(-1);
-		if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
-		{
-			curObj->SetShoot(false);
-		}
-	}
 }
 
 void cObject::BGM_SetAndPlay(const LPCWSTR File_Path)

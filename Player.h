@@ -25,6 +25,8 @@ private:
 
     Vec2 m_SpawnPlace; //스폰되는 장소
 
+    bool m_Xreverse = false;
+
 
 public:
     cPlayer();

@@ -50,10 +50,6 @@ public:
 	int GetMonsterSize() { return m_MonsterCount; }
 	void SetMonsterSize(int _s) { m_MonsterCount = _s; }
 
-	//cSound* GetBGM() { return m_BGM; }
-	//void SetBGM(const char* _BGM_Path) { if (m_BGM == nullptr) { m_BGM = new cSound(_BGM_Path, true); } }
-	//void DeleteBGM() { if (m_BGM != nullptr) { delete m_BGM; m_BGM = nullptr; } }
-
 	vector<cObject*>* GetCurObjectVec() { return m_arr_obj; }
 
 	virtual void SetSceneImg(const wchar_t* FileName);

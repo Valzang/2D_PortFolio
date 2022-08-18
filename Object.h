@@ -99,7 +99,6 @@ public:
 
 	// 충돌체크
 	virtual void CollisionCheck(cObject* curObj, int GROUP_TYPE);
-	virtual void CollisionPlatform(cObject* curObj, cObject* otherObj);
 
 	// 현재 그룹타입
 	int GetCurGroupType() { return m_curGroupType; }

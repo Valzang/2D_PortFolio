@@ -10,14 +10,12 @@
 
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true), m_isDamaging(false)
-					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
+					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f) , m_Xreverse(false)
 					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(3.f)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
-	//m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
-	//SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight()/6.f));
 
 	SetHP(2);
 	SetDir(Vec2(-2.f, 3.f));
@@ -27,14 +25,12 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 }
 
 cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true)
-									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f)
+									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f), m_Xreverse(false)
 									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
-	//m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
-	//SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight()/6.f));
 	SetSpawnPlace(_SpawnPlace);
 	SetPos(_SpawnPlace);
 	SetHP(2);
@@ -304,19 +300,7 @@ bool cPlayer::Update()
 	}
 
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
-	if (m_InvincibleTime > 0.f)
-		m_InvincibleTime -= DELTA_TIME;
-	else
-	{
-		m_InvincibleTime = 0.f;
-		delete m_PlayerImg;
-		m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
-		SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 3.f));
-		if(GetDirection() == -1)
-			m_PlayerImg->RotateFlip(RotateNoneFlipX);
-
-	}
-	
+	m_InvincibleTime = (m_InvincibleTime > 0.f) ? m_InvincibleTime - DELTA_TIME : 0.f;	
 	
 
 	return true;
@@ -345,26 +329,24 @@ void cPlayer::Render(HDC _hdc)
 		if (m_isJumping || m_isDamaging)
 		{
 			// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
-			if (m_InvincibleTime > 0.f)
+			if ((m_InvincibleTime > 0.f && Blink<2) || m_InvincibleTime <= 0.f)
 			{
-				if(Blink<2)
-				{
-					yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
+				yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
+				if (m_InvincibleTime > 0.f)
 					++Blink;
-				}
-				else
-				{
-					yStart += (int)(m_PlayerImg->GetHeight() / 6.f * 5.f);
-					if (Blink++ == 3)
-						Blink = 0;
-				}				
+				
 			}				
 			else
-				yStart += (int)(m_PlayerImg->GetHeight() / 3.f * 2.f);
+			{
+				yStart += (int)(m_PlayerImg->GetHeight() / 6.f * 5.f);
+				if (Blink++ == 3)
+					Blink = 0;
+			}
 			curFrame = Img_Jump_Cursor / 10;
 			Img_Jump_Cursor = Img_Jump_Cursor >= 59 ? 1 : Img_Jump_Cursor + 1;
 		}
-		else if (m_isMoved) // 움직이고 있다면
+		// 움직이고 있다면
+		else if (m_isMoved) 
 		{
 			// 속도를 늦추려했으나 쉽게 되진 않음. 추후에 시도해볼것.
 			if (m_InvincibleTime > 0.f)
@@ -382,41 +364,35 @@ void cPlayer::Render(HDC _hdc)
 			Img_Move_Cursor = Img_Move_Cursor >= 11 ? 1 : Img_Move_Cursor + 1;
 
 		}
+		// 앉아있다면
 		else if (m_isSitted)
 		{
-			// 앉아있다면
-			if (m_InvincibleTime > 0.f)
+			if ((m_InvincibleTime > 0.f && Blink < 2) || m_InvincibleTime <= 0.f)
 			{
-				if (Blink < 2)
-				{
-					yStart += (int)(m_PlayerImg->GetHeight() / 6.f);
-					++Blink;
-				}
-				else
-				{
-					yStart += (int)(m_PlayerImg->GetHeight() / 3.f * 2.f);
-					if (Blink++ == 3)
-						Blink = 0;
-				}
+				yStart += (int)(m_PlayerImg->GetHeight() / 6.f);
+				if(m_InvincibleTime > 0.f)
+					++Blink;				
 			}
 			else
-				yStart += (int)(m_PlayerImg->GetHeight() / 3.f);
+			{
+				yStart += (int)(m_PlayerImg->GetHeight() / 3.f * 2.f);
+				if (Blink++ == 3)
+					Blink = 0;
+			}
 			curFrame = m_isDashing ? 1 : 0;
 		}
+		// 가만히 있을 때
 		else
 		{
 			if (m_InvincibleTime > 0.f)
 			{
-				if (m_InvincibleTime > 0.f)
+				if (Blink < 2)
+					++Blink;
+				else
 				{
-					if (Blink < 2)
-						++Blink;
-					else
-					{
-						yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
-						if (Blink++ == 3)
-							Blink = 0;
-					}
+					yStart += (int)(m_PlayerImg->GetHeight() / 2.f);
+					if (Blink++ == 3)
+						Blink = 0;
 				}
 			}
 			curFrame = 0;
@@ -461,8 +437,18 @@ void cPlayer::Render(HDC _hdc)
 		{
 			mat.RotateAt(Gdiplus::REAL(180 % 360), Gdiplus::PointF(Player_Pos.x, Player_Pos.y)); // 플레이어 중점을 기준으로 회전
 			graphics.SetTransform(&mat);
-			m_PlayerImg->RotateFlip(RotateNoneFlipX);
+			if (!m_Xreverse)
+			{
+				m_PlayerImg->RotateFlip(RotateNoneFlipX);
+				m_Xreverse = true;
+			}
+			
 			// 위아래가 뒤집혀서 반대방향이 되었으므로 방향 변화해줌
+		}		
+		else if(m_Xreverse)
+		{
+			m_PlayerImg->RotateFlip(RotateNoneFlipX);
+			m_Xreverse = false;
 		}
 		//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 		graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
@@ -471,23 +457,22 @@ void cPlayer::Render(HDC _hdc)
 	{
 		static int Enter_count = 0;
 		xStart = Width * (Enter_count/2);
+		// 진입 애니메이션이 끝나면 플레이어블 애니메이션으로 변경
 		if (Enter_count >= 26)
 		{
 			Enter_count = 0;
 			m_Spawning = false;
-			delete m_PlayerImg;
-			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move_Blink.png");
 			m_InvincibleTime = 3.f;
+
+			delete m_PlayerImg;
+			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 			SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 6.f));
-			if(GetDirection() == -1)
-				m_PlayerImg->RotateFlip(RotateNoneFlipX);
 		}	
 		else
-			++Enter_count;
+			++Enter_count;		
 		//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 		graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
-	}
-
+	}	
 	
 	
 }

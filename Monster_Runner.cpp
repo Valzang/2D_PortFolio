@@ -2,12 +2,7 @@
 #include "Scene.h"
 #include "SceneManager.h"
 
-enum Behavior_Tree { Stay, Change_Direction, Forward, Retreat, Run };
-random_device rd;
-mt19937 gen(rd());
-uniform_int_distribution<int> state(0, 2);
-uniform_int_distribution<int> forward_time(2, 4);
-uniform_int_distribution<int> stay_time(0, 2);
+
 
 cMonster_Runner::cMonster_Runner()
 	:m_BehaviorTime(), m_CurBehaviorState(0), m_ChangeBehavior(true)
@@ -61,7 +56,11 @@ bool cMonster_Runner::Update()
 			//방향이 위로 날아가야할 때
 			if (GetRotateDir())
 			{	
-				SetDirection(-1);
+				if (GetDirection() == 1)
+				{
+					SetDirection(-1);
+					m_MonsterImg->RotateFlip(RotateNoneFlipX);
+				}				
 				m_Speed = (m_Speed + diff) * 3.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
@@ -81,7 +80,11 @@ bool cMonster_Runner::Update()
 			//방향이 위로 날아가야할 때
 			if (GetRotateDir())
 			{
-				SetDirection(1);
+				if (GetDirection() == -1)
+				{
+					SetDirection(1);
+					m_MonsterImg->RotateFlip(RotateNoneFlipX);
+				}
 				m_Speed = (m_Speed + -diff) * 3.f;
 				m_Dir.y = -1.2f;
 				SetOnPlatform(false);
@@ -104,7 +107,8 @@ bool cMonster_Runner::Update()
 			case Forward:
 				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
 				break;
-			case Run:
+			case Attack:
+				m_Speed = 300.f;
 				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
 				CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
 				break;
@@ -115,7 +119,7 @@ bool cMonster_Runner::Update()
 				break;
 		}
 		// 달릴 때 이미지 변경
-		if (m_CurBehaviorState == Run)
+		if (m_CurBehaviorState == Attack)
 		{
 			if (GetScale().x == 89.f)
 			{
@@ -142,72 +146,12 @@ bool cMonster_Runner::Update()
 		if (!SenseBomb())
 			SensePlayer();
 
-		if (m_BehaviorTime <= 0.f && m_CurBehaviorState != Run)
+		if (m_BehaviorTime <= 0.f && m_CurBehaviorState != Attack)
 			m_ChangeBehavior = true;
 
 		if (m_ChangeBehavior)
 			ChooseBehavior();
-	}
-	/*
-	if (GetShoot())
-	{		
-		CurPos.y += 800.f * m_Dir.y * DELTA_TIME;
-		if (m_Dir.y <= 2)
-			// 포물선 그리게끔 일정값 이하일 때는 계속 증가시켜주기.
-			m_Dir.y += 6.f * DELTA_TIME;
-		if (GetDirection() == 1) // 우측 방향일때
-			CurPos.x += (float)(m_Speed * DELTA_TIME); // 바라보는 방향에 맞게끔			
-		else // 좌측 방향일 때
-			CurPos.x -= (float)(m_Speed  * DELTA_TIME); // 바라보는 방향에 맞게끔								
-	}
-	else
-	{
-		if(GetThruRotate())
-		{
-			//cout << "회전 플랫폼 통과 중 1 : " << CurPos.y << '\n';
-			//CurPos.y += 1800.f * m_Dir.y * DELTA_TIME;
-			//cout << "회전 플랫폼 통과 중 2 : " << CurPos.y << '\n';
-		}
-		if (!isOnPlatform())
-		{
-			cout << "추락 중 1 : " << CurPos.y << '\n';
-			CurPos.y += 600.f * m_Dir.y * DELTA_TIME;
-			cout << "추락 중 2 : " << CurPos.y << '\n';
-		}
-		else
-			m_Speed = 200.f;
-
-		switch (m_CurBehaviorState)
-		{
-			case Forward:
-				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
-				break;
-				
-			case Run:
-				CurPos.x += DELTA_TIME * m_Speed * GetDirection();
-				CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
-				break;
-			case Retreat:
-				CurPos.x -= DELTA_TIME * (m_Speed / 1.5f) * GetDirection();
-				break;
-			default:
-				break;
-		}
-
-		m_BehaviorTime -= DELTA_TIME;
-
-
-		if (!SenseBomb())
-			SensePlayer();
-
-		if (m_BehaviorTime <= 0.f && m_CurBehaviorState != Run)
-			m_ChangeBehavior = true;
-
-		if (m_ChangeBehavior)
-			ChooseBehavior();
-	}
-	*/
-	
+	}	
 
 	SetPos(CurPos);
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);	
@@ -282,10 +226,8 @@ void cMonster_Runner::SensePlayer()
 		if (curPlayer_y <= curMonster_down
 			&& curPlayer_y >= curMonster_top)
 		{
-			m_CurBehaviorState = Run;
-			
+			m_CurBehaviorState = Attack;			
 			m_ChangeBehavior = false;
-			m_Speed = 300.f;
 		}
 	}
 	else if (GetDirection() == -1 && curMonster_x >= curPlayer_x)
@@ -293,9 +235,8 @@ void cMonster_Runner::SensePlayer()
 		if (curPlayer_y <= curMonster_down
 			&& curPlayer_y >= curMonster_top)
 		{
-			m_CurBehaviorState = Run;			
+			m_CurBehaviorState = Attack;			
 			m_ChangeBehavior = false;
-			m_Speed = 300.f;
 		}
 	}
 	else if (m_BehaviorTime < 0.f)
@@ -341,7 +282,10 @@ bool cMonster_Runner::SenseBomb()
 		}
 	}
 	else if (m_BehaviorTime < 0.f)
+	{
 		m_ChangeBehavior = true;
+	}
+		
 
 	return false;
 }

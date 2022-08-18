@@ -4,6 +4,7 @@
 #include "Monster_Flying.h"
 #include "Monster_Thorn.h"
 #include "Monster_Runner.h"
+#include "Monster_SpitFire.h"
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
 #include "Platform_Rotate.h"
@@ -33,7 +34,7 @@ void cScene_Start::Enter()
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
 
-	//Monster Object 추가
+	// Monster Object 추가 ===================================================================================================
 	cMonster* MonsterObj = nullptr;
 	MonsterObj = new cMonster_Flying;
 	MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 2.5f });
@@ -43,22 +44,38 @@ void cScene_Start::Enter()
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 	MonsterObj = new cMonster_Runner;
-	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y *11.f });
-	Vec2 curcurPos = MonsterObj->GetPos();
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 7.f });
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
-	//MonsterObj = new cMonster_Thorn;
-	//MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
-	//Vec2 curcurPos = MonsterObj->GetPos();
-	//MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+	MonsterObj = new cMonster_Thorn;
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 6.f });
 
-	//AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
-	//SetPlatformSize(6);
+	MonsterObj = new cMonster_SpitFire;
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 10.f });
 
-	//Platform Object 추가
+	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+
+
+	// Platform Object 추가	===================================================================================================
+	// 3rd Floor ===================================================================
+
 	cPlatform* PlatformObj = nullptr;
+	PlatformObj = new cPlatform_Rotate;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 180 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 180 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 180 }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	// 2nd Floor ===================================================================
 	PlatformObj = new cPlatform_Rotate;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 30 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
@@ -71,6 +88,8 @@ void cScene_Start::Enter()
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 30 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
+
+	// 1st Floor ===================================================================
 	PlatformObj = new cPlatform_Rotate;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f+120 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
@@ -82,6 +101,8 @@ void cScene_Start::Enter()
 	PlatformObj = new cPlatform;
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f + 360, Resolution.y / 2.f + 120 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	// Zero Floor ==================================================================
 
 	PlatformObj = new cPlatform_SideWall;
 	PlatformObj->SetPos(Vec2{ (PlatformObj->GetScale().x / 2.f), Resolution.y / 2.f });
@@ -95,13 +116,6 @@ void cScene_Start::Enter()
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
-	//for (; i < GetPlatformSize(); ++i)
-	//{
-	//	PlatformObj = new cPlatform;
-	//	PlatformObj->SetPos(Vec2 { (MoveDist + ObjectScale / 2.f) + temp * (float)i, 50.f });
-	//	PlatformObj->SetCenterPos(PlatformObj->GetPos());
-	//	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
-	//}
 }
 
 void cScene_Start::Exit() // 나가면서 현재 플레이어에 대한 정보를 씬 매니저에 넘겨줘야할 듯..?

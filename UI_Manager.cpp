@@ -35,16 +35,20 @@ void cUI_Manager::Init()
 {
 	Set_PlayerLife_Pos(Vec2(Get_LifeCount_Scale().x*1.5f, Get_LifeCount_Scale().y*1.5f));
 	Set_LifeCount_Pos(Vec2(Get_PlayerLife_Pos().x + Get_PlayerLife_Scale().x/2.f, Get_PlayerLife_Pos().y + 7.f));
-	m_curPlayer = dynamic_cast<cPlayer*>(cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER][0]);
+	if(cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER].size() != 0)
+		m_curPlayer = dynamic_cast<cPlayer*>(cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER][0]);
 }
 
 void cUI_Manager::Update()
 {
-	m_PlayerHP = m_curPlayer->GetHP();
+	if(m_curPlayer != NULL)
+		m_PlayerHP = m_curPlayer->GetHP();
 }
 
 void cUI_Manager::Render(HDC _hdc)
 {
+	if (m_curPlayer == NULL)
+		return;
 	Graphics graphics_Life(_hdc);
 	Graphics graphics_LifeCount(_hdc);
 

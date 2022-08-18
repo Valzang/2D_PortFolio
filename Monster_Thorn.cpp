@@ -4,6 +4,7 @@ cMonster_Thorn::cMonster_Thorn() : m_FlyingTime(0)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Thron.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
+	m_curGroupType = (INT)GROUP_TYPE::MONSTER_THORN;
 	SetHP(1);
 	SetImgAttr();
 	SetDirection(1);
@@ -30,11 +31,10 @@ bool cMonster_Thorn::Update()
 		m_FlyingTime = 0;
 	}
 	else if (m_FlyingTime >= 0.45f && m_Speed > 0)
-	{
 		m_Speed *= -1;
-	}
 
 	CurPos.y += DELTA_TIME * m_Speed;
+	CurPos.x += DELTA_TIME * abs(m_Speed) * GetDirection();
 
 	SetPos(CurPos);
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
@@ -52,7 +52,7 @@ void cMonster_Thorn::Render(HDC _hdc)
 	int h = m_MonsterImg->GetHeight();
 
 	int xStart = curFrame * w;
-	curFrame = curFrame >= 2 ? 0 : curFrame + 1;
+	curFrame = curFrame >= 3 ? 0 : curFrame + 1;
 
 	int yStart = 0;
 
