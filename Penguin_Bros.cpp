@@ -63,14 +63,19 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     {
         if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
         {
+            cout << msg.message << '\n';
             if (msg.message == WM_QUIT)
                 break;
             else
             {
                 if (msg.message == WM_NCLBUTTONDOWN)
                     cTimeManager::GetInstance()->SetGrabTitle();
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);                
+                if (msg.message != WM_NCRBUTTONDOWN
+                    && msg.message != WM_NCLBUTTONDBLCLK)
+                {
+                    TranslateMessage(&msg);
+                    DispatchMessage(&msg);
+                }
             }
 
         }
@@ -107,7 +112,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW&~WS_MAXIMIZEBOX,
+   hWnd = CreateWindowExW(WS_EX_TOOLWINDOW, szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
