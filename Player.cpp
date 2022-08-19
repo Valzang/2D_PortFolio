@@ -33,7 +33,7 @@ cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_i
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
 	SetSpawnPlace(_SpawnPlace);
 	SetPos(_SpawnPlace);
-	SetHP(2);
+	SetHP(9);
 
 	SetDir(Vec2(-2.f, 3.f));
 
@@ -147,7 +147,7 @@ bool cPlayer::Update()
 	else
 	{
 		if ((KEY_CHECK(KEY::I, KEY_STATE::DOWN) || KEY_CHECK(KEY::I, KEY_STATE::HOLD)) 
-			&& !(KEY_CHECK(KEY::K, KEY_STATE::HOLD))) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
+			&& !(KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && !m_isDamaging) // 실제로 위로 움직이는 게 아닌, 회전 플랫폼에 있을 때 위쪽으로 회전시키는 용도로만 쓰임.
 		{
 			if (m_isAttached && !GetRotating()
 				&& (KEY_CHECK(KEY::J, KEY_STATE::NONE) || KEY_CHECK(KEY::J, KEY_STATE::UP))
@@ -158,7 +158,7 @@ bool cPlayer::Update()
 					m_AttachingTime = 0.f;
 			}
 		}
-		if ((KEY_CHECK(KEY::K, KEY_STATE::DOWN) || KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && !GetRotating()) // 아래를 짚음.
+		if ((KEY_CHECK(KEY::K, KEY_STATE::DOWN) || KEY_CHECK(KEY::K, KEY_STATE::HOLD)) && !GetRotating() && !m_isDamaging) // 아래를 짚음.
 		{
 			if (!m_isAttached)
 				m_isSitted = true;
@@ -189,20 +189,19 @@ bool cPlayer::Update()
 			m_isSitted = false;
 		}
 
-		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && !GetRotating())
+		if (KEY_CHECK(KEY::S, KEY_STATE::DOWN) && !m_isJumping && !m_isSitted && !m_isDashing && !GetRotating() && !m_isDamaging)
 		{
 			if (m_isAttached)
 			{
 				m_isAttached = false;
 				m_AttachingTime = 0.f;
-				SetOnPlatform(false);
 			}
 			else if (isOnPlatform())
 			{
-				SetOnPlatform(false);
 				m_isJumping = true;
 				m_Dir.y *= -1;
 			}
+			SetOnPlatform(false);
 		}
 
 		// ================================================================================================================== 좌측 이동
@@ -280,9 +279,7 @@ bool cPlayer::Update()
 			m_AttachingTime += DELTA_TIME;
 	}
 
-	SetPos(Pos);
-	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
-	CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
+	SetPos(Pos); 
 	if (GetRotating())
 	{
 		if (m_Rotation_Degree >= 180 || m_Rotation_Degree <= -180)
@@ -295,9 +292,14 @@ bool cPlayer::Update()
 			SetRotating(false);
 			m_Rotation_Degree = 0;
 			SetPos(Player_Pos);
+			// 더 돌아서 공중에 떠있는거 방지용
+			//SetOnPlatform(false);
 			m_isAttached = Player_Pos.y > Platform_Pos.y ? true : false;
 		}
 	}
+	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
+	CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
+	
 
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
 	m_InvincibleTime = (m_InvincibleTime > 0.f) ? m_InvincibleTime - DELTA_TIME : 0.f;	
@@ -431,6 +433,7 @@ void cPlayer::Render(HDC _hdc)
 			graphics.SetTransform(&mat);
 
 			m_Rotation_Degree += (int)(decrease * 60.f * DELTA_TIME);
+			//m_Rotation_Degree += (int)(decrease);
 		}
 
 		if (m_isAttached)
@@ -467,6 +470,12 @@ void cPlayer::Render(HDC _hdc)
 			delete m_PlayerImg;
 			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
 			SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 6.f));
+
+			if(m_isAttached)
+			{
+				m_isAttached = false; 
+				m_PlayerImg->RotateFlip(RotateNoneFlipX);
+			}
 		}	
 		else
 			++Enter_count;		
@@ -557,12 +566,11 @@ void cPlayer::Respawn()
 	SetPos(m_SpawnPlace);
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
-	m_Spawning = true;
+	m_Spawning = true;	
 	m_isMoved = false;
 	m_isSitted = false;
 	m_isDashing = false;
 	m_isJumping = false;
-	m_isAttached = false;
 	m_InvincibleTime = 3.f;
 	SetDir(Vec2(-2.f, 3.f));
 	SetDirection(1);

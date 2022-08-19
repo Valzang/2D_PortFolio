@@ -52,6 +52,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 	vector<cObject*> otherObj = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[GROUP_TYPE];
 	int curObj_GroupType = curObj->GetCurGroupType();
 
+
 	for (int i = 0; i < otherObj.size(); ++i)
 	{
 		// 부딪힌 오브젝트의 끝점들
@@ -184,6 +185,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						{
 							cPlayer* curPlayer = dynamic_cast<cPlayer*>(curObj);
 							curPlayer->SetRotFromDown(true);
+							//if (curPlayer->Rotate_Platform() && curPlayer->GetRotating())
 							if (curPlayer->Rotate_Platform())
 								curPlayer->SetAttach();
 							else
@@ -256,7 +258,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								curMonster->SetCurBHState(0);
 								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX) * 2, curMonster->GetPos().y));
 							}
-							else
+							else if (!otherObj_Player->GetRotating())
 								otherObj_Player->Damage();
 						}
 						
@@ -324,7 +326,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								curMonster->SetCurBHState(0);
 								curMonster->SetPos(Vec2(curMonster->GetPos().x - (otherObj_RightX - curObj_LeftX) * 2, curMonster->GetPos().y));
 							}
-							else
+							else if (!otherObj_Player->GetRotating())
 								otherObj_Player->Damage();
 						}
 					}
@@ -360,6 +362,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			
 		}
 	}
+
 	curObj->SetPos(curObj_Pos);
 }
 

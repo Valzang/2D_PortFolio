@@ -36,14 +36,13 @@ public:
     virtual void Render(HDC _hdc) override;
     void CreateBomb();
 
-
     bool GetDashing() { return m_isDashing; }
 
     void SetUnsitted() { m_isSitted = false; }
     void SetYspeedReverse() { m_Dir.y = 300.f; }
     bool Rotate_Platform();
 
-    bool isAttaching() { return m_isAttached; }
+    bool GetAttach() { return m_isAttached; }
     void SetAttach() { m_isAttached = true; }    
 
     void SetAttackTime(double _val) { m_AfterAttackTime = _val; }

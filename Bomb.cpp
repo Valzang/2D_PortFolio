@@ -146,8 +146,8 @@ void cBomb::Render(HDC _hdc)
 		xStart = 0;
 		w = m_BombImg->GetWidth();
 		h = m_BombImg->GetHeight() / 11;
-		yStart = h * (m_ExplosionTime++/3);
-		if(m_ExplosionTime > 32)
+		yStart = h * (m_ExplosionTime++/2);
+		if(m_ExplosionTime > 21)
 			Dead();
 	}
 	else
