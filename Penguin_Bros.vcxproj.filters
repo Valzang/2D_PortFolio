@@ -217,10 +217,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
+    <Image Include="PB_Icon_256x256.ico">
       <Filter>Default\리소스 파일</Filter>
     </Image>
     <Image Include="Penguin_Bros.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="PB_Icon_64x64.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>Default\리소스 파일</Filter>
+    </Image>
+    <Image Include="PB_Icon_64x64_.ico">
       <Filter>Default\리소스 파일</Filter>
     </Image>
   </ItemGroup>

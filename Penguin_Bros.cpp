@@ -107,7 +107,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // 인스턴스 핸들을 전역 변수에 저장합니다.
 
-   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+   hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW&~WS_MAXIMIZEBOX,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -125,6 +125,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+        case WM_GETMINMAXINFO:
+        {
+            ((MINMAXINFO*)lParam)->ptMaxTrackSize.x = 1280;
+            ((MINMAXINFO*)lParam)->ptMaxTrackSize.y = 768;
+            ((MINMAXINFO*)lParam)->ptMaxTrackSize.x = 1280;
+            ((MINMAXINFO*)lParam)->ptMaxTrackSize.y = 768;
+        }
+        break;
 		case WM_COMMAND:
 		{
 			int wmId = LOWORD(wParam);

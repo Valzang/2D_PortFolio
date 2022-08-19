@@ -25,7 +25,7 @@ cScene_Start::~cScene_Start()
 void cScene_Start::Enter()
 {
 	// 플레이어 추가 및 위치 설정
-	cPlayer* PlayerObj = new cPlayer(Vec2(640.f,400.f));
+	cPlayer* PlayerObj = new cPlayer(Vec2(640.f,600.f));
 	AddObject(PlayerObj, GROUP_TYPE::PLAYER);
 
 
@@ -34,6 +34,7 @@ void cScene_Start::Enter()
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
+	cUI_Manager::GetInstance()->Init();
 
 	// Monster Object 추가 ===================================================================================================
 	cMonster* MonsterObj = nullptr;
@@ -44,15 +45,17 @@ void cScene_Start::Enter()
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
-	MonsterObj = new cMonster_Runner;
-	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 7.f });
-
-	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
-
 	MonsterObj = new cMonster_Thorn;
-	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 6.f });
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 4.f });
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+
+	MonsterObj = new cMonster_Runner;
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 8.8f });
+
+	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
+
+	
 
 	MonsterObj = new cMonster_SpitFire;
 	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 10.f });

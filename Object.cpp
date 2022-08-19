@@ -248,7 +248,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						}
 						else if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
 						{
-							cout << "우측 몬스터가 좌측 플레이어와 충돌 " << '\n';
 							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(curObj);
 							if (curMonster->GetCurBHState() != 4)
 							{
@@ -317,7 +316,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						}
 						else if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
 						{
-							cout << "좌측 몬스터가 우측 플레이어와 충돌 " << '\n';
 							cMonster_Runner* curMonster = dynamic_cast<cMonster_Runner*>(curObj);
 							if (curMonster->GetCurBHState() != 4)
 							{

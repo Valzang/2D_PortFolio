@@ -196,8 +196,11 @@
     <ResourceCompile Include="Penguin_Bros.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Penguin_Bros.ico" />
+    <Image Include="PB_Icon_64x64_.ico" />
     <Image Include="small.ico" />
+    <Image Include="PB_Icon_64x64.ico" />
+    <Image Include="Penguin_Bros.ico" />
+    <Image Include="PB_Icon_256x256.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

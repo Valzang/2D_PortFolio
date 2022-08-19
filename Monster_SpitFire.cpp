@@ -129,8 +129,6 @@ bool cMonster_SpitFire::Update()
 		if (m_ChangeBehavior)
 			ChooseBehavior();
 	}
-	if (m_Speed != 100.f)
-		cout << "현재 속도 : " << m_Speed << '\n';
 
 	SetPos(CurPos);
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
