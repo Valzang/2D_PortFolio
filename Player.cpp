@@ -293,7 +293,7 @@ bool cPlayer::Update()
 			m_Rotation_Degree = 0;
 			SetPos(Player_Pos);
 			// 더 돌아서 공중에 떠있는거 방지용
-			//SetOnPlatform(false);
+			SetOnPlatform(false);
 			m_isAttached = Player_Pos.y > Platform_Pos.y ? true : false;
 		}
 	}
