@@ -8,6 +8,7 @@
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
 #include "Platform_Rotate.h"
+#include "Platform_Broken.h"
 
 #include "Core.h"
 
@@ -106,6 +107,15 @@ void cScene_Start::Enter()
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f + 360, Resolution.y / 2.f + 120 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
+	PlatformObj = new cPlatform_Broken;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y - 350.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform_Broken;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 300, Resolution.y - 350.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+
 	// Zero Floor ==================================================================
 
 	PlatformObj = new cPlatform_SideWall;
@@ -119,7 +129,6 @@ void cScene_Start::Enter()
 	PlatformObj = new cPlatform_Under;
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
-
 }
 
 void cScene_Start::Exit() // 나가면서 현재 플레이어에 대한 정보를 씬 매니저에 넘겨줘야할 듯..?

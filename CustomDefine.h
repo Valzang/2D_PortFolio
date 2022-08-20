@@ -69,6 +69,36 @@ using namespace std;
 #define DELTA_TIME cTimeManager::GetInstance()->GetDT()
 #define KEY_CHECK(key, state) cKeyManager::GetInstance()->GetKeyState(key) == state
 
+enum class GROUP_TYPE
+{
+	DEFAULT,
+	PLATFORM,
+	PLATFORM_ROTATE,
+	PLATFORM_BROKEN,
+	PLAYER,
+	MONSTER,
+	MONSTER_THORN,
+	MONSTER_RUNNER,
+	THING,
+	BOMB,
+	SPITFIRE,
+
+	END = 11,
+};
+
+enum class SCENE_TYPE
+{
+	TOOL,
+	START,
+	STAGE_11,
+	STAGE_12,
+	STAGE_13,
+	STAGE_14,
+	STAGE_15,
+
+	END,
+};
+
 
 struct Vec2
 {
@@ -126,35 +156,6 @@ struct Vec2
 	{
 		return sqrt(x * x + y * y);
 	}
-};
-
-enum class GROUP_TYPE
-{
-	DEFAULT,
-	PLATFORM,
-	PLATFORM_ROTATE,
-	PLAYER,
-	MONSTER,
-	MONSTER_THORN,
-	MONSTER_RUNNER,
-	THING,
-	BOMB,
-	SPITFIRE,
-
-	END = 10,
-};
-
-enum class SCENE_TYPE
-{
-	TOOL,
-	START,
-	STAGE_11,
-	STAGE_12,
-	STAGE_13,
-	STAGE_14,
-	STAGE_15,
-
-	END,
 };
 
 

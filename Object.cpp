@@ -225,6 +225,18 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						switch (curObj_GroupType)
 						{
 							case (INT)GROUP_TYPE::BOMB:
+								if (otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::PLATFORM_BROKEN)
+								{
+									cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
+									if(curBomb->GetExplode())
+										otherObj[i]->Dead();
+									else
+									{
+										curBomb->SetExplode();
+										otherObj[i]->Dead();
+									}
+									break;
+								}
 							case (INT)GROUP_TYPE::MONSTER_THORN:
 								curObj->SetDirection(1);
 								break;
@@ -293,6 +305,18 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						switch (curObj_GroupType)
 						{
 							case (INT)GROUP_TYPE::BOMB:
+								if (otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::PLATFORM_BROKEN)
+								{
+									cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
+									if (curBomb->GetExplode())
+										otherObj[i]->Dead();
+									else
+									{
+										curBomb->SetExplode();
+										otherObj[i]->Dead();
+									}
+									break;
+								}
 							case (INT)GROUP_TYPE::MONSTER_THORN:
 								curObj->SetDirection(-1);
 								break;
