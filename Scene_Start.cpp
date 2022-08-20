@@ -5,6 +5,7 @@
 #include "Monster_Thorn.h"
 #include "Monster_Runner.h"
 #include "Monster_SpitFire.h"
+#include "Monster_Boss.h"
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
 #include "Platform_Rotate.h"
@@ -20,7 +21,7 @@ cScene_Start::cScene_Start()
 }
 
 cScene_Start::~cScene_Start()
-{
+{	
 }
 
 void cScene_Start::Enter()
@@ -31,7 +32,7 @@ void cScene_Start::Enter()
 
 
 	// 몬스터 배치	
-	SetMonsterSize(4);			// 몬스터 수
+	SetMonsterSize(5);			// 몬스터 수
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
@@ -55,22 +56,34 @@ void cScene_Start::Enter()
 	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 8.8f });
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
-
 	
 
-	MonsterObj = new cMonster_SpitFire;
-	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 10.f });
+	MonsterObj = new cMonster_Boss;
+	//MonsterObj = new cMonster_SpitFire;
+	MonsterObj->SetPos(Vec2 { 200.f, Resolution.y - MonsterObj->GetScale().y * 5.f });
 
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 
 	// Platform Object 추가	===================================================================================================
+
 	// 3rd Floor ===================================================================
 
 	cPlatform* PlatformObj = nullptr;
 	PlatformObj = new cPlatform_Rotate;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 180 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
+
+
+	PlatformObj = new cPlatform_Broken;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y - 340.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+	PlatformObj = new cPlatform_Broken;
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 300, Resolution.y - 340.f }); // 중심좌표..?
+	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
+
 
 	PlatformObj = new cPlatform;
 	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 180 }); // 중심좌표..?
@@ -107,14 +120,6 @@ void cScene_Start::Enter()
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f + 360, Resolution.y / 2.f + 120 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
-	PlatformObj = new cPlatform_Broken;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y - 350.f }); // 중심좌표..?
-	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
-
-	PlatformObj = new cPlatform_Broken;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 300, Resolution.y - 350.f }); // 중심좌표..?
-	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
-
 
 	// Zero Floor ==================================================================
 
@@ -129,6 +134,7 @@ void cScene_Start::Enter()
 	PlatformObj = new cPlatform_Under;
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y - (PlatformObj->GetScale().y / 2.f) }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
+
 }
 
 void cScene_Start::Exit() // 나가면서 현재 플레이어에 대한 정보를 씬 매니저에 넘겨줘야할 듯..?

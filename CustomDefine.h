@@ -69,6 +69,7 @@ using namespace std;
 #define DELTA_TIME cTimeManager::GetInstance()->GetDT()
 #define KEY_CHECK(key, state) cKeyManager::GetInstance()->GetKeyState(key) == state
 
+
 enum class GROUP_TYPE
 {
 	DEFAULT,
@@ -79,11 +80,13 @@ enum class GROUP_TYPE
 	MONSTER,
 	MONSTER_THORN,
 	MONSTER_RUNNER,
+	MONSTER_BOSS,
 	THING,
 	BOMB,
 	SPITFIRE,
+	WAVE,
 
-	END = 11,
+	END = 13,
 };
 
 enum class SCENE_TYPE
@@ -135,7 +138,7 @@ struct Vec2
 	template <typename T>
 	Vec2(T _x, T _y) : x((float)_x), y((float)_y) {}
 
-	// 생성자 ===================================================
+	// 생성자 ==============================================
 	Vec2& Normalize() // 벡터 일반화
 	{
 		float fLen = Length();
@@ -157,6 +160,7 @@ struct Vec2
 		return sqrt(x * x + y * y);
 	}
 };
+
 
 
 

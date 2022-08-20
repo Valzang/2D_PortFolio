@@ -124,6 +124,11 @@ bool cPlatform::Update()
 		}
 
 	}
+
+	if (GetCurGroupType() == (INT)GROUP_TYPE::PLATFORM_BROKEN)
+	{
+		CollisionCheck(this, (INT)GROUP_TYPE::BOMB);
+	}
 	return true;
 }
 

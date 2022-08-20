@@ -73,7 +73,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			{
 				switch (GROUP_TYPE)
 				{
-					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
 					case (INT)GROUP_TYPE::PLATFORM:					
 					{
 						// 회전문을 1번만 통과해야할 때
@@ -169,6 +168,13 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						}						
 					}
 						break;
+					case (INT)GROUP_TYPE::BOMB:
+					{
+						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
+						if (otherBomb->GetExplode())
+							curObj->Dead();
+					}
+						break;
 				}				
 			}
 			// 위쪽에서 충돌했을 때
@@ -176,7 +182,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			{
 				switch (GROUP_TYPE)
 				{
-					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
 					case (INT)GROUP_TYPE::PLATFORM:
 					{
 						// 넘어온 만큼 위치 보정
@@ -210,6 +215,13 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						}
 					}
 						break;
+					case (INT)GROUP_TYPE::BOMB:
+					{
+						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
+						if (otherBomb->GetExplode())
+							curObj->Dead();
+					}
+						break;
 				}				
 			}
 			// 왼쪽이 닿았을 때
@@ -217,7 +229,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			{
 				switch (GROUP_TYPE)
 				{
-					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
 					case (INT)GROUP_TYPE::PLATFORM:
 					{						
 						// 넘어온 만큼 위치 보정
@@ -228,13 +239,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								if (otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::PLATFORM_BROKEN)
 								{
 									cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-									if(curBomb->GetExplode())
-										otherObj[i]->Dead();
-									else
-									{
-										curBomb->SetExplode();
-										otherObj[i]->Dead();
-									}
+									curBomb->SetExplode();
 									break;
 								}
 							case (INT)GROUP_TYPE::MONSTER_THORN:
@@ -243,6 +248,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							case (INT)GROUP_TYPE::MONSTER_RUNNER:
 								curObj->SetShoot(false);
 								break;
+							case (INT)GROUP_TYPE::WAVE:
 							case (INT)GROUP_TYPE::SPITFIRE:
 								curObj->Dead();
 								break;
@@ -253,12 +259,16 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB
-							|| curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+							|| curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE
+							|| curObj_GroupType == (INT)GROUP_TYPE::WAVE)
 						{
 							if (!otherObj_Player->GetRotating())
+							{
 								otherObj_Player->Damage();
-							if(!otherObj_Player->GetRotating() && curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
-								curObj->Dead();
+								if (curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+									curObj->Dead();
+							}
+							
 						}
 						else if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
 						{
@@ -288,6 +298,13 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						}
 					}
 						break;
+					case (INT)GROUP_TYPE::BOMB:
+					{
+						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
+						if (otherBomb->GetExplode())
+							curObj->Dead();
+					}
+						break;
 				}
 				
 			}
@@ -297,7 +314,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			{
 				switch (GROUP_TYPE)
 				{
-					case (INT)GROUP_TYPE::PLATFORM_ROTATE:
 					case (INT)GROUP_TYPE::PLATFORM:
 					{						
 						// 넘어온 만큼 위치 보정
@@ -308,13 +324,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								if (otherObj[i]->GetCurGroupType() == (INT)GROUP_TYPE::PLATFORM_BROKEN)
 								{
 									cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-									if (curBomb->GetExplode())
-										otherObj[i]->Dead();
-									else
-									{
-										curBomb->SetExplode();
-										otherObj[i]->Dead();
-									}
+									curBomb->SetExplode();
 									break;
 								}
 							case (INT)GROUP_TYPE::MONSTER_THORN:
@@ -333,12 +343,15 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cPlayer* otherObj_Player = dynamic_cast<cPlayer*>(otherObj[i]);
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB
-							|| curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+							|| curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE
+							|| curObj_GroupType == (INT)GROUP_TYPE::WAVE)
 						{
 							if (!otherObj_Player->GetRotating())
+							{
 								otherObj_Player->Damage();
-							if (!otherObj_Player->GetRotating() && curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
-								curObj->Dead();
+								if (curObj_GroupType == (INT)GROUP_TYPE::SPITFIRE)
+									curObj->Dead();
+							}							
 						}
 						else if (curObj_GroupType == (INT)GROUP_TYPE::MONSTER_RUNNER)
 						{
@@ -378,6 +391,13 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 								curMonster->SetPos(Vec2(curMonster->GetPos().x + (curObj_RightX - otherObj_LeftX)*2, curMonster->GetPos().y));
 							}
 						}
+					}
+						break;
+					case (INT)GROUP_TYPE::BOMB:
+					{
+						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
+						if (otherBomb->GetExplode())
+							curObj->Dead();
 					}
 						break;
 				}

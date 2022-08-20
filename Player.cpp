@@ -295,6 +295,7 @@ bool cPlayer::Update()
 			// 더 돌아서 공중에 떠있는거 방지용
 			SetOnPlatform(false);
 			m_isAttached = Player_Pos.y > Platform_Pos.y ? true : false;
+
 		}
 	}
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
@@ -433,13 +434,13 @@ void cPlayer::Render(HDC _hdc)
 			graphics.SetTransform(&mat);
 
 			m_Rotation_Degree += (int)(decrease * 60.f * DELTA_TIME);
-			//m_Rotation_Degree += (int)(decrease);
 		}
 
 		if (m_isAttached)
 		{
 			mat.RotateAt(Gdiplus::REAL(180 % 360), Gdiplus::PointF(Player_Pos.x, Player_Pos.y)); // 플레이어 중점을 기준으로 회전
 			graphics.SetTransform(&mat);
+
 			if (!m_Xreverse)
 			{
 				m_PlayerImg->RotateFlip(RotateNoneFlipX);

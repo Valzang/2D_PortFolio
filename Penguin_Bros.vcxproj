@@ -143,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="Bomb.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Monster_Boss.h" />
     <ClInclude Include="Monster_Flying.h" />
     <ClInclude Include="Monster_Runner.h" />
     <ClInclude Include="Monster_SpitFire.h" />
@@ -168,10 +169,12 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeManager.h" />
     <ClInclude Include="UI_Manager.h" />
+    <ClInclude Include="Wave.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomb.cpp" />
     <ClCompile Include="Core.cpp" />
+    <ClCompile Include="Monster_Boss.cpp" />
     <ClCompile Include="Monster_Flying.cpp" />
     <ClCompile Include="Monster_Runner.cpp" />
     <ClCompile Include="Monster_SpitFire.cpp" />
@@ -193,6 +196,7 @@
     <ClCompile Include="SpitFire.cpp" />
     <ClCompile Include="TimeManager.cpp" />
     <ClCompile Include="UI_Manager.cpp" />
+    <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Penguin_Bros.rc" />

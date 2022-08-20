@@ -145,6 +145,12 @@
     <ClInclude Include="Platform_Broken.h">
       <Filter>Engine\03. Object\Platform</Filter>
     </ClInclude>
+    <ClInclude Include="Monster_Boss.h">
+      <Filter>Engine\03. Object\Monster\Monster_Mover</Filter>
+    </ClInclude>
+    <ClInclude Include="Wave.h">
+      <Filter>Engine\03. Object\Projectile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -215,6 +221,12 @@
     </ClCompile>
     <ClCompile Include="Platform_Broken.cpp">
       <Filter>Engine\03. Object\Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="Monster_Boss.cpp">
+      <Filter>Engine\03. Object\Monster\Monster_Mover</Filter>
+    </ClCompile>
+    <ClCompile Include="Wave.cpp">
+      <Filter>Engine\03. Object\Projectile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
