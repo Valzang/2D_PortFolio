@@ -6,6 +6,7 @@ cSceneManager::cSceneManager()
 	: m_curScene(nullptr)
 	, m_arrScene {}
 	, m_curSceneLevel(1)
+	, m_Restart(false)
 {
 	
 }
@@ -54,6 +55,17 @@ void cSceneManager::Init()
 void cSceneManager::Update()
 {
 	m_curScene->Update();
+	if (m_curScene->GetContinue())
+		m_Restart = true;
+	else if (m_Restart)
+	{
+		delete m_arrScene[m_curSceneLevel];
+		m_arrScene[m_curSceneLevel] = nullptr;
+		m_curSceneLevel = (INT)SCENE_TYPE::START;
+		m_Restart = false;
+		Init();
+	}
+		
 }
 
 void cSceneManager::Render(HDC _hdc)

@@ -52,9 +52,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 	vector<cObject*> otherObj = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[GROUP_TYPE];
 	int curObj_GroupType = curObj->GetCurGroupType();
 
-
+	bool CollisionDown = false;
 	for (int i = 0; i < otherObj.size(); ++i)
-	{
+	{		
 		// 부딪힌 오브젝트의 끝점들
 		Vec2 otherObj_Pos = otherObj[i]->GetPos();
 		Vec2 otherObj_Scale = otherObj[i]->GetScale();
@@ -65,16 +65,17 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 		float otherObj_DownY = otherObj_Pos.y + otherObj_Scale.y / 2.f;
 
 		// 충돌했을 때 (사각형 기준)
-		if ((abs(curObj_Pos.x - otherObj_Pos.x) < (curObj_Scale.x + otherObj_Scale.x) / 2.f)
-			&& (abs(curObj_Pos.y - otherObj_Pos.y) < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
+		if ((abs(curObj_Pos.x - otherObj_Pos.x) <= (curObj_Scale.x + otherObj_Scale.x) / 2.f)
+			&& (abs(curObj_Pos.y - otherObj_Pos.y) <= (curObj_Scale.y + otherObj_Scale.y) / 2.f))
 		{	
 			// 아랫쪽에서 충돌했을 때
-			if (curObj_UpY < otherObj_UpY && curObj_DownY > otherObj_UpY)
+			if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
 			{
 				switch (GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM:					
 					{
+						CollisionDown = true;
 						// 회전문을 1번만 통과해야할 때
 						if (curObj->GetThruRotate() && otherObj[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
 						{
@@ -165,7 +166,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
-						}						
+							else if (curBomb->GetShoot())
+								curBomb->SetExplode();
+						}
 					}
 						break;
 					case (INT)GROUP_TYPE::BOMB:
@@ -178,7 +181,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				}				
 			}
 			// 위쪽에서 충돌했을 때
-			else if (curObj_UpY < otherObj_DownY && curObj_DownY > otherObj_DownY)
+			else if (curObj_UpY <= otherObj_DownY && curObj_DownY > otherObj_DownY)
 			{
 				switch (GROUP_TYPE)
 				{
@@ -212,6 +215,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
+							else if (curBomb->GetShoot())
+								curBomb->SetExplode();
 						}
 					}
 						break;
@@ -404,8 +409,10 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				
 			}			
 			
-		}
+		}		
 	}
+	if (!CollisionDown && GROUP_TYPE == (INT)GROUP_TYPE::PLATFORM)
+		curObj->SetOnPlatform(false);
 
 	curObj->SetPos(curObj_Pos);
 }

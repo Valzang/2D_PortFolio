@@ -5,6 +5,14 @@ class cPlayer : public cObject
 {
 private:
     Image* m_PlayerImg;  // 이미지 파일    
+    Image* m_PlayerLifeImg;     // 플레이어 목숨 이미지 파일
+    Image* m_PlayerLifeCountImg; // 플레이어 목숨 카운트 이미지 파일
+
+    Vec2 m_PlayerLife_Pos;
+    Vec2 m_PlayerLife_Scale;
+
+    Vec2 m_LifeCount_Pos;
+    Vec2 m_LifeCount_Scale;
 
     bool m_isMoved;     // 현재 움직이고 있는지
     bool m_isSitted;    // 현재 앉아있는 지
@@ -12,9 +20,11 @@ private:
     bool m_isJumping;   // 현재 점프 중인지
     bool m_isAttached;  // 회전 후 천장에 붙어있는지
     bool m_Spawning;    // 나타나는 중인지
+    bool m_GameOver;    // 사라지는 중인지
     bool m_isDamaging;  // 데미지 받고 있을 때
 
     int m_Rotation_Degree; // 돌아가는 각도
+    int m_OverCount;        // 죽고나서 소환되는 이미지
 
     double m_AtkCoolTime; // 폭탄 간 쿨타임
     double m_DashTime;    // 몇 초 간 대쉬를 하는지
@@ -25,7 +35,7 @@ private:
 
     Vec2 m_SpawnPlace; //스폰되는 장소
 
-    bool m_Xreverse = false;
+    bool m_Xreverse = false; // 이미지가 반전이 되는지
 
 
 public:
@@ -34,6 +44,8 @@ public:
     virtual ~cPlayer();
     virtual bool Update() override;
     virtual void Render(HDC _hdc) override;
+
+    void ResetAttackTime() { m_AtkCoolTime = 3.f; }
     void CreateBomb();
 
     bool GetDashing() { return m_isDashing; }

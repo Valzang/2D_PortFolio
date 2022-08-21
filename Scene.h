@@ -16,6 +16,10 @@ private:
 	vector<cObject*> m_arr_obj[(UINT)GROUP_TYPE::END];
 	Image* m_SceneImg;  // 이미지 파일
 	Image* m_IntroAlramImg;				// 인트로 전용 알람 문구
+	Image* m_OutroAlramImg;				// 인트로 전용 알람 문구
+
+	bool m_WantContinue;
+	int m_PlayerDeath;
 	
 	int m_MonsterCount;					// 몬스터 수
 
@@ -55,6 +59,8 @@ public:
 
 	int GetCurSceneType() { return m_curSceneType; }
 	void SetCurSceneType(int _val) { m_curSceneType = _val; }
+
+	bool GetContinue() { return m_WantContinue; }
 
 	vector<cObject*>* GetCurObjectVec() { return m_arr_obj; }
 

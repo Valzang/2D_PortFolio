@@ -73,6 +73,7 @@ using namespace std;
 enum class GROUP_TYPE
 {
 	DEFAULT,
+	WAVE,
 	PLATFORM,
 	PLATFORM_ROTATE,
 	PLATFORM_BROKEN,
@@ -84,7 +85,6 @@ enum class GROUP_TYPE
 	THING,
 	BOMB,
 	SPITFIRE,
-	WAVE,
 
 	END = 13,
 };

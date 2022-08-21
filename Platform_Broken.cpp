@@ -3,7 +3,7 @@
 cPlatform_Broken::cPlatform_Broken()
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLATFORM_BROKEN;
-	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform_Broken.png");
+	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform/Platform_Broken.png");
 	SetScale(Vec2((float)m_PlatformImg->GetWidth(), (float)m_PlatformImg->GetHeight()));
 	SetImgAttr();
 }

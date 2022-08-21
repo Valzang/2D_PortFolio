@@ -2,7 +2,7 @@
 
 cMonster_Thorn::cMonster_Thorn() : m_FlyingTime(0)
 {
-	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Thron.png");
+	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Thron.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
 	m_curGroupType = (INT)GROUP_TYPE::MONSTER_THORN;
 	SetHP(1);

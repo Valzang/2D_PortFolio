@@ -2,7 +2,6 @@
 #include "CustomDefine.h"
 #include "TimeManager.h"
 #include "SceneManager.h"
-#include "UI_Manager.h"
 
 class cCore
 {

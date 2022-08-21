@@ -7,7 +7,7 @@
 cMonster_Runner::cMonster_Runner()
 	:m_BehaviorTime(), m_CurBehaviorState(0), m_ChangeBehavior(true)
 {
-	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Runner.png");	
+	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Runner.png");	
 	m_curGroupType = (INT)GROUP_TYPE::MONSTER_RUNNER;
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
 	SetHP(1);
@@ -124,7 +124,7 @@ bool cMonster_Runner::Update()
 			if (GetScale().x == 89.f)
 			{
 				delete m_MonsterImg;
-				m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Runner_Run.png");
+				m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Runner_Run.png");
 				SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
 				if (GetDirection() == -1)
 					m_MonsterImg->RotateFlip(RotateNoneFlipX);
@@ -134,7 +134,7 @@ bool cMonster_Runner::Update()
 		else if (GetScale().x == 129.f)
 		{
 			delete m_MonsterImg;
-			m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Runner.png");
+			m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Runner.png");
 			SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
 			if (GetDirection() == -1)
 				m_MonsterImg->RotateFlip(RotateNoneFlipX);

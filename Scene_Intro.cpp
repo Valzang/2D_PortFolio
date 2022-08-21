@@ -8,8 +8,8 @@
 cScene_Intro::cScene_Intro()
 {
 	SetCurSceneType((INT)SCENE_TYPE::START);
-	SetSceneImg(L"Image/Intro.png");
-	BGM_SetAndPlay(L"Sound/BGM/PB_OST_STAGE_PVP.mp3");
+	SetSceneImg(L"Image/Scene/Intro.png");
+	BGM_SetAndPlay(L"Sound/BGM/PB_OST_Intro.mp3");
 }
 
 cScene_Intro::~cScene_Intro()
