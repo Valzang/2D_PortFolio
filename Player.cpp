@@ -15,6 +15,15 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
 
+	m_PlayerLifeImg = Image::FromFile((WCHAR*)L"Image/Player/Player_HP_count.png");
+	m_PlayerLife_Scale = Vec2((float)m_PlayerLifeImg->GetWidth(), (float)m_PlayerLifeImg->GetHeight());
+
+	m_PlayerLifeCountImg = Image::FromFile((WCHAR*)L"Image/Number.png");
+	m_LifeCount_Scale = Vec2((float)m_PlayerLifeCountImg->GetWidth() / 10.f, (float)m_PlayerLifeCountImg->GetHeight());
+
+	m_PlayerLife_Pos = Vec2(m_LifeCount_Scale.x * 1.5f, m_LifeCount_Scale.y * 1.5f);
+	m_LifeCount_Pos = Vec2(m_PlayerLife_Pos.x + m_PlayerLife_Scale.x / 2.f, m_PlayerLife_Pos.y + 7.f);
+
 	SetHP(2);
 	SetDir(Vec2(-2.f, 3.f));
 
@@ -29,9 +38,19 @@ cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_i
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
+
+	m_PlayerLifeImg = Image::FromFile((WCHAR*)L"Image/Player/Player_HP_count.png");
+	m_PlayerLife_Scale = Vec2((float)m_PlayerLifeImg->GetWidth(), (float)m_PlayerLifeImg->GetHeight());
+
+	m_PlayerLifeCountImg = Image::FromFile((WCHAR*)L"Image/Number.png");
+	m_LifeCount_Scale = Vec2((float)m_PlayerLifeCountImg->GetWidth() / 10.f, (float)m_PlayerLifeCountImg->GetHeight());
+
+	m_PlayerLife_Pos = Vec2(m_LifeCount_Scale.x * 1.5f, m_LifeCount_Scale.y * 1.5f);
+	m_LifeCount_Pos = Vec2(m_PlayerLife_Pos.x + m_PlayerLife_Scale.x / 2.f, m_PlayerLife_Pos.y + 7.f);
+
 	SetSpawnPlace(_SpawnPlace);
 	SetPos(_SpawnPlace);
-	SetHP(9);
+	SetHP(0);
 
 	SetDir(Vec2(-2.f, 3.f));
 
@@ -41,10 +60,21 @@ cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_i
 
 cPlayer::~cPlayer()
 {
+	mciSendCommandW(dwID, MCI_CLOSE, 0, NULL);
 	if (m_PlayerImg != NULL)
 	{
 		delete m_PlayerImg;
 		m_PlayerImg = nullptr;
+	}
+	if (m_PlayerLifeImg != NULL)
+	{
+		delete m_PlayerLifeImg;
+		m_PlayerLifeImg = nullptr;
+	}
+	if (m_PlayerLifeCountImg != NULL)
+	{
+		delete m_PlayerLifeCountImg;
+		m_PlayerLifeCountImg = nullptr;
 	}
 }
 
@@ -59,9 +89,21 @@ bool cPlayer::Update()
 	if (m_Spawning)
 		return true;
 
+	if (m_GameOver && (KEY_CHECK(KEY::A, KEY_STATE::DOWN)))
+		return false;
+
 	// 남아 있는 목숨이 없을 때
 	if (GetHP() < 0)
-		return false;
+	{
+		if (isDead())
+			return true;
+		else
+		{
+			m_Spawning = true;
+			m_GameOver = true;
+			return true;
+		}
+	}
 
 	// 데미지를 받았을 때
 	if (m_isDamaging)
@@ -320,7 +362,7 @@ void cPlayer::Render(HDC _hdc)
 
 	int xStart = 0, yStart = 0;
 
-	if (!m_Spawning)
+	if (!m_Spawning && !m_GameOver)
 	{
 		static int Img_Jump_Cursor = 1;
 		static int Img_Move_Cursor = 1;
@@ -455,6 +497,29 @@ void cPlayer::Render(HDC _hdc)
 		//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 		graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
 	}
+
+	else if (m_GameOver)
+	{
+	if (m_OverCount == 0)
+	{
+		delete m_PlayerImg;
+		m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_GameOver.png");
+		SetScale(Vec2((float)m_PlayerImg->GetWidth() / 15.f, (float)m_PlayerImg->GetHeight()));
+		SetPos(Vec2(640, 349));
+		Width = (int)GetScale().x;
+		Height = (int)GetScale().y;
+	}
+	xStart = Width * (m_OverCount / 3);
+	if (m_OverCount >= 44)
+	{
+		m_Spawning = false;
+		Dead();
+	}
+	else
+		++m_OverCount;
+	//											
+	graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
+	}
 	else
 	{
 		static int Enter_count = 0;
@@ -481,6 +546,27 @@ void cPlayer::Render(HDC _hdc)
 		//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
 		graphics.DrawImage(m_PlayerImg, Rect((int)Player_Pos.x - Width / 2, (int)Player_Pos.y - Height / 2, Width, Height), xStart, yStart, Width, Height, UnitPixel, GetImgAttr());
 	}	
+
+	Graphics graphics_Life(_hdc);
+	Graphics graphics_LifeCount(_hdc);
+
+	int Life_w = (int)m_PlayerLife_Scale.x;
+	int Life_h = (int)m_PlayerLife_Scale.y;
+
+	Vec2 LifeCount_Pos = m_LifeCount_Pos;
+	Vec2 LifeCount_Scale = m_LifeCount_Scale;
+
+	int LifeCount_w = (int)m_LifeCount_Scale.x;
+	int LifeCount_h = (int)m_LifeCount_Scale.y;
+
+	int Life_xStart = LifeCount_w * GetHP();
+
+	graphics_Life.DrawImage(m_PlayerLifeImg,
+							Rect((int)m_PlayerLife_Pos.x - Life_w / 2, (int)m_PlayerLife_Pos.y - Life_h / 2, Life_w, Life_h),
+							0, 0, Life_w, Life_h, UnitPixel, GetImgAttr());
+	graphics_LifeCount.DrawImage(m_PlayerLifeCountImg,
+								 Rect((int)m_LifeCount_Pos.x - LifeCount_w / 2, (int)m_LifeCount_Pos.y - LifeCount_h / 2, LifeCount_w, LifeCount_h),
+								 Life_xStart, 0, LifeCount_w, LifeCount_h, UnitPixel, GetImgAttr());
 	
 	
 }

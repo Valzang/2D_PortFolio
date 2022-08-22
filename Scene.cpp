@@ -5,6 +5,7 @@ cScene::cScene() : m_SceneImg(nullptr), m_IntroAlramImg(nullptr), m_MonsterCount
 {
 	m_IntroAlramImg = Image::FromFile(L"Image/Intro_Alram.png");
 	m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 200, 201));
+	m_OutroAlramImg = Image::FromFile(L"Image/Outro_Alram.png");
 }
 
 cScene::~cScene()
@@ -79,6 +80,7 @@ void cScene::Update()
 	}
 	else
 	{
+		bool Player_Dead = false;
 		for (UINT i = 0; i < (UINT)GROUP_TYPE::END; ++i)
 		{
 			for (INT j = (INT)(m_arr_obj[i].size()) - 1; j >= 0; --j)
@@ -88,10 +90,23 @@ void cScene::Update()
 					delete m_arr_obj[i][j];
 					m_arr_obj[i][j] = nullptr;
 					m_arr_obj[i].erase(m_arr_obj[i].begin() + j);
+					continue;
+				}
+				if (m_arr_obj[i][j]->GetCurGroupType() == (INT)GROUP_TYPE::PLAYER
+					&& m_arr_obj[i][j]->isDead())
+				{
+					Player_Dead = true;
+					m_WantContinue = true;
+					break;
 				}
 			}
+			if (Player_Dead)
+				break;
 		}
-	}	
+		if (!Player_Dead && m_WantContinue)
+			m_WantContinue = false;
+
+	}
 }
 
 void cScene::Render(HDC _hdc)
@@ -120,6 +135,34 @@ void cScene::Render(HDC _hdc)
 		Vec2 Alram_Pos(Vec2(640.f, 584.f));
 		// Rect°¡ À§Ä¡
 		graphics_Alram.DrawImage(m_IntroAlramImg, Rect((int)Alram_Pos.x - w / 2, (int)Alram_Pos.y - h / 2, w, h), 0, yStart, w, h, UnitPixel, &m_imgAttr);
+
+		yStart = curFrame++ < 10 ? 0 : h;
+		if (curFrame == 18)
+			curFrame = 0;
+	}
+	if (m_WantContinue)
+	{
+		if (m_PlayerDeath == 0)
+		{
+			mciSendCommandW(dwID, MCI_CLOSE, 0, NULL); 
+			mciOpen.lpstrDeviceType = L"mpegvideo";
+			mciOpen.lpstrElementName = L"Sound/BGM/Player_Death.mp3"; 
+
+			mciSendCommandW(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD_PTR)&mciOpen);
+			dwID = mciOpen.wDeviceID;
+
+			// play
+			mciSendCommandW(dwID, MCI_PLAY, MCI_NOTIFY, (DWORD_PTR)&mciPlay);
+			++m_PlayerDeath;
+		}
+		Gdiplus::Graphics graphics_Alram(_hdc);
+		w = (int)m_OutroAlramImg->GetWidth();
+		h = (int)(m_OutroAlramImg->GetHeight() / 2.f);
+		static int yStart = 0;
+		static int curFrame = 0;
+		Vec2 Alram_Pos(Vec2(640.f, 584.f));
+		
+		graphics_Alram.DrawImage(m_OutroAlramImg, Rect((int)Alram_Pos.x - w / 2, (int)Alram_Pos.y - h / 2, w, h), 0, yStart, w, h, UnitPixel, &m_imgAttr);
 
 		yStart = curFrame++ < 10 ? 0 : h;
 		if (curFrame == 18)

@@ -5,6 +5,14 @@ class cPlayer : public cObject
 {
 private:
     Image* m_PlayerImg;  // 이미지 파일    
+    Image* m_PlayerLifeImg;    
+    Image* m_PlayerLifeCountImg; 
+
+    Vec2 m_PlayerLife_Pos;
+    Vec2 m_PlayerLife_Scale;
+
+    Vec2 m_LifeCount_Pos;
+    Vec2 m_LifeCount_Scale;
 
     bool m_isMoved;     // 현재 움직이고 있는지
     bool m_isSitted;    // 현재 앉아있는 지
@@ -12,8 +20,10 @@ private:
     bool m_isJumping;   // 현재 점프 중인지
     bool m_isAttached;  // 회전 후 천장에 붙어있는지
     bool m_Spawning;    // 나타나는 중인지
+    bool m_GameOver;
     bool m_isDamaging;  // 데미지 받고 있을 때
 
+    int m_OverCount;
     int m_Rotation_Degree; // 돌아가는 각도
 
     double m_AtkCoolTime; // 폭탄 간 쿨타임
@@ -45,6 +55,7 @@ public:
     bool GetAttach() { return m_isAttached; }
     void SetAttach() { m_isAttached = true; }    
 
+    void ResetAttackTime() { m_AtkCoolTime = 3.f; }
     void SetAttackTime(double _val) { m_AfterAttackTime = _val; }
 
     virtual void Damage();

@@ -36,7 +36,6 @@ void cScene_Start::Enter()
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
-	cUI_Manager::GetInstance()->Init();
 
 	// Monster Object 추가 ===================================================================================================
 	cMonster* MonsterObj = nullptr;

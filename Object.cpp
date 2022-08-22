@@ -165,7 +165,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
-						}						
+							else if (curBomb->GetShoot())
+								curBomb->SetExplode();
+						}
 					}
 						break;
 					case (INT)GROUP_TYPE::BOMB:
@@ -212,6 +214,8 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
 							if (curBomb->GetExplode())
 								otherObj[i]->Damage();
+							else if (curBomb->GetShoot())
+								curBomb->SetExplode();
 						}
 					}
 						break;
