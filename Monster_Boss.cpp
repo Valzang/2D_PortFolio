@@ -34,8 +34,7 @@ cMonster_Boss::~cMonster_Boss()
 }
 
 bool cMonster_Boss::Update()
-{
-	cout << "현재 몬스터 수 : " << cSceneManager::GetInstance()->GetCurScene()->GetMonsterSize() << "\t보스 HP : " << GetHP() << '\n';
+{	
 	if (GetHP() < 0 && !m_NonDamage)
 		return false;
 
