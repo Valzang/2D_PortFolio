@@ -23,12 +23,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="Engine\04. Scene\Source">
-      <UniqueIdentifier>{013eb19c-1099-4a66-8933-00231ff657af}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Engine\04. Scene\Header">
-      <UniqueIdentifier>{e8a42ac2-3817-4853-aaf5-bddb0af60632}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\03. Object\Monster">
       <UniqueIdentifier>{0dff8edf-9404-4f76-8ec1-d4f314ac336e}</UniqueIdentifier>
     </Filter>
@@ -59,6 +53,27 @@
     <Filter Include="Engine\03. Object\Projectile">
       <UniqueIdentifier>{b30fce9d-3d0f-421a-9b00-2368304a399f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\04. Scene\Scene1">
+      <UniqueIdentifier>{4a5f5b34-6fed-40dc-be27-46bafc2f6b97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Scene2">
+      <UniqueIdentifier>{c182ba43-ebda-49dd-aa5d-8eba7cc6cb53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Scene3">
+      <UniqueIdentifier>{aba6f39c-d46a-4c1c-9ca2-f0f04c9870f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Scene4">
+      <UniqueIdentifier>{1cc5596f-23e4-4e9d-989f-be389127f7a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Scene5">
+      <UniqueIdentifier>{704643bc-9c8b-4c88-bd75-d160d520f07e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Scene_Intro">
+      <UniqueIdentifier>{65be88be-bd88-4709-a39f-bede60ce67ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\04. Scene\Scene_Ending">
+      <UniqueIdentifier>{6b4c5604-fa58-49c5-b089-0c9e99872fce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -66,12 +81,6 @@
     </ClInclude>
     <ClInclude Include="CustomDefine.h">
       <Filter>Engine\01. Define &amp; Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>Engine\04. Scene\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene_Start.h">
-      <Filter>Engine\04. Scene\Header</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Engine\03. Object\Player</Filter>
@@ -133,9 +142,6 @@
     <ClInclude Include="SpitFire.h">
       <Filter>Engine\03. Object\Projectile</Filter>
     </ClInclude>
-    <ClInclude Include="Scene_Intro.h">
-      <Filter>Engine\04. Scene\Header</Filter>
-    </ClInclude>
     <ClInclude Include="Platform_Broken.h">
       <Filter>Engine\03. Object\Platform</Filter>
     </ClInclude>
@@ -145,16 +151,34 @@
     <ClInclude Include="Wave.h">
       <Filter>Engine\03. Object\Projectile</Filter>
     </ClInclude>
+    <ClInclude Include="Scene_1.h">
+      <Filter>Engine\04. Scene\Scene1</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Intro.h">
+      <Filter>Engine\04. Scene\Scene_Intro</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Engine\04. Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_2.h">
+      <Filter>Engine\04. Scene\Scene2</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_5.h">
+      <Filter>Engine\04. Scene\Scene5</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_4.h">
+      <Filter>Engine\04. Scene\Scene4</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_3.h">
+      <Filter>Engine\04. Scene\Scene3</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene_Ending.h">
+      <Filter>Engine\04. Scene\Scene_Ending</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
       <Filter>Engine\01. Define &amp; Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>Engine\04. Scene\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene_Start.cpp">
-      <Filter>Engine\04. Scene\Source</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Engine\03. Object\Player</Filter>
@@ -207,9 +231,6 @@
     <ClCompile Include="SpitFire.cpp">
       <Filter>Engine\03. Object\Projectile</Filter>
     </ClCompile>
-    <ClCompile Include="Scene_Intro.cpp">
-      <Filter>Engine\04. Scene\Source</Filter>
-    </ClCompile>
     <ClCompile Include="Platform_Broken.cpp">
       <Filter>Engine\03. Object\Platform</Filter>
     </ClCompile>
@@ -218,6 +239,30 @@
     </ClCompile>
     <ClCompile Include="Wave.cpp">
       <Filter>Engine\03. Object\Projectile</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_1.cpp">
+      <Filter>Engine\04. Scene\Scene1</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Intro.cpp">
+      <Filter>Engine\04. Scene\Scene_Intro</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Engine\04. Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_2.cpp">
+      <Filter>Engine\04. Scene\Scene2</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_5.cpp">
+      <Filter>Engine\04. Scene\Scene5</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_4.cpp">
+      <Filter>Engine\04. Scene\Scene4</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_3.cpp">
+      <Filter>Engine\04. Scene\Scene3</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene_Ending.cpp">
+      <Filter>Engine\04. Scene\Scene_Ending</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -68,7 +68,7 @@ public:
 	virtual void DeleteSceneImg();
 
 	virtual void Enter() = 0; // 해당 씬으로 진입 시 호출
-	virtual void Exit() = 0;  // 해당 씬에서 탈출 시 호출
+	void Exit();  // 해당 씬에서 탈출 시 호출
 
 	void BGM_SetAndPlay(const LPCWSTR File_Path);
 

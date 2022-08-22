@@ -15,6 +15,8 @@ cMonster_Boss::cMonster_Boss() : m_isDamaging(false), m_prevHP(4), m_isAttacking
 
 cMonster_Boss::~cMonster_Boss()
 {
+	int _Score = cSceneManager::GetInstance()->GetScore() + 5000;
+	cSceneManager::GetInstance()->SetScore(_Score);
 	if (m_MonsterImg != NULL)
 	{
 		delete m_MonsterImg;

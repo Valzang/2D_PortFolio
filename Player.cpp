@@ -9,7 +9,7 @@
 
 cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true), m_isDamaging(false)
 					, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f) , m_Xreverse(false)
-					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(3.f)
+					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(3.f), m_GameOver(false), m_OverCount(0)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
@@ -31,9 +31,9 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 	SetDirection(1);
 }
 
-cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true)
+cPlayer::cPlayer(Vec2 _SpawnPlace, int _Life) : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), m_isDashing(false), m_isJumping(false), m_Spawning(true)
 									, m_AtkCoolTime(3.f), m_DashCoolTime(2.f), m_DashTime(0.f), m_AfterAttackTime(0.f), m_Xreverse(false)
-									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
+									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_GameOver(false), m_OverCount(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
 	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
@@ -48,14 +48,14 @@ cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_i
 	m_PlayerLife_Pos = Vec2(m_LifeCount_Scale.x * 1.5f, m_LifeCount_Scale.y * 1.5f);
 	m_LifeCount_Pos = Vec2(m_PlayerLife_Pos.x + m_PlayerLife_Scale.x / 2.f, m_PlayerLife_Pos.y + 7.f);
 
-	SetSpawnPlace(_SpawnPlace);
-	SetPos(_SpawnPlace);
-	SetHP(0);
-
+	SetHP(_Life);
 	SetDir(Vec2(-2.f, 3.f));
 
 	SetImgAttr();
 	SetDirection(1);
+
+	SetSpawnPlace(_SpawnPlace);
+	SetPos(_SpawnPlace);
 }
 
 cPlayer::~cPlayer()
@@ -658,5 +658,9 @@ void cPlayer::Respawn()
 	m_isJumping = false;
 	m_InvincibleTime = 3.f;
 	SetDir(Vec2(-2.f, 3.f));
+	int _Score = cSceneManager::GetInstance()->GetScore() - 1200;
+	if (_Score < 0)
+		_Score = 0;
+	cSceneManager::GetInstance()->SetScore(_Score);
 	SetDirection(1);
 }

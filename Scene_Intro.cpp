@@ -1,5 +1,5 @@
 #include "Scene_Intro.h"
-#include "Scene_Start.h"
+#include "Scene_1.h"
 #include "Player.h"
 #include "KeyManager.h"
 #include "Monster_Flying.h"
@@ -20,6 +20,7 @@ void cScene_Intro::Enter()
 {
 	// 몬스터 배치	
 	SetMonsterSize(1);			// 몬스터 수
+	cSceneManager::GetInstance()->SetScore(0);
 }
 
 void cScene_Intro::Exit()

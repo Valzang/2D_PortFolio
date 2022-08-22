@@ -12,6 +12,8 @@ cMonster_Thorn::cMonster_Thorn() : m_FlyingTime(0)
 
 cMonster_Thorn::~cMonster_Thorn()
 {
+	int _Score = cSceneManager::GetInstance()->GetScore() + 800;
+	cSceneManager::GetInstance()->SetScore(_Score);
 	if (m_MonsterImg != NULL)
 	{
 		delete m_MonsterImg;

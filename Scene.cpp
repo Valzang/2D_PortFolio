@@ -1,7 +1,7 @@
 #include "Scene.h"
 #include "KeyManager.h"
 
-cScene::cScene() : m_SceneImg(nullptr), m_IntroAlramImg(nullptr), m_MonsterCount(0), mciOpen(), mciPlay(), dwID(0), m_curSceneType(0)
+cScene::cScene() : m_SceneImg(nullptr), m_IntroAlramImg(nullptr), m_MonsterCount(0), mciOpen(), mciPlay(), dwID(0), m_curSceneType(0), m_PlayerDeath(), m_WantContinue()
 {
 	m_IntroAlramImg = Image::FromFile(L"Image/Intro_Alram.png");
 	m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 200, 201));
@@ -39,6 +39,15 @@ void cScene::DeleteSceneImg()
 	{
 		delete m_SceneImg;
 		m_SceneImg = nullptr;
+	}
+}
+
+void cScene::Exit()
+{
+	if (cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER].size() != 0)
+	{
+		cObject* curPlayer = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER][0];
+		cSceneManager::GetInstance()->ConnectPlayerInfo(curPlayer->GetHP());
 	}
 }
 

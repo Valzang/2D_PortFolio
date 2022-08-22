@@ -12,6 +12,7 @@ private:
 	int m_Direction;
 
 	int m_HP;
+	int m_Score;
 	bool m_IsDead;
 	bool m_OnPlatform;
 
@@ -51,6 +52,10 @@ public:
 	Vec2 GetPos() { return m_Pos; }
 	virtual void SetPos(Vec2 _Pos);
 	void SetPosOtherside(); // 맵 안에서만 맴돌게끔 해주는 함수
+
+	// 점수 관련
+	int GetScore() { return m_Score; }
+	void SetScore(int _val) { m_Score = _val; }
 
 	// 죽었는지
 	bool isDead() { return m_IsDead; }

@@ -7,6 +7,7 @@ private:
 
 public:
 	cMonster_Flying();
+	cMonster_Flying(int _Direction);
 	virtual ~cMonster_Flying();
 
 	virtual bool Update() override;

@@ -40,7 +40,7 @@ private:
 
 public:
     cPlayer();
-    cPlayer(Vec2 _SpawnPlace);
+    cPlayer(Vec2 _SpawnPlace, int _Life);
     virtual ~cPlayer();
     virtual bool Update() override;
     virtual void Render(HDC _hdc) override;

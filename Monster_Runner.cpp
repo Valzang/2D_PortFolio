@@ -15,6 +15,8 @@ cMonster_Runner::cMonster_Runner()
 
 cMonster_Runner::~cMonster_Runner()
 {
+	int _Score = cSceneManager::GetInstance()->GetScore() + 1000;
+	cSceneManager::GetInstance()->SetScore(_Score);
 	if (m_MonsterImg != NULL)
 	{
 		delete m_MonsterImg;

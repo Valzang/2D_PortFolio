@@ -1,5 +1,9 @@
 #include "SceneManager.h"
-#include "Scene_Start.h"
+#include "Scene_1.h"
+#include "Scene_2.h"
+#include "Scene_3.h"
+#include "Scene_4.h"
+#include "Scene_5.h"
 #include "Scene_Intro.h"
 
 cSceneManager::cSceneManager()
@@ -31,16 +35,24 @@ void cSceneManager::Init()
 			m_curScene = m_arrScene[(UINT)SCENE_TYPE::START];
 			break;
 		case (INT)SCENE_TYPE::STAGE_11:
-			m_arrScene[(UINT)SCENE_TYPE::STAGE_11] = new cScene_Start;
+			m_arrScene[(UINT)SCENE_TYPE::STAGE_11] = new cScene_1;
 			m_curScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_11];
 			break;
 		case (INT)SCENE_TYPE::STAGE_12:
+			m_arrScene[(UINT)SCENE_TYPE::STAGE_12] = new cScene_2;
+			m_curScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_12];
 			break;
 		case (INT)SCENE_TYPE::STAGE_13:
+			m_arrScene[(UINT)SCENE_TYPE::STAGE_13] = new cScene_3;
+			m_curScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_13];
 			break;
 		case (INT)SCENE_TYPE::STAGE_14:
+			m_arrScene[(UINT)SCENE_TYPE::STAGE_14] = new cScene_4;
+			m_curScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_14];
 			break;
 		case (INT)SCENE_TYPE::STAGE_15:
+			m_arrScene[(UINT)SCENE_TYPE::STAGE_15] = new cScene_5;
+			m_curScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_15];
 			break;
 	}
 	// Scene »ý¼º
@@ -54,6 +66,7 @@ void cSceneManager::Init()
 
 void cSceneManager::Update()
 {
+	cout << GetScore() << '\n';
 	m_curScene->Update();
 	if (m_curScene->GetContinue())
 		m_Restart = true;

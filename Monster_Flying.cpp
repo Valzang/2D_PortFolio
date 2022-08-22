@@ -9,8 +9,21 @@ cMonster_Flying::cMonster_Flying() : m_FlyingTime(0)
 	SetDirection(1);
 }
 
+cMonster_Flying::cMonster_Flying(int _Direction) : m_FlyingTime(0)
+{
+	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Flying.png");
+	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
+	SetHP(1);
+	SetImgAttr();
+	SetDirection(_Direction);
+	if(_Direction == -1)
+		m_MonsterImg->RotateFlip(RotateNoneFlipX);
+}
+
 cMonster_Flying::~cMonster_Flying()
 {
+	int _Score = cSceneManager::GetInstance()->GetScore() + 500;
+	cSceneManager::GetInstance()->SetScore(_Score);
 	if (m_MonsterImg != NULL)
 	{
 		delete m_MonsterImg;
@@ -20,7 +33,6 @@ cMonster_Flying::~cMonster_Flying()
 
 bool cMonster_Flying::Update()
 {
-	//m_MonsterImg->RotateFlip(RotateNoneFlipX);
 	if (GetHP() <= 0)
 		return false;
 	Vec2 CurPos = GetPos();

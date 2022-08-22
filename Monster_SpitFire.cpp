@@ -15,6 +15,8 @@ cMonster_SpitFire::cMonster_SpitFire() : m_SpitFireTime(0.f)
 
 cMonster_SpitFire::~cMonster_SpitFire()
 {
+	int _Score = cSceneManager::GetInstance()->GetScore() + 1000;
+	cSceneManager::GetInstance()->SetScore(_Score);
 	if (m_MonsterImg != NULL)
 	{
 		delete m_MonsterImg;
