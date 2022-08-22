@@ -2,7 +2,7 @@
 
 cPlatform_SideWall::cPlatform_SideWall()
 {
-	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform/Platform_Side.png");
+	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform_Side.png");
 	SetScale(Vec2((float)m_PlatformImg->GetWidth(), (float)m_PlatformImg->GetHeight()));
 	SetImgAttr();
 }

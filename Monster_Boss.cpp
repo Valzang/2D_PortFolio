@@ -4,7 +4,7 @@
 
 cMonster_Boss::cMonster_Boss() : m_isDamaging(false), m_prevHP(4), m_isAttacking(false)
 {
-	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Boss.png");
+	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Boss.png");
 	m_curGroupType = (INT)GROUP_TYPE::MONSTER_BOSS;
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 10.f, (float)m_MonsterImg->GetHeight()/2.f));
 	Vec2 temp = GetScale();

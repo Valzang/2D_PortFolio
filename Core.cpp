@@ -55,6 +55,7 @@ int cCore::Init(HWND _hWnd, POINT _ptResolution)
 	cTimeManager::GetInstance()->Init();
 	cKeyManager::GetInstance()->Init();
 	cSceneManager::GetInstance()->Init();
+	cUI_Manager::GetInstance()->Init();
 
 	return S_OK;
 }
@@ -69,6 +70,8 @@ void cCore::Progress()
 	{		
 		cKeyManager::GetInstance()->Update();
 		cSceneManager::GetInstance()->Update();
+		cUI_Manager::GetInstance()->Update();
+
 		Render();
 	}
 }
@@ -84,6 +87,7 @@ void cCore::Render()
 	Rectangle(m_memDC, -1, -1, m_ptResolution.x + 1, m_ptResolution.y + 1); // 빈 화면으로 초기화
 
 	cSceneManager::GetInstance()->Render(m_memDC);
+	cUI_Manager::GetInstance()->Render(m_memDC);
 
 	BitBlt(m_hDC, 0, 0, m_ptResolution.x, m_ptResolution.y
 		   , m_memDC, 0, 0, SRCCOPY);

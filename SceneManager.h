@@ -11,7 +11,6 @@ private:
 	cScene* m_arrScene[(UINT)SCENE_TYPE::END]; // 가지고 있는 씬 목록
 	cScene* m_curScene; // 현재 씬
 	int		m_curSceneLevel;
-	bool	m_Restart;
 	
 public:
 	void Init();

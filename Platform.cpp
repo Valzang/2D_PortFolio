@@ -8,7 +8,7 @@
 cPlatform::cPlatform() : m_PlatformImg(NULL), m_DecreaseDegree(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLATFORM;
-	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform/Platform.png");	
+	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform.png");	
 	SetScale(Vec2((float)m_PlatformImg->GetWidth(), (float)m_PlatformImg->GetHeight()));
 	SetImgAttr();
 }

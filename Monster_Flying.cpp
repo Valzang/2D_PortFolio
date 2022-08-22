@@ -2,7 +2,7 @@
 
 cMonster_Flying::cMonster_Flying() : m_FlyingTime(0)
 {
-	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Flying.png");
+	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_Flying.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
 	SetHP(1);
 	SetImgAttr();

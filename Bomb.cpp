@@ -1,7 +1,5 @@
 #include "Bomb.h"
 #include "TimeManager.h"
-#include "Player.h"
-#include "Scene.h"
 #include "Core.h"
 // PI == -PI 좌측직선		0	=> 우측 직선
 // PI/2 => 아래직선			-PI/2 => 위 직선
@@ -32,15 +30,7 @@ bool cBomb::Update()
 {
 	m_TimeLimit += DELTA_TIME;
 	if (isDead())
-	{
-		if (cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER].size() != 0)
-		{
-			cPlayer* curPlayer = dynamic_cast<cPlayer*>(cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[(INT)GROUP_TYPE::PLAYER][0]);
-			curPlayer->ResetAttackTime();
-		}
-			
 		return false;
-	}
 
 	else if (!m_isExploded) // 폭발하지 않았을 때
 	{

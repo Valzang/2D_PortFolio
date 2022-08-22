@@ -168,6 +168,7 @@
     <ClInclude Include="SpitFire.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TimeManager.h" />
+    <ClInclude Include="UI_Manager.h" />
     <ClInclude Include="Wave.h" />
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +195,7 @@
     <ClCompile Include="Scene_Start.cpp" />
     <ClCompile Include="SpitFire.cpp" />
     <ClCompile Include="TimeManager.cpp" />
+    <ClCompile Include="UI_Manager.cpp" />
     <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
