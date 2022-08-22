@@ -82,7 +82,6 @@ bool cPlayer::Update()
 {
 	Vec2 Pos = GetPos();
 	Vec2 Scl = GetScale();
-
 	if (cSceneManager::GetInstance()->GetCurScene()->GetMonsterSize() == 0 && !m_Clear)
 	{
 		m_Clear = true;
@@ -205,8 +204,7 @@ bool cPlayer::Update()
 			m_isJumping = false;
 			m_Dir.y = 450.f;
 		}
-	}
-
+	}	
 	// 대쉬 중이라면
 	if (m_isDashing)
 	{
@@ -378,12 +376,11 @@ bool cPlayer::Update()
 			// 더 돌아서 공중에 떠있는거 방지용
 			SetOnPlatform(false);
 			m_isAttached = Player_Pos.y > Platform_Pos.y ? true : false;
-
 		}
 	}
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
 	CollisionCheck(this, (INT)GROUP_TYPE::MONSTER);
-	
+
 
 	SetPosOtherside(); // 반대쪽으로 넘어갔으면 다른 쪽으로 나오게끔
 	m_InvincibleTime = (m_InvincibleTime > 0.f) ? m_InvincibleTime - DELTA_TIME : 0.f;	

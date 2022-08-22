@@ -66,15 +66,15 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 
 		// 충돌했을 때 (사각형 기준)
 		if ((abs(curObj_Pos.x - otherObj_Pos.x) < (curObj_Scale.x + otherObj_Scale.x) / 2.f)
-			&& (abs(curObj_Pos.y - otherObj_Pos.y) < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
+			&& (abs(curObj_Pos.y - otherObj_Pos.y) +0.01f < (curObj_Scale.y + otherObj_Scale.y) / 2.f))
 		{	
 			// 아랫쪽에서 충돌했을 때
-			if (curObj_UpY < otherObj_UpY && curObj_DownY > otherObj_UpY)
+			if (curObj_UpY < otherObj_UpY && curObj_DownY >= otherObj_UpY)
 			{
 				switch (GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM:					
-					{
+					{						
 						// 회전문을 1번만 통과해야할 때
 						if (curObj->GetThruRotate() && otherObj[i]->m_curGroupType == (INT)GROUP_TYPE::PLATFORM_ROTATE)
 						{
@@ -180,8 +180,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				}				
 			}
 			// 위쪽에서 충돌했을 때
-			else if (curObj_UpY < otherObj_DownY && curObj_DownY > otherObj_DownY)
+			else if (curObj_UpY <= otherObj_DownY && curObj_DownY > otherObj_DownY)
 			{
+			
 				switch (GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM:
@@ -234,7 +235,7 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 				switch (GROUP_TYPE)
 				{
 					case (INT)GROUP_TYPE::PLATFORM:
-					{						
+					{			
 						// 넘어온 만큼 위치 보정
 						curObj_Pos.x += (otherObj_RightX - curObj_LeftX);
 						switch (curObj_GroupType)

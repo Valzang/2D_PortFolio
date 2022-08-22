@@ -58,42 +58,42 @@ void cScene_1::Enter()
 
 	cPlatform* PlatformObj = nullptr;
 	PlatformObj = new cPlatform_Rotate;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 230 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 220.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
 
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 230 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 220.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 230 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 220.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	// 2nd Floor ===================================================================
 	PlatformObj = new cPlatform_Rotate;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 80 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f, Resolution.y / 2.f - 80.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
 
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 80 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f - 360, Resolution.y / 2.f - 80.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 80 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2 { Resolution.x / 2.f + 360, Resolution.y / 2.f - 80.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 
 	// 1st Floor ===================================================================
 	PlatformObj = new cPlatform_Rotate;
-	PlatformObj->SetPos(Vec2{ PlatformObj->GetScale().x - 20.f, Resolution.y / 2.f + 70 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ PlatformObj->GetScale().x - 20.f, Resolution.y / 2.f + 70.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
 
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f - 130.f, Resolution.y / 2.f + 70 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f - 130.f, Resolution.y / 2.f + 70.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 	
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f + 360, Resolution.y / 2.f + 70 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f + 360, Resolution.y / 2.f + 70.f }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 

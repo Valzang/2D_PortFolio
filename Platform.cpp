@@ -42,7 +42,7 @@ bool cPlatform::Update()
 		Vec2 curPlayer_Scale = curPlayer->GetScale();
 
 		if ((curPlayer_Pos.x > Platform_Pos.x - Platform_Scale.x/2.f) && (curPlayer_Pos.x < Platform_Pos.x + Platform_Scale.x / 2.f)
-			&& (abs(curPlayer_Pos.y - Platform_Pos.y) <= (curPlayer_Scale.y + Platform_Scale.y) / 2.f)
+			&& (abs(curPlayer_Pos.y - Platform_Pos.y) <= (curPlayer_Scale.y + Platform_Scale.y) / 2.f +0.01f)
 			&& !curPlayer->GetDashing())
 		{
 			curPlayer->SetRotator(this);
