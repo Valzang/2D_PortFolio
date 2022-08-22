@@ -29,7 +29,7 @@ enum class KEY
 	// 1P 움직임
 	A, S, I, J, K, L,
 
-
+	/*
 	// 2P 움직임	
 	Delete, End, Num8, Num4, Num5, Num6,
 
@@ -37,6 +37,7 @@ enum class KEY
 	P, // Pause
 	ESC, // Escape
 	Enter, // Enter
+	*/
 	LAST // enum의 끝
 };
 
@@ -49,7 +50,7 @@ static int arrVK[(int)KEY::LAST] =
 
 	// 1P 움직임
 	'A', 'S', 'I', 'J', 'K', 'L',
-
+	/*
 	// 2P 움직임
 	VK_DELETE, VK_END, VK_NUMPAD8, VK_NUMPAD4, VK_NUMPAD5, VK_NUMPAD6,
 
@@ -57,6 +58,7 @@ static int arrVK[(int)KEY::LAST] =
 	'P', // Pause
 	VK_ESCAPE, // Escape
 	VK_RETURN, // Enter
+	*/
 };
 
 struct KeyInfo
@@ -72,7 +74,6 @@ class cKeyManager
 
 private:
 	vector<KeyInfo> m_vecKey;
-	//HWND m_hWnd = NULL;
 
 public:
 	void Init();

@@ -62,15 +62,7 @@ void cTimeManager::Update()
 		if (!m_isFocusing && m_deltaTime_temp == 0.f)
 			m_deltaTime_temp = m_deltaTime;
 	}
-	/*
-	QueryPerformanceCounter(&m_curCount);
-	// 이전 프레임과 현재 프레임의 카운팅 값의 차이.
-	m_deltaTime = (double)(m_curCount.QuadPart - m_prevCount.QuadPart) / (double)m_curFrequency.QuadPart;
 
-	++m_callCount;
-	m_accumlate += m_deltaTime; // 델타타임 누적
-	// 이전 카운트 값을 전체값을 갱신(다음번 계산을 위해)
-	*/
 	m_prevCount = m_curCount;
 
 	// 1초가 되면

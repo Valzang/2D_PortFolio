@@ -64,11 +64,7 @@ void cSceneManager::Init()
 			m_curScene = m_arrScene[(UINT)SCENE_TYPE::ENDING];
 			break;
 	}
-	// Scene 생성
-	//m_arrScene[(UINT)SCENE_TYPE::TOOL] = new cScene_Intro;
-	//m_arrScene[(UINT)SCENE_TYPE::START]->SetName(L"Start Scene");
-	// 현재 씬 지정
-	//m_curScene = m_arrScene[(UINT)SCENE_TYPE::TOOL];
+
 	m_curScene->Enter();
 
 }
