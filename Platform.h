@@ -6,6 +6,7 @@ class cPlatform : public cObject
 protected:
     Image* m_PlatformImg;  // 이미지 파일
     int m_DecreaseDegree; // 각도 감소 정도
+    int m_Rot;
 
 public:
     cPlatform();

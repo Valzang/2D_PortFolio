@@ -332,7 +332,7 @@ bool cPlayer::Update()
 		// ============================================= ÆøÅº ¼³Ä¡
 		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN) && !GetRotating())
 		{
-			if (m_AtkCoolTime >= 3.f)
+			if (m_AtkCoolTime >= 3.2f)
 			{
 				m_AtkCoolTime = 0.f;
 				if (m_isJumping)

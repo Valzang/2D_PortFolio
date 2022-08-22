@@ -1,6 +1,6 @@
 #include "Wave.h"
 
-cWave::cWave() : m_WaveImg(nullptr), m_FirstY(0.f)
+cWave::cWave() : m_WaveImg(nullptr), m_FirstY(0.f), m_curFrame(0)
 {
 	m_WaveImg = Image::FromFile((WCHAR*)L"Image/Boss_Wave.png");
 	Init();	
@@ -11,7 +11,7 @@ cWave::cWave() : m_WaveImg(nullptr), m_FirstY(0.f)
 	SetImgAttr();
 }
 
-cWave::cWave(Vec2 _Pos, int _Direction, cMonster_Boss* _Boss) : m_WaveImg(nullptr), m_FirstY(0.f)
+cWave::cWave(Vec2 _Pos, int _Direction, cMonster_Boss* _Boss) : m_WaveImg(nullptr), m_FirstY(0.f), m_curFrame(0)
 {
 	m_WaveImg = Image::FromFile((WCHAR*)L"Image/Boss_Wave.png");
 	m_Boss = _Boss;
@@ -36,6 +36,11 @@ cWave::~cWave()
 		delete m_WaveImg;
 		m_WaveImg = nullptr;
 	}
+}
+
+void cWave::DestroyByBomb()
+{
+	m_Boss->SetAttackTime();
 }
 
 void cWave::Init()
@@ -63,7 +68,7 @@ bool cWave::Update()
 	Vec2 curPos = GetPos();
 	curPos.x += 320.f * DELTA_TIME * GetDirection();
 	CollisionCheck(this, (INT)GROUP_TYPE::PLATFORM);
-	//CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
+	CollisionCheck(this, (INT)GROUP_TYPE::PLAYER);
 	CollisionCheck(this, (INT)GROUP_TYPE::BOMB);
 	SetPos(curPos);
 	SetPosOtherside();
@@ -73,14 +78,12 @@ bool cWave::Update()
 
 void cWave::Render(HDC _hdc)
 {
-	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
 	Vec2 Pos = GetPos();
-	Vec2 Scale = m_ImgScale[curFrame/4];
+	Vec2 Scale = m_ImgScale[m_curFrame /4];
 	
-	static int yStart = 0;
-	if (curFrame % 4 == 0)
+	if (m_curFrame % 4 == 0)
 	{		
 		Vec2 changePos;
 		changePos.x = Pos.x;
@@ -90,19 +93,19 @@ void cWave::Render(HDC _hdc)
 	
 
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
-	graphics.DrawImage(m_WaveImg, Rect((int)Pos.x - (int)Scale.x / 2, (int)Pos.y - (int)Scale.y / 2, (int)Scale.x, (int)Scale.y), 0, yStart, (int)Scale.x, (int)Scale.y, UnitPixel, GetImgAttr());
+	graphics.DrawImage(m_WaveImg, Rect((int)Pos.x - (int)Scale.x / 2, (int)Pos.y - (int)Scale.y / 2, (int)Scale.x, (int)Scale.y), 0, m_yStart, (int)Scale.x, (int)Scale.y, UnitPixel, GetImgAttr());
 	SetScale(Scale);
 
-	if (curFrame >= 51)
+	if (m_curFrame >= 51)
 	{
-		curFrame = 0;
-		yStart = 0;
+		m_curFrame = 0;
+		m_yStart = 0;
 		Dead();
 	}
 	else
 	{
-		++curFrame;
-		if (curFrame % 4 == 0)
-			yStart += (int)m_ImgScale[curFrame / 4 - 1].y;
+		++m_curFrame;
+		if (m_curFrame % 4 == 0)
+			m_yStart += (int)m_ImgScale[m_curFrame / 4 - 1].y;
 	}
 }

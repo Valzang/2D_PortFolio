@@ -2,10 +2,6 @@
 #include "Player.h"
 #include "Monster.h"
 #include "Monster_Flying.h"
-#include "Monster_Thorn.h"
-#include "Monster_Runner.h"
-#include "Monster_SpitFire.h"
-#include "Monster_Boss.h"
 #include "Platform_SideWall.h"
 #include "Platform_Under.h"
 #include "Platform_Rotate.h"
@@ -108,10 +104,7 @@ void cScene_1::Enter()
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform_Under;
-	//float temp = ;
-	//float temp2 = Resolution.y - PlatformObj->GetScale().y / 2.f;
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y - 120.f }); // Áß½ÉÁÂÇ¥..?
-	cout << PlatformObj->GetPos().y;
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 }

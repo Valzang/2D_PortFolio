@@ -66,6 +66,7 @@ void cSceneManager::Init()
 
 void cSceneManager::Update()
 {
+	cout << "현재 점수 : " << m_Score << '\n';
 	m_curScene->Update();
 	if (m_curScene->GetContinue())
 		m_Restart = true;
@@ -73,7 +74,7 @@ void cSceneManager::Update()
 	{
 		delete m_arrScene[m_curSceneLevel];
 		m_arrScene[m_curSceneLevel] = nullptr;
-		m_curSceneLevel = (INT)SCENE_TYPE::START;
+		m_curSceneLevel = (INT)SCENE_TYPE::START;		
 		m_Restart = false;
 		Init();
 	}
@@ -87,7 +88,7 @@ void cSceneManager::Render(HDC _hdc)
 	else
 	{
 		delete m_arrScene[m_curSceneLevel];
-		m_arrScene[m_curSceneLevel++] = nullptr;
+		m_arrScene[m_curSceneLevel++] = nullptr;		
 		Init();
 	}
 

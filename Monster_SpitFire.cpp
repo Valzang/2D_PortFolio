@@ -140,20 +140,19 @@ bool cMonster_SpitFire::Update()
 
 void cMonster_SpitFire::Render(HDC _hdc)
 {
-	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
 	int w = m_MonsterImg->GetWidth() / 5;
 	int h = m_MonsterImg->GetHeight() / 4;
 
-	int xStart = (curFrame / 3) * w;
+	int xStart = (m_curFrame / 3) * w;
 	int yStart = GetDirection()==1 ? 0 : h*2;
 	if (m_CurBehaviorState == Attack)
 	{
 		yStart += h;
-		xStart = (curFrame / 4) * w;
-		curFrame = curFrame >= 19 ? 0 : curFrame + 1;
-		if (curFrame == 0)
+		xStart = (m_curFrame / 4) * w;
+		m_curFrame = m_curFrame >= 19 ? 0 : m_curFrame + 1;
+		if (m_curFrame == 0 || m_BehaviorTime < 0.f)
 		{
 			m_CurBehaviorState = Forward;// 여기서 불꽃 소환
 			CreateFire();
@@ -161,14 +160,15 @@ void cMonster_SpitFire::Render(HDC _hdc)
 	}
 	else
 	{
+		
 		if (m_SpitFireTime > 0.f)
 			m_SpitFireTime -= DELTA_TIME;
 		else
 			m_SpitFireTime = 0;
 		if (m_CurBehaviorState == Stay)
-			curFrame = 0;
+			m_curFrame = 0;
 		else
-			curFrame = curFrame >= 14 ? 0 : curFrame + 1;
+			m_curFrame = m_curFrame >= 14 ? 0 : m_curFrame + 1;
 	}
 		
 	

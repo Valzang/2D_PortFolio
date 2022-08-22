@@ -5,7 +5,7 @@
 #include "Monster.h"
 #include "Object.h"
 
-cPlatform::cPlatform() : m_PlatformImg(NULL), m_DecreaseDegree(0)
+cPlatform::cPlatform() : m_PlatformImg(NULL), m_DecreaseDegree(0), m_Rot(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLATFORM;
 	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform/Platform.png");	
@@ -96,8 +96,8 @@ bool cPlatform::Update()
 			cBomb* curBomb = dynamic_cast<cBomb*>(curScene->GetCurObjectVec()[(UINT)GROUP_TYPE::BOMB][i]);
 			Vec2 curBomb_Pos = curBomb->GetPos();
 			Vec2 curBomb_Scale = curBomb->GetScale();
-			if ((abs(curBomb_Pos.x - Platform_Pos.x) <= (curBomb_Scale.x + Platform_Scale.x) / 2.f)
-				&& (abs(curBomb_Pos.y - Platform_Pos.y) <= (curBomb_Scale.y + Platform_Scale.y) / 2.f))
+			if ((abs(curBomb_Pos.x - Platform_Pos.x) <= (curBomb_Scale.x + Platform_Scale.x) / 2.f + 0.01f)
+				&& (abs(curBomb_Pos.y - Platform_Pos.y) <= (curBomb_Scale.y + Platform_Scale.y) / 2.f +0.01f))
 			{
 				curBomb->SetRotator(this);
 				curBomb->SetRotating(true);
@@ -161,17 +161,16 @@ void cPlatform::Render(HDC _hdc)
 
 		// Rotator의 위치값에 따라 회전 방향 다르게끔 구현해야함
 		Gdiplus::Matrix mat;
-		static int rot = 0;
 
-		mat.RotateAt(Gdiplus::REAL(rot % 360), Gdiplus::PointF(Platform_Pos.x, Platform_Pos.y)); // 중점을 기준으로 회전
+		mat.RotateAt(Gdiplus::REAL(m_Rot % 360), Gdiplus::PointF(Platform_Pos.x, Platform_Pos.y)); // 중점을 기준으로 회전
 
 		graphics.SetTransform(&mat);
 
-		rot += (int)(m_DecreaseDegree * 60.f * DELTA_TIME);
-		if (rot >= 180 || rot <= -180)
+		m_Rot += (int)(m_DecreaseDegree * 60.f * DELTA_TIME);
+		if (m_Rot >= 180 || m_Rot <= -180)
 		{
 			SetRotating(false);
-			rot = 0;
+			m_Rot = 0;
 		}
 	}
 		

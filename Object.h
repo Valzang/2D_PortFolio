@@ -15,6 +15,7 @@ private:
 	int m_Score;
 	bool m_IsDead;
 	bool m_OnPlatform;
+	bool m_isDamaging;
 
 	bool m_isRotating;
 	Vec2 m_RotatorPos;
@@ -60,6 +61,14 @@ public:
 	// 죽었는지
 	bool isDead() { return m_IsDead; }
 	void Dead() { m_IsDead = true; }
+
+	// 데미지
+	bool isDamaging() {	return m_isDamaging; }	
+	void SetDamaging(bool _val) { m_isDamaging = _val; }
+	// HP 관련
+	int GetHP() { return m_HP; }
+	void SetHP(int _val) { m_HP = _val; }
+	virtual void Damage() { --m_HP; m_isDamaging = true; }
 
 	// 현재 플랫폼 위인지
 	bool isOnPlatform() { return m_OnPlatform; }
@@ -111,10 +120,7 @@ public:
 	float GetFirstY() { return m_FirstPos_Y; }
 	void SetFirstY(float _val) { m_FirstPos_Y = _val; }
 
-	// HP 관련
-	int GetHP() { return m_HP; }
-	void SetHP(int _val) { m_HP = _val; }
-	virtual void Damage() { --m_HP; }
+	
 
 	//사운드 관련
 	void BGM_SetAndPlay(const LPCWSTR File_Path);

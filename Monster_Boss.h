@@ -12,9 +12,15 @@
 class cMonster_Boss : public cMonster
 {
 private:
-	bool m_isDamaging;
 	bool m_isAttacking;
 	int m_prevHP;
+	int m_curFrame;
+	bool m_NonDamage;
+
+	double m_AttackTime;
+
+	Vec2 DiffPos[4];
+	int	m_PosCount;
 
 public:
 	cMonster_Boss();
@@ -22,6 +28,8 @@ public:
 
 	void SensePlayer();
 	void CreateWave();
+
+	void SetAttackTime() { m_AttackTime = 3.f; }
 
 	virtual bool Update() override;
 	virtual void Render(HDC _hdc) override;

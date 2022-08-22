@@ -2,12 +2,13 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Bomb.h"
+#include "Wave.h"
 #include "Monster_Runner.h"
 
 cObject::cObject() : m_Pos(), m_Scale(), m_Direction(1), m_IsDead(false), m_OnPlatform(false), 
 					m_Dir(Vec2(-2.f, 600.f)), m_isRotating(), RotFromDown(false),
 					m_BombThruRotate(false), m_Rotator(nullptr), m_RotateToUp(false), m_FirstPos_Y(0.f), m_HP(1),
-					dwID(0), mciOpen(), mciPlay(), m_isShoot(false)
+					dwID(0), mciOpen(), mciPlay(), m_isShoot(false), m_isDamaging(false), m_Score(0)
 { 
 	m_Dir.Normalize(); 
 	m_curGroupType = (INT)GROUP_TYPE::DEFAULT; 
@@ -51,7 +52,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 	// 부딪힌 오브젝트 가져오기
 	vector<cObject*> otherObj = cSceneManager::GetInstance()->GetCurScene()->GetCurObjectVec()[GROUP_TYPE];
 	int curObj_GroupType = curObj->GetCurGroupType();
-
 
 	for (int i = 0; i < otherObj.size(); ++i)
 	{
@@ -163,9 +163,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
 						{
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-							if (curBomb->GetExplode())
-								otherObj[i]->Damage();
-							else if (curBomb->GetShoot())
+							if (curBomb->GetExplode() && !otherObj[i]->isDamaging())
+								otherObj[i]->Damage();							
+							else if (curBomb->GetShoot() && !curBomb->GetExplode())
 								curBomb->SetExplode();
 						}
 					}
@@ -174,7 +174,17 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
 						if (otherBomb->GetExplode())
+						{
 							curObj->Dead();
+							if (curObj->GetCurGroupType() == (INT)GROUP_TYPE::WAVE)
+							{
+								cWave* curWave = dynamic_cast<cWave*>(curObj);
+								curWave->DestroyByBomb();
+							}
+							
+						}
+						else if (otherBomb->GetShoot() && !otherBomb->GetExplode())
+							otherBomb->SetExplode();
 					}
 						break;
 				}				
@@ -213,9 +223,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
 						{
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-							if (curBomb->GetExplode())
+							if (curBomb->GetExplode() && !otherObj[i]->isDamaging())
 								otherObj[i]->Damage();
-							else if (curBomb->GetShoot())
+							else if (curBomb->GetShoot() && !curBomb->GetExplode())
 								curBomb->SetExplode();
 						}
 					}
@@ -224,7 +234,16 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
 						if (otherBomb->GetExplode())
+						{
 							curObj->Dead();
+							if (curObj->GetCurGroupType() == (INT)GROUP_TYPE::WAVE)
+							{
+								cWave* curWave = dynamic_cast<cWave*>(curObj);
+								curWave->DestroyByBomb();
+							}
+						}
+						else if (otherBomb->GetShoot() && !otherBomb->GetExplode())
+							otherBomb->SetExplode();
 					}
 						break;
 				}				
@@ -296,9 +315,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
 						{
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-							if (curBomb->GetExplode())
+							if (curBomb->GetExplode() && !otherObj[i]->isDamaging())
 								otherObj[i]->Damage();
-							else if (curBomb->GetShoot())
+							else if (curBomb->GetShoot() && !curBomb->GetExplode())
 								curBomb->SetExplode();
 						}
 					}
@@ -307,7 +326,16 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
 						if (otherBomb->GetExplode())
+						{
 							curObj->Dead();
+							if (curObj->GetCurGroupType() == (INT)GROUP_TYPE::WAVE)
+							{
+								cWave* curWave = dynamic_cast<cWave*>(curObj);
+								curWave->DestroyByBomb();
+							}
+						}
+						else if (otherBomb->GetShoot() && !otherBomb->GetExplode())
+							otherBomb->SetExplode();
 					}
 						break;
 				}
@@ -378,9 +406,9 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 						if (curObj_GroupType == (INT)GROUP_TYPE::BOMB)
 						{
 							cBomb* curBomb = dynamic_cast<cBomb*>(curObj);
-							if (curBomb->GetExplode())
+							if (curBomb->GetExplode() && !otherObj[i]->isDamaging())
 								otherObj[i]->Damage();
-							else if (curBomb->GetShoot())
+							else if (curBomb->GetShoot() && !curBomb->GetExplode())
 								curBomb->SetExplode();
 						}
 						else if (curObj_GroupType == (INT)GROUP_TYPE::PLAYER
@@ -402,7 +430,16 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 					{
 						cBomb* otherBomb = dynamic_cast<cBomb*>(otherObj[i]);
 						if (otherBomb->GetExplode())
+						{
 							curObj->Dead();
+							if (curObj->GetCurGroupType() == (INT)GROUP_TYPE::WAVE)
+							{
+								cWave* curWave = dynamic_cast<cWave*>(curObj);
+								curWave->DestroyByBomb();
+							}
+						}
+						else if (otherBomb->GetShoot() && !otherBomb->GetExplode())
+							otherBomb->SetExplode();
 					}
 						break;
 				}
@@ -411,7 +448,6 @@ void cObject::CollisionCheck(cObject* curObj, int GROUP_TYPE)
 			
 		}
 	}
-
 	curObj->SetPos(curObj_Pos);
 }
 
@@ -425,6 +461,6 @@ void cObject::BGM_SetAndPlay(const LPCWSTR File_Path)
 	mciSendCommandW(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD_PTR)&mciOpen);
 	dwID = mciOpen.wDeviceID;
 
-	// play & repeat
+	// play
 	mciSendCommandW(dwID, MCI_PLAY, MCI_NOTIFY, (DWORD_PTR)&mciPlay);
 }

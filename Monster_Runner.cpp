@@ -3,7 +3,7 @@
 #include "SceneManager.h"
 
 cMonster_Runner::cMonster_Runner()
-	:m_BehaviorTime(), m_CurBehaviorState(0), m_ChangeBehavior(true)
+	:m_BehaviorTime(), m_CurBehaviorState(0), m_ChangeBehavior(true), m_curFrame(0)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Runner.png");	
 	m_curGroupType = (INT)GROUP_TYPE::MONSTER_RUNNER;
@@ -161,14 +161,13 @@ bool cMonster_Runner::Update()
 
 void cMonster_Runner::Render(HDC _hdc)
 {
-	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
 	int w = m_MonsterImg->GetWidth() / 4;
 	int h = m_MonsterImg->GetHeight();
 
-	int xStart = (curFrame/2) * w;
-	curFrame = curFrame >= 7 ? 0 : curFrame + 1;
+	int xStart = (m_curFrame /2) * w;
+	m_curFrame = m_curFrame >= 7 ? 0 : m_curFrame + 1;
 
 	Vec2 Pos = GetPos();
 	Vec2 Scale = GetScale();
@@ -187,7 +186,7 @@ void cMonster_Runner::ChooseBehavior()
 			m_BehaviorTime = (double)stay_time(gen);
 			m_ChangeBehavior = false;
 		}
-		break;
+			break;
 		case Change_Direction:
 		{
 			m_MonsterImg->RotateFlip(RotateNoneFlipX);
@@ -196,7 +195,7 @@ void cMonster_Runner::ChooseBehavior()
 			SetDirection(-GetDirection());
 			m_ChangeBehavior = false;
 		}
-		break;
+			break;
 		case Forward:
 		{
 			m_CurBehaviorState = Forward;
@@ -204,7 +203,7 @@ void cMonster_Runner::ChooseBehavior()
 			m_ChangeBehavior = false;
 			m_Speed = 100.f;
 		}
-		break;
+			break;
 	}
 }
 

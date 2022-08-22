@@ -27,28 +27,22 @@ cScene_5::~cScene_5()
 
 void cScene_5::Enter()
 {
-	cSceneManager::GetInstance()->SetScore(0);
 	// 플레이어 추가 및 위치 설정
-	cPlayer* PlayerObj = new cPlayer(Vec2(1150.f, 540.f), 2);
+	int HP = cSceneManager::GetInstance()->GetPlayerLife();
+	cPlayer* PlayerObj = new cPlayer(Vec2(640.f, 540.f), HP);
 	AddObject(PlayerObj, GROUP_TYPE::PLAYER);
 
 
 	// 몬스터 배치	
-	SetMonsterSize(2);			// 몬스터 수
+	SetMonsterSize(1);			// 몬스터 수
 
 	// 화면 크기에 맞게 배치하기
 	Vec2 Resolution = cCore::GetInstance()->GetResolution();
 
 	// Monster Object 추가 ===================================================================================================
 	cMonster* MonsterObj = nullptr;
-	MonsterObj = new cMonster_Flying;
-	MonsterObj->SetPos(Vec2{ 200.f, Resolution.y - MonsterObj->GetScale().y * 2.5f });
-	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
-	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
-
-	MonsterObj = new cMonster_Flying(-1);
-	MonsterObj->SetPos(Vec2{ Resolution.x - 200.f, 100.f });
-	MonsterObj->SetFirstY(MonsterObj->GetPos().y);
+	MonsterObj = new cMonster_Boss;
+	MonsterObj->SetPos(Vec2{ 1100.f, 380.f });
 	AddObject(MonsterObj, GROUP_TYPE::MONSTER);
 
 
@@ -85,11 +79,11 @@ void cScene_5::Enter()
 
 	// 1st Floor ===================================================================
 	PlatformObj = new cPlatform_Rotate;
-	PlatformObj->SetPos(Vec2{ PlatformObj->GetScale().x - 20.f, Resolution.y / 2.f + 70 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y / 2.f + 70 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);// _ROTATE);
 
 	PlatformObj = new cPlatform;
-	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f - 130.f, Resolution.y / 2.f + 70 }); // 중심좌표..?
+	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f - 360.f, Resolution.y / 2.f + 70 }); // 중심좌표..?
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 	PlatformObj = new cPlatform;
@@ -111,7 +105,6 @@ void cScene_5::Enter()
 	//float temp = ;
 	//float temp2 = Resolution.y - PlatformObj->GetScale().y / 2.f;
 	PlatformObj->SetPos(Vec2{ Resolution.x / 2.f, Resolution.y - 120.f }); // 중심좌표..?
-	cout << PlatformObj->GetPos().y;
 	AddObject(PlatformObj, GROUP_TYPE::PLATFORM);
 
 }

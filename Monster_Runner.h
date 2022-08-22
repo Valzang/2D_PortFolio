@@ -18,6 +18,7 @@ protected:
 
 	// 비헤이비어 트리의 행동을 바꿔야 하는 지
 	bool m_ChangeBehavior;
+	int m_curFrame;
 
 public:
 	cMonster_Runner();
