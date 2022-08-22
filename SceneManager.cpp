@@ -5,14 +5,19 @@
 #include "Scene_4.h"
 #include "Scene_5.h"
 #include "Scene_Intro.h"
+#include "Scene_Ending.h"
 
 cSceneManager::cSceneManager()
 	: m_curScene(nullptr)
 	, m_arrScene {}
-	, m_curSceneLevel(1)
+	, m_curSceneLevel(0)
 	, m_Restart(false)
+	, m_PlayerLifeCount(0)
+	, m_Score(0)
+	, m_ScoreImg(nullptr)
 {
-	
+	m_ScoreImg = Image::FromFile((WCHAR*)L"Image/UI/Number.png");
+	SetImgAttr();
 }
 cSceneManager::~cSceneManager()
 {
@@ -54,6 +59,10 @@ void cSceneManager::Init()
 			m_arrScene[(UINT)SCENE_TYPE::STAGE_15] = new cScene_5;
 			m_curScene = m_arrScene[(UINT)SCENE_TYPE::STAGE_15];
 			break;
+		case (INT)SCENE_TYPE::ENDING:
+			m_arrScene[(UINT)SCENE_TYPE::ENDING] = new cScene_Ending;
+			m_curScene = m_arrScene[(UINT)SCENE_TYPE::ENDING];
+			break;
 	}
 	// Scene 생성
 	//m_arrScene[(UINT)SCENE_TYPE::TOOL] = new cScene_Intro;
@@ -66,7 +75,6 @@ void cSceneManager::Init()
 
 void cSceneManager::Update()
 {
-	cout << "현재 점수 : " << m_Score << '\n';
 	m_curScene->Update();
 	if (m_curScene->GetContinue())
 		m_Restart = true;
@@ -89,6 +97,8 @@ void cSceneManager::Render(HDC _hdc)
 	{
 		delete m_arrScene[m_curSceneLevel];
 		m_arrScene[m_curSceneLevel++] = nullptr;		
+		if (m_curSceneLevel == (INT)SCENE_TYPE::END)
+			m_curSceneLevel = (INT)SCENE_TYPE::START;
 		Init();
 	}
 
@@ -98,6 +108,16 @@ void cSceneManager::Render(HDC _hdc)
 
 void cSceneManager::Score_Render(HDC _hdc)
 {
-	string score_str = to_string(m_Score);
+	Graphics graphics_Score(_hdc);
+
+	string Score_Str = to_string(m_Score);
+	int w = m_ScoreImg->GetWidth() / 10;
+	int h = m_ScoreImg->GetHeight();
+	for (int i = 0 ; i < Score_Str.size() ; ++i)
+	{
+		graphics_Score.DrawImage(m_ScoreImg,
+								Rect(160+22*i, 20, w, h),
+								w*(Score_Str[i]-'0'), 0, w, h, UnitPixel, &m_imgAttr);
+	}
 }
 

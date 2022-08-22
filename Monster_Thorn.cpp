@@ -1,6 +1,6 @@
 #include "Monster_Thorn.h"
 
-cMonster_Thorn::cMonster_Thorn() : m_FlyingTime(0)
+cMonster_Thorn::cMonster_Thorn() : m_FlyingTime(0), m_curFrame(0)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Thron.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 4.f, (float)m_MonsterImg->GetHeight()));
@@ -47,14 +47,13 @@ bool cMonster_Thorn::Update()
 
 void cMonster_Thorn::Render(HDC _hdc)
 {
-	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
 	int w = m_MonsterImg->GetWidth() / 4;
 	int h = m_MonsterImg->GetHeight();
 
-	int xStart = curFrame * w;
-	curFrame = curFrame >= 3 ? 0 : curFrame + 1;
+	int xStart = m_curFrame * w;
+	m_curFrame = m_curFrame >= 3 ? 0 : m_curFrame + 1;
 
 	int yStart = 0;
 

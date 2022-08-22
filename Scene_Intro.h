@@ -9,6 +9,5 @@ public:
 	virtual ~cScene_Intro();
 
 	virtual void Enter();
-	virtual void Exit();
 };
 

@@ -91,13 +91,13 @@ enum class GROUP_TYPE
 
 enum class SCENE_TYPE
 {
-	TOOL,
 	START,
 	STAGE_11,
 	STAGE_12,
 	STAGE_13,
 	STAGE_14,
 	STAGE_15,
+	ENDING,
 
 	END,
 };

@@ -4,6 +4,7 @@ class cMonster_Thorn : public cMonster
 {
 private:
 	double m_FlyingTime;
+	int		m_curFrame;
 
 public:
 	cMonster_Thorn();

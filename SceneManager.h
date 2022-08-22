@@ -15,6 +15,8 @@ private:
 
 	int		m_PlayerLifeCount;
 	UINT	m_Score;
+	Image*	m_ScoreImg;
+	Gdiplus::ImageAttributes m_imgAttr;
 	
 public:
 	void Init();
@@ -27,6 +29,8 @@ public:
 	int GetPlayerLife() { return m_PlayerLifeCount; }
 	void SetScore(int _Score) { m_Score = _Score; }
 	int GetScore() { return m_Score; }
+
+	void SetImgAttr() { m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 174, 201)); }
 
 	cScene* GetCurScene() { return m_curScene; }
 };

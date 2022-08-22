@@ -1,6 +1,6 @@
 #include "Monster_Flying.h"
 
-cMonster_Flying::cMonster_Flying() : m_FlyingTime(0)
+cMonster_Flying::cMonster_Flying() : m_FlyingTime(0), m_curFrame(0)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Flying.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
@@ -9,7 +9,7 @@ cMonster_Flying::cMonster_Flying() : m_FlyingTime(0)
 	SetDirection(1);
 }
 
-cMonster_Flying::cMonster_Flying(int _Direction) : m_FlyingTime(0)
+cMonster_Flying::cMonster_Flying(int _Direction) : m_FlyingTime(0), m_curFrame(0)
 {
 	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_Flying.png");
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 3.f, (float)m_MonsterImg->GetHeight()));
@@ -58,14 +58,13 @@ bool cMonster_Flying::Update()
 
 void cMonster_Flying::Render(HDC _hdc)
 {
-	static int curFrame = 0;
 	Graphics graphics(_hdc);
 
 	int w = m_MonsterImg->GetWidth() / 3;
 	int h = m_MonsterImg->GetHeight();
 
-	int xStart = curFrame * w;
-	curFrame = curFrame >= 2 ? 0 : curFrame + 1;
+	int xStart = m_curFrame * w;
+	m_curFrame = m_curFrame >= 2 ? 0 : m_curFrame + 1;
 
 	int yStart = 0;
 

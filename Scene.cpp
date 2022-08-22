@@ -103,7 +103,8 @@ void cScene::BGM_Clear()
 
 void cScene::Update()
 {
-	if (GetCurSceneType() == (INT)SCENE_TYPE::START)
+	if (GetCurSceneType() == (INT)SCENE_TYPE::START
+		|| GetCurSceneType() == (INT)SCENE_TYPE::ENDING)
 	{
 		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN))
 		{			
