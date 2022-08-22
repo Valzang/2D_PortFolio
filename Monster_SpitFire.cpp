@@ -5,7 +5,7 @@
 
 cMonster_SpitFire::cMonster_SpitFire() : m_SpitFireTime(0.f)
 {
-	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster_SpitFire.png");
+	m_MonsterImg = Image::FromFile((WCHAR*)L"Image/Monster/Monster_SpitFire.png");
 	m_curGroupType = (INT)GROUP_TYPE::MONSTER_RUNNER;
 	SetScale(Vec2((float)m_MonsterImg->GetWidth() / 5.f, (float)m_MonsterImg->GetHeight()/ 4.f));
 	SetHP(1);

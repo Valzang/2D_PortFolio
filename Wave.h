@@ -5,8 +5,9 @@ class cWave : public cObject
 {
 private:
     Image* m_WaveImg;  // 이미지 파일
-    Vec2 ImgScale[13];
+    Vec2 m_ImgScale[13];
     cMonster_Boss* m_Boss;
+    float m_FirstY;
 
 public:
     cWave();

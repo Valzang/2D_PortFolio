@@ -2,7 +2,7 @@
 
 cPlatform_Under::cPlatform_Under()
 {
-	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform_Under.png");
+	m_PlatformImg = Image::FromFile((WCHAR*)L"Image/Platform/Platform_Under.png");
 	SetScale(Vec2((float)m_PlatformImg->GetWidth(), (float)m_PlatformImg->GetHeight()));
 	SetImgAttr();
 }

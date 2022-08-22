@@ -1,9 +1,7 @@
 #include "Player.h"
 #include "TimeManager.h"
 #include "KeyManager.h"
-
 #include "Bomb.h"
-
 #include "SceneManager.h"
 #include "Scene.h"
 
@@ -14,7 +12,7 @@ cPlayer::cPlayer() : m_PlayerImg(nullptr), m_isMoved(false), m_isSitted(false), 
 					, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0), m_InvincibleTime(3.f)
 {	
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
-	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
+	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
 
 	SetHP(2);
@@ -29,7 +27,7 @@ cPlayer::cPlayer(Vec2 _SpawnPlace) : m_PlayerImg(nullptr), m_isMoved(false), m_i
 									, m_AttachingTime(0.f), m_isAttached(false), m_Rotation_Degree(0)
 {
 	m_curGroupType = (INT)GROUP_TYPE::PLAYER;
-	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
+	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
 	SetSpawnPlace(_SpawnPlace);
 	SetPos(_SpawnPlace);
@@ -469,7 +467,7 @@ void cPlayer::Render(HDC _hdc)
 			m_InvincibleTime = 3.f;
 
 			delete m_PlayerImg;
-			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Move.png");
+			m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Move.png");
 			SetScale(Vec2((float)m_PlayerImg->GetWidth() / 6.f, (float)m_PlayerImg->GetHeight() / 6.f));
 
 			if(m_isAttached)
@@ -565,7 +563,7 @@ void cPlayer::Respawn()
 	if(m_PlayerImg != NULL)
 		delete m_PlayerImg;
 	SetPos(m_SpawnPlace);
-	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player_Enter.png");
+	m_PlayerImg = Image::FromFile((WCHAR*)L"Image/Player/Player_Enter.png");
 	SetScale(Vec2((float)m_PlayerImg->GetWidth() / 14.f, (float)m_PlayerImg->GetHeight()));
 	m_Spawning = true;	
 	m_isMoved = false;
