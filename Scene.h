@@ -16,10 +16,13 @@ private:
 	vector<cObject*> m_arr_obj[(UINT)GROUP_TYPE::END];
 	Image* m_SceneImg;  // 이미지 파일
 	Image* m_IntroAlramImg;				// 인트로 전용 알람 문구
-	Image* m_OutroAlramImg;				//
+	Image* m_OutroAlramImg;				// 죽었을 때 알람 문구
+	Image* m_GameOverImg;				// GAMEOVER 띄우는 문구
+	Image* m_ClearImg;					// COOL 띄우는 문구
 
 	bool m_WantContinue;
 	int m_PlayerDeath;
+	bool m_Clear;
 	
 	int m_MonsterCount;					// 몬스터 수
 
@@ -71,6 +74,10 @@ public:
 	void Exit();  // 해당 씬에서 탈출 시 호출
 
 	void BGM_SetAndPlay(const LPCWSTR File_Path);
+	void BGM_Clear();
+	void BGM_Stop() {
+		mciSendCommandW(dwID, MCI_CLOSE, 0, NULL); // 음악 종료	
+	}
 
 	void Update();
 	void Render(HDC _hdc);

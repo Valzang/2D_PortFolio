@@ -20,7 +20,8 @@ private:
     bool m_isJumping;   // 현재 점프 중인지
     bool m_isAttached;  // 회전 후 천장에 붙어있는지
     bool m_Spawning;    // 나타나는 중인지
-    bool m_GameOver;
+    bool m_GameOver;    // 게임 오버 확인용
+    bool m_Clear;       // 클리어 이미지 띄우기용
     bool m_isDamaging;  // 데미지 받고 있을 때
 
     int m_OverCount;
@@ -59,6 +60,8 @@ public:
     void SetAttackTime(double _val) { m_AfterAttackTime = _val; }
 
     virtual void Damage();
+
+    void UI_Render(HDC _hdc);
 
     void SetSpawnPlace(Vec2 _Val) { m_SpawnPlace = _Val; }
     void Respawn();

@@ -14,12 +14,14 @@ private:
 	bool	m_Restart;
 
 	int		m_PlayerLifeCount;
-	int		m_Score;
+	UINT	m_Score;
 	
 public:
 	void Init();
 	void Update();
 	void Render(HDC _hdc);
+
+	void Score_Render(HDC _hdc);
 
 	void ConnectPlayerInfo(int _Life) { m_PlayerLifeCount = _Life;}
 	int GetPlayerLife() { return m_PlayerLifeCount; }

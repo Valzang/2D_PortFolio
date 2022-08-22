@@ -176,6 +176,6 @@ void cPlatform::Render(HDC _hdc)
 	}
 		
 	//											스케일의 절반만큼 빼주는 이유는 기본적으로 그리기는 왼쪽상단에서부터 그려주기 때문에 그림의 중점을 바꿔주기 위함.
-	graphics.DrawImage(m_PlatformImg, Rect((int)Platform_Pos.x - (int)Scale.x / 2, (int)Platform_Pos.y - (int)Scale.y / 2, (int)GetScale().x, (int)GetScale().y),
+	graphics.DrawImage(m_PlatformImg, Rect((int)(Platform_Pos.x - Scale.x / 2), (int)(Platform_Pos.y - Scale.y / 2), (int)GetScale().x, (int)GetScale().y),
 					   0, 0, (int)Scale.x, (int)Scale.y, UnitPixel, GetImgAttr());
 }

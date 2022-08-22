@@ -66,7 +66,6 @@ void cSceneManager::Init()
 
 void cSceneManager::Update()
 {
-	cout << GetScore() << '\n';
 	m_curScene->Update();
 	if (m_curScene->GetContinue())
 		m_Restart = true;
@@ -83,7 +82,7 @@ void cSceneManager::Update()
 void cSceneManager::Render(HDC _hdc)
 {
 	int t_MonsterCount = m_curScene->GetMonsterSize();
-	if(t_MonsterCount > 0)
+	if(t_MonsterCount >= 0)
 		m_curScene->Render(_hdc);
 	else
 	{
@@ -91,5 +90,13 @@ void cSceneManager::Render(HDC _hdc)
 		m_arrScene[m_curSceneLevel++] = nullptr;
 		Init();
 	}
+
+	if (m_Score > 0)
+		Score_Render(_hdc);
+}
+
+void cSceneManager::Score_Render(HDC _hdc)
+{
+	string score_str = to_string(m_Score);
 }
 

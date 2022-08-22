@@ -1,11 +1,14 @@
 #include "Scene.h"
 #include "KeyManager.h"
 
-cScene::cScene() : m_SceneImg(nullptr), m_IntroAlramImg(nullptr), m_MonsterCount(0), mciOpen(), mciPlay(), dwID(0), m_curSceneType(0), m_PlayerDeath(), m_WantContinue()
+cScene::cScene() : m_SceneImg(nullptr), m_IntroAlramImg(nullptr), m_OutroAlramImg(nullptr) , m_ClearImg(nullptr), m_GameOverImg(nullptr),
+					m_MonsterCount(0), mciOpen(), mciPlay(), dwID(0), m_curSceneType(0), m_PlayerDeath(), m_WantContinue(), m_Clear(false)
 {
-	m_IntroAlramImg = Image::FromFile(L"Image/Intro_Alram.png");
+	m_IntroAlramImg = Image::FromFile(L"Image/UI/Intro_Alram.png");
 	m_imgAttr.SetColorKey(Color(255, 174, 201), Color(255, 200, 201));
-	m_OutroAlramImg = Image::FromFile(L"Image/Outro_Alram.png");
+	m_OutroAlramImg = Image::FromFile(L"Image/UI/Outro_Alram.png");
+	m_ClearImg = Image::FromFile(L"Image/UI/Cool.png");
+	m_GameOverImg = Image::FromFile(L"Image/UI/Game_Over.png");
 }
 
 cScene::~cScene()
@@ -35,10 +38,31 @@ void cScene::SetSceneImg(const wchar_t* FileName)
 
 void cScene::DeleteSceneImg()
 {
+	
 	if (m_SceneImg != NULL)
 	{
 		delete m_SceneImg;
 		m_SceneImg = nullptr;
+	}
+	if (m_ClearImg != NULL)
+	{
+		delete m_ClearImg;
+		m_ClearImg = nullptr;
+	}
+	if (m_OutroAlramImg != NULL)
+	{
+		delete m_OutroAlramImg;
+		m_OutroAlramImg = nullptr;
+	}
+	if (m_IntroAlramImg != NULL)
+	{
+		delete m_IntroAlramImg;
+		m_IntroAlramImg = nullptr;
+	}
+	if (m_GameOverImg != NULL)
+	{
+		delete m_GameOverImg;
+		m_GameOverImg = nullptr;
 	}
 }
 
@@ -64,14 +88,26 @@ void cScene::BGM_SetAndPlay(const LPCWSTR File_Path)
 
 }
 
+void cScene::BGM_Clear()
+{
+	mciOpen.lpstrDeviceType = L"mpegvideo";
+	mciOpen.lpstrElementName = L"Sound/BGM/PB_Clear.mp3"; // 파일 경로 입력
+
+	mciSendCommandW(0, MCI_OPEN, MCI_OPEN_ELEMENT | MCI_OPEN_TYPE, (DWORD_PTR)&mciOpen);
+	dwID = mciOpen.wDeviceID;
+
+	// play & repeat
+	mciSendCommandW(dwID, MCI_PLAY, MCI_NOTIFY, (DWORD_PTR)&mciPlay);
+	m_Clear = true;
+}
+
 void cScene::Update()
 {
-	//m_BGM->Update();
 	if (GetCurSceneType() == (INT)SCENE_TYPE::START)
 	{
 		if (KEY_CHECK(KEY::A, KEY_STATE::DOWN))
 		{			
-			SetMonsterSize(0);
+			SetMonsterSize(-1);
 
 			MCI_OPEN_PARMS mciOpen2;
 			MCI_PLAY_PARMS mciPlay2;
@@ -164,6 +200,14 @@ void cScene::Render(HDC _hdc)
 			mciSendCommandW(dwID, MCI_PLAY, MCI_NOTIFY, (DWORD_PTR)&mciPlay);
 			++m_PlayerDeath;
 		}
+
+		Gdiplus::Graphics graphics_Over(_hdc);
+		w = (int)m_GameOverImg->GetWidth();
+		h = (int)m_GameOverImg->GetHeight();
+		Vec2 Over_Pos(Vec2(640.f, 184.f));
+
+		graphics_Over.DrawImage(m_GameOverImg, Rect((int)Over_Pos.x - w / 2, (int)Over_Pos.y - h / 2, w, h), 0, 0, w, h, UnitPixel, &m_imgAttr);
+
 		Gdiplus::Graphics graphics_Alram(_hdc);
 		w = (int)m_OutroAlramImg->GetWidth();
 		h = (int)(m_OutroAlramImg->GetHeight() / 2.f);
@@ -176,6 +220,16 @@ void cScene::Render(HDC _hdc)
 		yStart = curFrame++ < 10 ? 0 : h;
 		if (curFrame == 18)
 			curFrame = 0;
+	}
+
+	if (m_Clear)
+	{
+		Gdiplus::Graphics graphics_Cool(_hdc);
+		w = (int)m_ClearImg->GetWidth();
+		h = (int)m_ClearImg->GetHeight();
+		Vec2 Alram_Pos(Vec2(640.f, 310.f));
+
+		graphics_Cool.DrawImage(m_ClearImg, Rect((int)Alram_Pos.x - w / 2, (int)Alram_Pos.y - h / 2, w, h), 0, 0, w, h, UnitPixel, &m_imgAttr);
 	}
 
 	
