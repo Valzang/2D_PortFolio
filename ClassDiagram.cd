@@ -1,0 +1,225 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="cObject">
+    <Position X="9" Y="0.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IIaAgASIZECIFDAACkAAgAgyBBpQIkBGZDmAiwByIBA=</HashCode>
+      <FileName>Object.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cPlayer" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>MAZEooCKIAAiABABIAAASAAATAQAAQKQDJAQAAwAIAI=</HashCode>
+      <FileName>Player.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cPlatform" Collapsed="true">
+    <Position X="17" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAgAAAAAAACAAACAAAAAAABAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Platform.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cPlatform_Broken" Collapsed="true">
+    <Position X="19.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAQAAAAA=</HashCode>
+      <FileName>Platform_Broken.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cPlatform_Rotate" Collapsed="true">
+    <Position X="17.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Platform_Rotate.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cPlatform_SideWall" Collapsed="true">
+    <Position X="16" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAACAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Platform_SideWall.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cPlatform_Under" Collapsed="true">
+    <Position X="14.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Platform_Under.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cMonster" Collapsed="true">
+    <Position X="4.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAABCAAAAQAAAABAAAAEAAgAAABAAAAAAAAA=</HashCode>
+      <FileName>Monster.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cMonster_Boss" Collapsed="true">
+    <Position X="5.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQIIAAAAABBAAAAAgAAIAAAgABEAQAABBAAAAAAAAA=</HashCode>
+      <FileName>Monster_Boss.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cMonster_Runner" Collapsed="true">
+    <Position X="3.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEQAAEAABAAAQAAAAAAAIEgAAAAAAAABAEIAEAAAE=</HashCode>
+      <FileName>Monster_Runner.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cMonster_SpitFire" Collapsed="true">
+    <Position X="3.75" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQEQAAAAAAAAAAAAAQIAAAEAAQAAAAAABAAAAAAgAA=</HashCode>
+      <FileName>Monster_SpitFire.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cMonster_Flying" Collapsed="true">
+    <Position X="7.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQBAAAAAAAAAAAAAAAAAAAAgAAAAAAAABAAAAAIAAA=</HashCode>
+      <FileName>Monster_Flying.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cMonster_Thorn" Collapsed="true">
+    <Position X="2" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQBAAAAAAAAAAAAgAAAAAAAgAAABAAAABAAAAAAAAA=</HashCode>
+      <FileName>Monster_Thorn.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene" Collapsed="true">
+    <Position X="8" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgyAqISAMEAAAAAhIAIAgAAAFQBEQgAQIbCAAAAAAIA=</HashCode>
+      <FileName>Scene.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_Ending" Collapsed="true">
+    <Position X="13.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAEAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Scene_Ending.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_Intro" Collapsed="true">
+    <Position X="2.5" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAACAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Scene_Intro.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_1" Collapsed="true">
+    <Position X="4.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Scene_1.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_2" Collapsed="true">
+    <Position X="6.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAABAAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scene_2.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_3" Collapsed="true">
+    <Position X="8" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAAIAAAAAAA=</HashCode>
+      <FileName>Scene_3.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_4" Collapsed="true">
+    <Position X="9.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAEAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Scene_4.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cScene_5" Collapsed="true">
+    <Position X="11.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAACAEAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Scene_5.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cSpitFire" Collapsed="true">
+    <Position X="13.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAIEAAAAAAAAQAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>SpitFire.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cBomb" Collapsed="true">
+    <Position X="11.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EQwAAAAAQABIIEEAIAAAAAAAAAABAAAAApAAAAAEQAA=</HashCode>
+      <FileName>Bomb.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cWave" Collapsed="true">
+    <Position X="9.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAQAAAAAAAAIACAAAAQAAAAQgAAAAAAAABACAAAAAgg=</HashCode>
+      <FileName>Wave.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cKeyManager" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>KeyManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cSceneManager" Collapsed="true">
+    <Position X="4.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAgAEAAAAAACACgCAACAIAUAgAAABgCwAIAAAA=</HashCode>
+      <FileName>SceneManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="cTimeManager" Collapsed="true">
+    <Position X="6.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IASgECCAAAAAAAAAhBAAAAAAAAAEAAQAAAQCCAAAIAA=</HashCode>
+      <FileName>TimeManager.h</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="KeyInfo" Collapsed="true">
+    <Position X="1" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAACAAAAAAABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>KeyManager.h</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="Behavior_Tree" Collapsed="true">
+    <Position X="2.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABgAAAAAAAAAAAIAAAAAQAAAAAAAAAAI=</HashCode>
+      <FileName>Monster_Runner.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="KEY_STATE" Collapsed="true">
+    <Position X="2.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAACAAAAAAAAAAAAQAAAAAAAAICAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>KeyManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="KEY" Collapsed="true">
+    <Position X="1" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAICgAAgAAAAIKSBAAA=</HashCode>
+      <FileName>KeyManager.h</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="맑은 고딕" Size="9" />
+</ClassDiagram>

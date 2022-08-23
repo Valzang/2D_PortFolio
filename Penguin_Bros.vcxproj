@@ -216,6 +216,9 @@
     <Image Include="Penguin_Bros.ico" />
     <Image Include="PB_Icon_256x256.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
